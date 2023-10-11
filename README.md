@@ -8,6 +8,8 @@ STUDENT ID = 561805
 
 [//]: # (TODO: Write a short description of your project/product here.)
 
+Introduksjon: dd
+
 ## Project structure
 
 [//]: # (TODO: Describe the structure of your project here. How have you used packages in your structure. Where are all sourcefiles stored. Where are all JUnit-test classes stored. etc.)

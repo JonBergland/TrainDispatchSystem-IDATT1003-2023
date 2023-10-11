@@ -5,4 +5,7 @@ package edu.ntnu.stud;
  */
 public class TrainDispatchApp {
   // TODO: Fill in the main method and any other methods you need.
+    int i = 0;
+
+
 }
