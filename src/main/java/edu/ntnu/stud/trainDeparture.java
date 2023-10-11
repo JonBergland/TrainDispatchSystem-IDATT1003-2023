@@ -5,18 +5,15 @@ import java.time.LocalTime;
 public class trainDeparture {
     /**
      * Dette er entitetsklassen for en togavgang
-     */
-
-    /**
+     *
      *Objektsvariabler
      */
-    private LocalTime departureTime;
-    private String line;
-    private int trainNumber;
-    private String destination;
+    private final LocalTime departureTime;
+    private final String line;
+    private final int trainNumber;
+    private final String destination;
     private LocalTime delay;
     private int track;
-
 
     /**
      * Konstruktør
@@ -30,7 +27,42 @@ public class trainDeparture {
         this.track = track;
     }
 
+
     /**
      * Objekstmetoder
+     *
      */
+    public int getTrainNumber() {
+        return trainNumber;
+    }
+    public int getTrack() {
+        return track;
+    }
+
+    public LocalTime getDelay() {
+        return delay;
+    }
+
+    public LocalTime getDepartureTime() {
+        return departureTime;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public String getLine() {
+        return line;
+    }
+
+    public LocalTime setDelay(LocalTime delay){
+        this.delay = delay;
+        return delay;
+    }
+
+    public int setTrack(int track){
+        this.track = track;
+        return track;
+    }
+
 }
