@@ -8,8 +8,10 @@ public class trainDeparture {
      * Dette er entitetsklassen for en tog-avgang
      *
      *Objektsvariabler
+     * Lager en variabel til hver av atributtene til objektet
      */
-    private final LocalTime OriginalDepartureTime;
+
+    private final LocalTime originalDepartureTime;
     private final String line;
     private final int trainNumber;
     private final String destination;
@@ -20,7 +22,7 @@ public class trainDeparture {
      * Konstruktør
      */
     public trainDeparture(LocalTime OriginalDepartureTime, String line, int trainNumber, String destination, LocalTime delay, int track){
-        this.OriginalDepartureTime = OriginalDepartureTime;
+        this.originalDepartureTime = OriginalDepartureTime;
         this.line = line;
         this.trainNumber = trainNumber;
         this.destination = destination;
@@ -45,7 +47,7 @@ public class trainDeparture {
     }
 
     public LocalTime getOriginalDepartureTime() {
-        return OriginalDepartureTime;
+        return originalDepartureTime;
     }
 
     public String getDestination() {
@@ -56,9 +58,19 @@ public class trainDeparture {
         return line;
     }
     public LocalTime getDepartureTime(){
-        LocalTime departureTime = this.OriginalDepartureTime.plusHours(this.delay.getHour());
+        LocalTime departureTime = this.originalDepartureTime.plusHours(this.delay.getHour());
         departureTime = departureTime.plusMinutes(this.delay.getMinute());
         return departureTime;
+    }
+    public void printTrainDeparture(){
+        String output = originalDepartureTime + " " + line + " " + destination;
+        if(delay.isAfter(LocalTime.of(0, 0))){
+            output += " " + delay;
+        }
+        if (track > -1){
+            output += " " + track;
+        }
+        System.out.println(output);
     }
 
     public void setDelay(LocalTime delay){

@@ -6,7 +6,7 @@ public class userInterface {
     /**
      * Objekstvariabler
      */
-    private trainDeparture trainDeparture;
+    private final trainDeparture trainDeparture;
 
     /**
      * Konstruktør
