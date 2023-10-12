@@ -13,13 +13,13 @@ public class trainDeparture {
     private final String line;
     private final int trainNumber;
     private final String destination;
-    private int delay;
+    private LocalTime delay;
     private int track;
 
     /**
      * Konstruktør
      */
-    public trainDeparture(LocalTime OriginalDepartureTime, String line, int trainNumber, String destination, int delay, int track){
+    public trainDeparture(LocalTime OriginalDepartureTime, String line, int trainNumber, String destination, LocalTime delay, int track){
         this.OriginalDepartureTime = OriginalDepartureTime;
         this.line = line;
         this.trainNumber = trainNumber;
@@ -40,7 +40,7 @@ public class trainDeparture {
         return track;
     }
 
-    public int getDelay() {
+    public LocalTime getDelay() {
         return delay;
     }
 
@@ -56,12 +56,14 @@ public class trainDeparture {
         return line;
     }
     public LocalTime getDepartureTime(){
-        LocalTime departureTime = this.OriginalDepartureTime.plusMinutes(this.delay);
+        LocalTime departureTime = this.OriginalDepartureTime.plusHours(this.delay.getHour());
+        departureTime = departureTime.plusMinutes(this.delay.getMinute());
         return departureTime;
     }
 
-    public void setDelay(int delay){
-        this.delay += delay;
+    public void setDelay(LocalTime delay){
+        this.delay = this.delay.plusHours(delay.getHour());
+        this.delay = this.delay.plusMinutes(delay.getMinute());
     }
 
     public void setTrack(int track){
