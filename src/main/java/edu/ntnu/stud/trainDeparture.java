@@ -4,7 +4,7 @@ import java.time.LocalTime;
 
 public class trainDeparture {
     /**
-     * Dette er entitetsklassen for en togavgang
+     * Dette er entitetsklassen for en tog-avgang
      *
      *Objektsvariabler
      */
@@ -57,6 +57,7 @@ public class trainDeparture {
 
     public LocalTime setDelay(LocalTime delay){
         this.delay = delay;
+        int i = 0;
         return delay;
     }
 
