@@ -15,8 +15,7 @@ public class TrainDispatchApp {
 
 
     for(trainDeparture i : table){
-      userInterface userInterface = new userInterface(i);
-      userInterface.printTrainDeparture();
+      i.printTrainDeparture();
     }
   }
 
