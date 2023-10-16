@@ -1,7 +1,8 @@
 package edu.ntnu.stud;
 
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
+import java.util.*;
+
 
 public class trainDeparture {
     /**
@@ -62,15 +63,18 @@ public class trainDeparture {
         departureTime = departureTime.plusMinutes(this.delay.getMinute());
         return departureTime;
     }
-    public void printTrainDeparture(){
-        String output = originalDepartureTime + " " + line + " " + destination;
-        if(delay.isAfter(LocalTime.of(0, 0))){
-            output += " " + delay;
+    public void printTrainDeparture(List<trainDeparture> table){
+        Collections.sort(table, new sortByTime());
+        for(trainDeparture i : table) {
+            String output = i.getOriginalDepartureTime() + " " + i.getLine() + " " + i.getDestination();
+            if (i.getDelay().isAfter(LocalTime.of(0, 0))) {
+                output += " " + i.getDelay();
+            }
+            if (i.getTrack() > -1) {
+                output += " " + i.getTrack();
+            }
+            System.out.println(output);
         }
-        if (track > -1){
-            output += " " + track;
-        }
-        System.out.println(output);
     }
 
     public void setDelay(LocalTime delay){
