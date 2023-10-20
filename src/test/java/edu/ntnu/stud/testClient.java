@@ -4,8 +4,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 class testClient {
-    final ArrayList<trainDeparture> table;
-    public testClient(ArrayList<trainDeparture> table){this.table = table;}
+    final ArrayList<TrainDeparture> table;
+    public testClient(ArrayList<TrainDeparture> table){this.table = table;}
 
     public boolean test1(){
         boolean utskrift = true;
