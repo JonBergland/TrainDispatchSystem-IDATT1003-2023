@@ -35,9 +35,6 @@ public class trainDeparture {
     /**
      * Objekstmetoder
      *
-     *
-     *
-     *
      */
     public int getTrainNumber() {
         return trainNumber;
