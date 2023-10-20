@@ -1,10 +1,9 @@
 package edu.ntnu.stud;
 
 import java.time.LocalTime;
-import java.util.*;
 
 
-public class trainDeparture {
+public class TrainDeparture {
     /**
      * Dette er entitetsklassen for en tog-avgang
      *
@@ -22,7 +21,7 @@ public class trainDeparture {
     /**
      * Konstruktør
      */
-    public trainDeparture(LocalTime OriginalDepartureTime, String line, int trainNumber, String destination, LocalTime delay, int track){
+    public TrainDeparture(LocalTime OriginalDepartureTime, String line, int trainNumber, String destination, LocalTime delay, int track){
         this.originalDepartureTime = OriginalDepartureTime;
         this.line = line;
         this.trainNumber = trainNumber;
@@ -61,19 +60,6 @@ public class trainDeparture {
         LocalTime departureTime = this.originalDepartureTime.plusHours(this.delay.getHour());
         departureTime = departureTime.plusMinutes(this.delay.getMinute());
         return departureTime;
-    }
-    public void printTrainDeparture(List<trainDeparture> table){
-        Collections.sort(table, new sortByTime());
-        for(trainDeparture i : table) {
-            String output = i.getOriginalDepartureTime() + " " + i.getLine() + " " + i.getDestination();
-            if (i.getDelay().isAfter(LocalTime.of(0, 0))) {
-                output += " " + i.getDelay();
-            }
-            if (i.getTrack() > -1) {
-                output += " " + i.getTrack();
-            }
-            System.out.println(output);
-        }
     }
 
     public void setDelay(LocalTime delay){
