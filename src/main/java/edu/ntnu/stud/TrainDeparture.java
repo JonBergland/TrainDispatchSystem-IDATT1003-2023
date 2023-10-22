@@ -15,19 +15,20 @@ public class TrainDeparture {
     private final String line;
     private final int trainNumber;
     private final String destination;
-    private LocalTime delay;
     private int track;
+    private LocalTime delay;
+
 
     /**
      * Konstruktør
      */
-    public TrainDeparture(LocalTime OriginalDepartureTime, String line, int trainNumber, String destination, LocalTime delay, int track){
+    public TrainDeparture(LocalTime OriginalDepartureTime, String line, int trainNumber, String destination,  int track, LocalTime delay){
         this.originalDepartureTime = OriginalDepartureTime;
         this.line = line;
         this.trainNumber = trainNumber;
         this.destination = destination;
-        this.delay = delay;
         this.track = track;
+        this.delay = delay;
     }
 
 

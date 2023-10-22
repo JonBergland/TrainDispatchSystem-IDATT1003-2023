@@ -8,4 +8,14 @@ public class Table{
     public ArrayList<TrainDeparture> getTable() {
         return table;
     }
+
+    public boolean checkTrainNumber(int newTrainNumber){
+        boolean output = false;
+        for(TrainDeparture i: table){
+            if (i.getTrainNumber() == newTrainNumber){
+                output = true;
+            }
+        }
+        return output;
+    }
 }

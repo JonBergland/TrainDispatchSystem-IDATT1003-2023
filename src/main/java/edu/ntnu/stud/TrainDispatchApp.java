@@ -12,12 +12,15 @@ public class TrainDispatchApp {
   public static void main(String[] args) {
     Table table = new Table();
     //ArrayList<TrainDeparture> table = new ArrayList<>();
-    table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "Linje 1", 601, "Frognerseteren", LocalTime.of(0, 0), -1));
-    table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "Linje 2", 305, "Sognsvann", LocalTime.of(0, 0), -1));
-    table.getTable().add(new TrainDeparture(LocalTime.of(10, 30), "Linje 3", 404, "Bergkrystallen", LocalTime.of(0, 0), -1));
+    table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "Linje 1", 601, "Frognerseteren", -1, LocalTime.of(0, 0)));
+    table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "Linje 2", 305, "Sognsvann",-1,  LocalTime.of(0, 0)));
+    table.getTable().add(new TrainDeparture(LocalTime.of(10, 30), "Linje 3", 404, "Bergkrystallen", -1, LocalTime.of(0, 0)));
 
-    UserInterface userInterface = new UserInterface(table.getTable());
-    userInterface.printTrainDeparture();
+    UserInterface userInterface = new UserInterface(table);
+    //userInterface.printTrainDeparture();
+
+    userInterface.addTraindeparture();
+
 
 
   }
