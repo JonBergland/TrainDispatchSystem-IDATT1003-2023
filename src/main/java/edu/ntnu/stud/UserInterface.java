@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.util.*;
 
 public class UserInterface {
+    Scanner in = new Scanner(System.in);
     /**
      * Objekstvariabler
      */
@@ -29,54 +30,47 @@ public class UserInterface {
         }
     }
     public void addTraindeparture(){
-        Scanner in = new Scanner(System.in);
+        Input input = new Input(table);
         //ber bruker skrive inn timen toget går
-        System.out.println("Skriv inn ved hvilken time toget går" );
-        String hourInput = in.nextLine();
-        int hour = tryInt(hourInput, 0);
-        System.out.println(hour);
+        int hour = input.hourInput();
 
         //ber bruker skrive inn minuttet toget går
-        System.out.println("Skriv inn ved hvilken minutt toget går" );
-        String minuteInput = in.nextLine();
-        int minute = tryInt(minuteInput, 0);
-        System.out.println(minute);
+        int minute = input.minuteInput();
 
         //ber brukeren skrive inn navnet på den nye linjen
-        System.out.println("Skriv inn navnet på linjen");
-        String line = in.nextLine();
-        System.out.println(line);
+        String line = input.lineInput();
 
         //ber brukeren skrive inn tognummeret
-        System.out.println("Skriv inn et nytt, unikt tognummer" );
-        String trainNumberInput = in.nextLine();
-        int trainNumber = tryInt(trainNumberInput, 0);
-        System.out.println(trainNumber);
-        //kjører en løkke som kjører så lenge tognummeret ikke er unikt
-        while(table.checkTrainNumber(trainNumber)) {
-            System.out.println("Det nummeret eksisterer allerede. Skriv inn et nytt, unikt tognummer");
-            trainNumberInput = in.nextLine();
-            trainNumber = tryInt(trainNumberInput, 0);
-            System.out.println(trainNumber);
-        }
+        int trainNumber = input.trainNumberInput();
 
         //ber brukeren skrive inn navnet til destinasjonen til linjen
-        System.out.println("Skriv inn navnet på destinasjonen");
-        String destination = in.nextLine();
-        System.out.println(destination);
+        String destination = input.destinationInput();
 
         //ber brukeren om å sette spor til toget
-        System.out.println("Skriv inn ved hvilken spor toget skal gå fra. Hvis ikke bestemt, skriv inn -1");
-        String trackInput = in.nextLine();
-        int track = tryInt(trackInput, -1);
-        System.out.println(track);
+        int track = input.trackInput();
 
         //ber bruker om å sette inn eventuell forsinkelse
-        System.out.println("Skriv inn eventuell forsinkelse. Hvis ingen, skriv inn 0");
-        String delayInput = in.nextLine();
-        int delay = tryInt(delayInput, 0);
-        System.out.println(delay);
+        int delay = input.delayInput();
 
+        TrainDeparture newTraindeparture = new TrainDeparture(LocalTime.of(hour, minute), line, trainNumber, destination, track, LocalTime.of(0, delay));
+        table.getTable().add(newTraindeparture);
+        printTrainDeparture();
+    }
+
+    public void setTrackToTrain(){
+        int trainNumber = 0;
+        do {
+            System.out.println(table.getTrainNumberList());
+            System.out.println("Velg en av togavgangene å tildele spor på");
+            String trainNumberInput = in.nextLine();
+            trainNumber = tryInt(trainNumberInput, 0);
+        } while (!table.checkTrainNumber(trainNumber));
+
+        System.out.println("Skriv inn hvilket spor toget skal på");
+        String trackInput = in.nextLine();
+        int track = tryInt(trackInput, -1);
+
+        table.getTrainToTrainNumber(trainNumber).setTrack(track);
 
     }
 
