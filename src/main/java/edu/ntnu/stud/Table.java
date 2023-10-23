@@ -1,6 +1,9 @@
 package edu.ntnu.stud;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public class Table{
     private ArrayList<TrainDeparture> table = new ArrayList<>();
@@ -17,5 +20,22 @@ public class Table{
             }
         }
         return output;
+    }
+
+    public String getTrainNumberList(){
+        String output = "";
+        for(TrainDeparture i : table){
+            output += i.getTrainNumber() + " ";
+        }
+        return output;
+    }
+
+    public TrainDeparture getTrainToTrainNumber(int trainNumber){
+        for (TrainDeparture i : table){
+            if (i.getTrainNumber() == trainNumber){
+                return i;
+            }
+        }
+        return null;
     }
 }
