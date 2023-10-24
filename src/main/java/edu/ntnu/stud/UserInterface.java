@@ -16,18 +16,22 @@ public class UserInterface {
      */
     public UserInterface(Table table){this.table = table;}
 
-    public void printTrainDeparture() {
-        Collections.sort(table.getTable(), new sortByTime());
-        for (TrainDeparture i : table.getTable()) {
-            String output = i.getOriginalDepartureTime() + " " + i.getLine() + " " + i.getDestination();
-            if (i.getTrack() > -1) {
-                output += " Spor: " + i.getTrack();
-            }
-            if (i.getDelay().isAfter(LocalTime.of(0, 0))) {
-                output += " Forsinkelse: " + i.getDelay();
-            }
-            System.out.println(output);
-        }
+    public void printTrainDeparture() { //lager en metode som printer tog-oversikten ut til bruker
+        Collections.sort(table.getTable(), new sortByTime()); //sorterer tabellen med hjelp av sortByTime
+        table.getTable().forEach(
+                t ->
+                {String output = t.getOriginalDepartureTime() + " " + t.getLine() + " "
+                        + t.getTrainNumber() + " " + t.getDestination();
+                    if (t.getTrack() > -1) {
+                        output += " Spor: " + t.getTrack();
+                    }
+                    if (t.getDelay().isAfter(LocalTime.of(0, 0))) {
+                        output += " Forsinkelse: " + t.getDelay();
+                    }
+                    System.out.println(output);
+        });
+        String s = "-";
+        System.out.println(s.repeat(30));
     }
     public void addTraindeparture(){
         Input input = new Input(table);
@@ -60,8 +64,8 @@ public class UserInterface {
     public void setTrackToTrain(){
         int trainNumber = 0;
         do {
-            System.out.println(table.getTrainNumberList());
-            System.out.println("Velg en av togavgangene å tildele spor på");
+            table.printTrainNumberList();
+            System.out.println("\nVelg en av togavgangene å tildele spor på");
             String trainNumberInput = in.nextLine();
             trainNumber = tryInt(trainNumberInput, 0);
         } while (!table.checkTrainNumber(trainNumber));

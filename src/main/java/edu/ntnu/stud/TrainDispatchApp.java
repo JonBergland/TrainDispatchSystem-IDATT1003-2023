@@ -3,6 +3,8 @@ package edu.ntnu.stud;
 import java.time.LocalTime;
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * This is the main class for the train dispatch application.
  */
@@ -17,9 +19,20 @@ public class TrainDispatchApp {
     table.getTable().add(new TrainDeparture(LocalTime.of(10, 30), "Linje 3", 404, "Bergkrystallen", -1, LocalTime.of(0, 0)));
 
     UserInterface userInterface = new UserInterface(table);
+    userInterface.printTrainDeparture();
+
+    //userInterface.addTraindeparture();
     //userInterface.printTrainDeparture();
 
-    userInterface.addTraindeparture();
+    //System.out.println(table.getTable());
+    //List objectNummer = table.getTable().stream().filter(t -> t.getTrainNumber() == 601).collect(toList());
+    //System.out.println(objectNummer.get(0));
+    //userInterface.setTrackToTrain();
+    //userInterface.printTrainDeparture();
+
+    LocalTime tid = LocalTime.of(12, 60);
+    System.out.println(tid);
+
 
 
 
