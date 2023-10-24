@@ -22,12 +22,8 @@ public class Table{
         return output;
     }
 
-    public String getTrainNumberList(){
-        String output = "";
-        for(TrainDeparture i : table){
-            output += i.getTrainNumber() + " ";
-        }
-        return output;
+    public void printTrainNumberList(){
+        table.forEach(trainDeparture -> System.out.print(trainDeparture.getTrainNumber() + " "));
     }
 
     public TrainDeparture getTrainToTrainNumber(int trainNumber){
