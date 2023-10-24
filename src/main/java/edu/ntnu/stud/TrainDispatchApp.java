@@ -22,16 +22,15 @@ public class TrainDispatchApp {
     userInterface.printTrainDeparture();
 
     //userInterface.addTraindeparture();
-    //userInterface.printTrainDeparture();
+    userInterface.printTrainDeparture();
 
-    //System.out.println(table.getTable());
-    //List objectNummer = table.getTable().stream().filter(t -> t.getTrainNumber() == 601).collect(toList());
-    //System.out.println(objectNummer.get(0));
     //userInterface.setTrackToTrain();
     //userInterface.printTrainDeparture();
 
-    LocalTime tid = LocalTime.of(12, 60);
-    System.out.println(tid);
+    //userInterface.setDelayToTrain();
+    //userInterface.printTrainDeparture();
+    table.getTable().get(0).toStrin();
+
 
 
 
