@@ -63,6 +63,18 @@ public class TrainDeparture {
         return departureTime;
     }
 
+    public void toStrin() {
+        String output = getOriginalDepartureTime() + " " + getLine() + " "
+                + getTrainNumber() + " " + getDestination();
+        if (getTrack() > -1) {
+            output += " Spor: " + getTrack();
+        }
+        if (getDelay().isAfter(LocalTime.of(0, 0))) {
+            output += " Forsinkelse: " + getDelay();
+        }
+        System.out.println(output);
+    }
+
     public void setDelay(LocalTime delay){
         this.delay = this.delay.plusHours(delay.getHour());
         this.delay = this.delay.plusMinutes(delay.getMinute());
