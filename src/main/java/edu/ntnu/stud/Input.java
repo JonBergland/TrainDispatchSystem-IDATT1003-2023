@@ -15,16 +15,21 @@ public class Input {
     public int hourInput(){
         System.out.println("Skriv inn ved hvilken time toget går" );
         String hourInput = in.nextLine();
+        int dummyValue = 0;
         int hour = tryInt(hourInput, 0);
+        if (hour > 23) {hour = 0;} //hvis time satt inn er over 23 timer, blir veriden satt til dummyverdi
+        System.out.println("Det som er satt inn er over den gitte rekkevidden. "+dummyValue+ " ble satt inn istedet");
         System.out.println(hour);
         return hour;
     }
 
     public int minuteInput(){
-        System.out.println("Skriv inn ved hvilken minutt toget går" );
+        System.out.println("Skriv inn ved hvilken minutt toget går (mellom 0-59)" );
         String minuteInput = in.nextLine();
-        int minute = tryInt(minuteInput, 0);
-        System.out.println(minute);
+        int dummyValue = 0;
+        int minute = tryInt(minuteInput, dummyValue);
+        if (minute > 59) {minute = 0;} //hvis minutter satt inn er over 59 timer, blir veriden satt til dummyverdi
+        System.out.println("Det som er satt inn er over den gitte rekkevidden."+dummyValue+ "ble satt inn istedet");
         return minute;
     }
 
