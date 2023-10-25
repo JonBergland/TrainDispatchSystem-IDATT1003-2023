@@ -23,8 +23,15 @@ public class Table{
         table.forEach(trainDeparture -> System.out.print(trainDeparture.getTrainNumber() + " "));
     }
 
-    public void printDestinationList(){
-        table.forEach(trainDeparture -> System.out.println(trainDeparture.getDestination() + " "));
+    public void printDestinationList() {
+        ArrayList<String> unique = new ArrayList<>();
+        table.forEach(trainDeparture -> {
+                    String destination = trainDeparture.getDestination();
+                    if (!unique.contains(destination)) {
+                        System.out.println(destination + " ");
+                        unique.add(destination);
+                    }
+        });
     }
 
     public TrainDeparture getTrainByTrainNumber(int trainNumber){

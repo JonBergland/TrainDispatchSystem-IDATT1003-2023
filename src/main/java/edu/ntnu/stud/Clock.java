@@ -19,7 +19,7 @@ public class Clock {
         return clock;
     }
 
-    public void setClock(int hour, int minute){
-        this.clock = LocalTime.of(hour, minute);
+    public void setClock(LocalTime time){
+        this.clock = time;
     }
 }

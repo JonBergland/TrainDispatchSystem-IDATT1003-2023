@@ -9,24 +9,33 @@ public class UserInterface {
      * Objekstvariabler
      */
     private Table table = new Table();
-    private Input input;
+    private final Input input = new Input(table);
 
     private Clock clock = new Clock();
 
     /**
      * Konstruktør
      */
-    public UserInterface(Table table){this.table = table; this.input = new Input(this.table);}
 
-    public void menu(){
 
+    public void start(){
+        table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "Linje 1", 601, "Frognerseteren", -1, LocalTime.of(0, 0)));
+        table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "Linje 2", 305, "Sognsvann",-1,  LocalTime.of(0, 0)));
+        table.getTable().add(new TrainDeparture(LocalTime.of(10, 30), "Linje 3", 404, "Bergkrystallen", -1, LocalTime.of(0, 0)));
+        table.getTable().add(new TrainDeparture(LocalTime.of(10, 40), "Linje 4", 406, "Bergkrystallen", -1, LocalTime.of(0, 0)));
+
+    }
+
+    public void init(){
+        while (true){
+            int menuChoice = menuList();
+            doOperation(menuChoice);
+        }
     }
     public void printTrainDeparture() { //lager en metode som printer tog-oversikten ut til bruker
         System.out.println("Time: " + clock.getClock());
-        Collections.sort(table.getTable(), new sortByTime()); //sorterer tabellen med hjelp av sortByTime
+        table.getTable().sort(new sortByTime()); //sorterer tabellen med hjelp av sortByTime
         table.getTable().forEach(TrainDeparture::toStrin);
-        String s = "-";
-        System.out.println(s.repeat(30));
     }
     public void addTraindeparture(){
         //ber bruker skrive inn timen toget går
@@ -52,7 +61,6 @@ public class UserInterface {
 
         TrainDeparture newTraindeparture = new TrainDeparture(LocalTime.of(hour, minute), line, trainNumber, destination, track, delay);
         table.getTable().add(newTraindeparture);
-        printTrainDeparture();
     }
 
     public void setTrackToTrain(){
@@ -80,7 +88,6 @@ public class UserInterface {
     public void setNewTime(){
         updateClock();
         updateTable();
-        printTrainDeparture();
     }
 
     private void updateClock(){
@@ -91,35 +98,22 @@ public class UserInterface {
             time = input.clockInput();
         } while(time.isBefore(clock.getClock()));
 
-        clock.setClock(hour, minute);
-        System.out.println(clock.getClock());
+        clock.setClock(time);
+        updateTable();
     }
 
     private void updateTable(){
         table.getTable().removeIf(trainDeparture -> trainDeparture.getOriginalDepartureTime().isBefore(clock.getClock()));
     }
 
-    private Integer tryInt(String tall, int dummyValue){
-        int output = 0;
-        try {
-            output = Integer.parseInt(tall);
-        }
-        catch (NumberFormatException e) {
-            System.out.println(e + ". Det du skrev inn ble ikke akseptert og verdien "
-                    + dummyValue + " ble satt istedet");
-            output = dummyValue;
-        }
-        return output;
-    }
     private int chooseTrainNumber(){
         int trainNumber = 0;
         String utskrift = "";
         do {
             System.out.print(utskrift);
             table.printTrainNumberList();
-            System.out.println("\nVelg en av togavgangene");
-            String trainNumberInput = in.nextLine();
-            trainNumber = tryInt(trainNumberInput, 0);
+
+            trainNumber = input.intInput("\nVelg en av togavgangene", 0);
             utskrift = "Du må sette inn et tognummer fra listen\n";
         } while (!table.checkTrainNumber(trainNumber));
         return trainNumber;
@@ -139,9 +133,11 @@ public class UserInterface {
         return destinationList;
     }
 
-    private void menuList(){
+    private int menuList(){
         int menuChoice = 0;
         do {
+            String s = "-";
+            System.out.println(s.repeat(30));
             System.out.println("[1] Vis tog avgangene\n" +
                     "[2] Legg til ny togavgang\n" +
                     "[3] Tildel spor til avgang\n" +
@@ -153,6 +149,7 @@ public class UserInterface {
 
             menuChoice = input.intInput("Skriv inn tallet som korresponderer med handlingen du vil utføre: ", 0);
         } while (menuChoice == 0);
+        return menuChoice;
     }
 
     private void doOperation(int menuChoice){

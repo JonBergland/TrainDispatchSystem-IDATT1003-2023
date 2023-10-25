@@ -43,24 +43,17 @@ public class Input {
     }
 
     public int trainNumberInput(){
-        System.out.println("Skriv inn et nytt, unikt tognummer" );
-        String trainNumberUser = in.nextLine();
-        int trainNumber = tryInt(trainNumberUser, 0);
-        System.out.println(trainNumber);
-        //kjører en løkke som kjører så lenge tognummeret ikke er unikt
-        while(table.checkTrainNumber(trainNumber)) {
-            System.out.println("Det nummeret eksisterer allerede. Skriv inn et nytt, unikt tognummer");
-            trainNumberUser = in.nextLine();
-            trainNumber = tryInt(trainNumberUser, 0);
-            System.out.println(trainNumber);
+        int trainNumber = intInput("Skriv inn et nytt, unikt tognummer", 0);
+        //kjører en løkke som kjører så lenge tognummeret ikke er unikt eller inputen er dummyValue
+        while(table.checkTrainNumber(trainNumber) || trainNumber == 0) {
+            trainNumber = intInput("Det nummeret eksisterer allerede. Skriv inn et nytt, unikt tognummer", 0);
         }
         return trainNumber;
     }
 
     public String destinationInput(){
         System.out.println("Skriv inn navnet på destinasjonen");
-        String destination = in.nextLine();
-        return destination;
+        return in.nextLine();
     }
 
     public int trackInput(){
