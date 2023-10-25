@@ -17,19 +17,22 @@ public class Input {
         String hourInput = in.nextLine();
         int dummyValue = 0;
         int hour = tryInt(hourInput, 0);
-        if (hour > 23) {hour = 0;} //hvis time satt inn er over 23 timer, blir veriden satt til dummyverdi
-        System.out.println("Det som er satt inn er over den gitte rekkevidden. "+dummyValue+ " ble satt inn istedet");
-        System.out.println(hour);
+        if (hour > 23 || hour < 0) {
+            hour = 0; //hvis time satt inn er over 23 timer, blir veriden satt til dummyverdi
+            System.out.println("Det som er satt inn er over den gitte rekkevidden. "+dummyValue+ " ble satt inn istedet");
+        }
         return hour;
     }
 
     public int minuteInput(String detaljer){
-        System.out.println("Skriv inn ved hvilken minutt" + detaljer);
+        System.out.println("Skriv inn ved hvilken minutt " + detaljer);
         String minuteInput = in.nextLine();
         int dummyValue = 0;
         int minute = tryInt(minuteInput, dummyValue);
-        if (minute > 59) {minute = 0;} //hvis minutter satt inn er over 59 timer, blir veriden satt til dummyverdi
-        System.out.println("Det som er satt inn er over den gitte rekkevidden."+dummyValue+ "ble satt inn istedet");
+        if (minute > 59 || minute < 0) {
+            minute = 0; //hvis minutter satt inn er over 59 timer, blir veriden satt til dummyverdi
+            System.out.println("Det som er satt inn er over den gitte rekkevidden. "+dummyValue+ " ble satt inn istedet");
+        }
         return minute;
     }
 
@@ -67,11 +70,29 @@ public class Input {
         return track;
     }
 
-    public int delayInput(){
-        System.out.println("Skriv inn eventuell forsinkelse. Hvis ingen, skriv inn 0");
-        String delayInput = in.nextLine();
-        int delay = tryInt(delayInput, 0);
-        return delay;
+    public LocalTime delayInput(){
+        System.out.println("Skriv hvor forsinket toget er i timer:");
+        String delayHourInput = in.nextLine();
+        int delayHour = tryInt(delayHourInput, 0);
+
+        System.out.println("Skriv hvor forsinket toget er i minutter:");
+        String delayMinuteInput = in.nextLine();
+        int delayMinute = tryInt(delayMinuteInput, 0);
+        return LocalTime.of(delayHour, delayMinute);
+    }
+
+    public LocalTime clockInput(){
+        int hour = hourInput("du vil sette klokken til");
+        int minute = minuteInput("du vil sette klokken til");
+        LocalTime time = LocalTime.of(hour, minute);
+        return time;
+    }
+
+    public int intInput(String utskrift, int dummyValue){
+        System.out.println(utskrift);
+        String intInput = in.nextLine();
+        int number = tryInt(intInput, dummyValue);
+        return number;
     }
 
 

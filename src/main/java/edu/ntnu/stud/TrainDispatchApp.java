@@ -17,12 +17,13 @@ public class TrainDispatchApp {
     table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "Linje 1", 601, "Frognerseteren", -1, LocalTime.of(0, 0)));
     table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "Linje 2", 305, "Sognsvann",-1,  LocalTime.of(0, 0)));
     table.getTable().add(new TrainDeparture(LocalTime.of(10, 30), "Linje 3", 404, "Bergkrystallen", -1, LocalTime.of(0, 0)));
+    table.getTable().add(new TrainDeparture(LocalTime.of(10, 40), "Linje 4", 406, "Bergkrystallen", -1, LocalTime.of(0, 0)));
 
     UserInterface userInterface = new UserInterface(table);
     userInterface.printTrainDeparture();
 
     //userInterface.addTraindeparture();
-    userInterface.printTrainDeparture();
+    //userInterface.printTrainDeparture();
 
     //userInterface.setTrackToTrain();
     //userInterface.printTrainDeparture();
@@ -32,8 +33,10 @@ public class TrainDispatchApp {
 
     //table.getTable().get(0).toStrin();
 
-    userInterface.findTrainDeparture();
+    //userInterface.findTrainByTrainNumber();
+    //userInterface.findTrainByDestination();
 
+    userInterface.setNewTime();
 
 
 

@@ -18,7 +18,11 @@ public class UserInterface {
      */
     public UserInterface(Table table){this.table = table; this.input = new Input(this.table);}
 
+    public void menu(){
+
+    }
     public void printTrainDeparture() { //lager en metode som printer tog-oversikten ut til bruker
+        System.out.println("Time: " + clock.getClock());
         Collections.sort(table.getTable(), new sortByTime()); //sorterer tabellen med hjelp av sortByTime
         table.getTable().forEach(TrainDeparture::toStrin);
         String s = "-";
@@ -44,47 +48,55 @@ public class UserInterface {
         int track = input.trackInput();
 
         //ber bruker om å sette inn eventuell forsinkelse
-        int delay = input.delayInput();
+        LocalTime delay = input.delayInput();
 
-        TrainDeparture newTraindeparture = new TrainDeparture(LocalTime.of(hour, minute), line, trainNumber, destination, track, LocalTime.of(0, delay));
+        TrainDeparture newTraindeparture = new TrainDeparture(LocalTime.of(hour, minute), line, trainNumber, destination, track, delay);
         table.getTable().add(newTraindeparture);
         printTrainDeparture();
     }
 
     public void setTrackToTrain(){
         int trainNumber = chooseTrainNumber();
-
-        System.out.println("Skriv inn hvilket spor toget skal på");
-        String trackInput = in.nextLine();
-        int track = tryInt(trackInput, -1);
-
-        table.getTrainToTrainNumber(trainNumber).setTrack(track);
+        int track = input.trackInput();
+        table.getTrainByTrainNumber(trainNumber).setTrack(track);
     }
 
     public void setDelayToTrain(){
         int trainNumber = chooseTrainNumber();
-
-        System.out.println("Skriv hvor forsinket toget er i timer:");
-        String delayHourInput = in.nextLine();
-        int delayHour = tryInt(delayHourInput, 0);
-
-        System.out.println("Skriv hvor forsinket toget er i minutter:");
-        String delayMinuteInput = in.nextLine();
-        int delayMinute = tryInt(delayMinuteInput, 0);
-
-        table.getTrainToTrainNumber(trainNumber).setDelay(LocalTime.of(delayHour, delayMinute));
+        LocalTime delay = input.delayInput();
+        table.getTrainByTrainNumber(trainNumber).setDelay(delay);
     }
 
-    public void findTrainDeparture(){
+    public void findTrainByTrainNumber(){
         int trainNumber = chooseTrainNumber();
-        table.getTrainToTrainNumber(trainNumber).toStrin();
+        table.getTrainByTrainNumber(trainNumber).toStrin();
     }
 
-    public void updateClock(){
-        int hour = input.hourInput("du vil sette klokken til");
-        int minute = input.minuteInput("du vil sette klokken til");
+    public void findTrainByDestination(){
+        ArrayList<TrainDeparture> destinationList = chooseDestination();
+        destinationList.forEach(TrainDeparture::toStrin);
+    }
+
+    public void setNewTime(){
+        updateClock();
+        updateTable();
+        printTrainDeparture();
+    }
+
+    private void updateClock(){
+        int hour = 0;
+        int minute = 0;
+        LocalTime time;
+        do {
+            time = input.clockInput();
+        } while(time.isBefore(clock.getClock()));
+
         clock.setClock(hour, minute);
         System.out.println(clock.getClock());
+    }
+
+    private void updateTable(){
+        table.getTable().removeIf(trainDeparture -> trainDeparture.getOriginalDepartureTime().isBefore(clock.getClock()));
     }
 
     private Integer tryInt(String tall, int dummyValue){
@@ -111,6 +123,58 @@ public class UserInterface {
             utskrift = "Du må sette inn et tognummer fra listen\n";
         } while (!table.checkTrainNumber(trainNumber));
         return trainNumber;
+    }
+
+    private ArrayList<TrainDeparture> chooseDestination(){
+        ArrayList<TrainDeparture> destinationList = new ArrayList<>();
+        String utskrift = "";
+        do {
+            System.out.print(utskrift);
+            table.printDestinationList();
+            System.out.println("\nVelg en av destinasjonene");
+            String destination = in.nextLine();
+            destinationList = table.getTrainByDestination(destination);
+            utskrift = "Du må sette inn en destinasjon fra listen\n";
+        } while (destinationList.isEmpty());
+        return destinationList;
+    }
+
+    private void menuList(){
+        int menuChoice = 0;
+        do {
+            System.out.println("[1] Vis tog avgangene\n" +
+                    "[2] Legg til ny togavgang\n" +
+                    "[3] Tildel spor til avgang\n" +
+                    "[4] Legg inn forsinkelse\n" +
+                    "[5] Søk etter togavgang basert på tognummer\n" +
+                    "[6] Søk etter togavgang basert på destinasjon\n" +
+                    "[7] Oppdater klokken\n" +
+                    "[8] Avslutt\n");
+
+            menuChoice = input.intInput("Skriv inn tallet som korresponderer med handlingen du vil utføre: ", 0);
+        } while (menuChoice == 0);
+    }
+
+    private void doOperation(int menuChoice){
+        if(menuChoice == 1){
+            printTrainDeparture();
+        } else if (menuChoice == 2) {
+            addTraindeparture();
+        } else if (menuChoice == 3) {
+            setTrackToTrain();
+        } else if (menuChoice == 4) {
+            setDelayToTrain();
+        } else if (menuChoice == 5) {
+            findTrainByTrainNumber();
+        } else if (menuChoice == 6) {
+            findTrainByDestination();
+        } else if (menuChoice == 7) {
+            updateClock();
+        } else {
+            System.exit(0);
+        }
+
+
     }
 
     public void setTable(Table table){
