@@ -8,13 +8,15 @@ public class UserInterface {
     /**
      * Objekstvariabler
      */
-    //private ArrayList<TrainDeparture> table;
     private Table table = new Table();
+    private Input input;
+
+    private Clock clock = new Clock();
 
     /**
      * Konstruktør
      */
-    public UserInterface(Table table){this.table = table;}
+    public UserInterface(Table table){this.table = table; this.input = new Input(this.table);}
 
     public void printTrainDeparture() { //lager en metode som printer tog-oversikten ut til bruker
         Collections.sort(table.getTable(), new sortByTime()); //sorterer tabellen med hjelp av sortByTime
@@ -23,12 +25,11 @@ public class UserInterface {
         System.out.println(s.repeat(30));
     }
     public void addTraindeparture(){
-        Input input = new Input(table);
         //ber bruker skrive inn timen toget går
-        int hour = input.hourInput();
+        int hour = input.hourInput("toget går (mellom 0-23");
 
         //ber bruker skrive inn minuttet toget går
-        int minute = input.minuteInput();
+        int minute = input.minuteInput("toget går (mellom 0-59)");
 
         //ber brukeren skrive inn navnet på den nye linjen
         String line = input.lineInput();
@@ -72,6 +73,18 @@ public class UserInterface {
         int delayMinute = tryInt(delayMinuteInput, 0);
 
         table.getTrainToTrainNumber(trainNumber).setDelay(LocalTime.of(delayHour, delayMinute));
+    }
+
+    public void findTrainDeparture(){
+        int trainNumber = chooseTrainNumber();
+        table.getTrainToTrainNumber(trainNumber).toStrin();
+    }
+
+    public void updateClock(){
+        int hour = input.hourInput("du vil sette klokken til");
+        int minute = input.minuteInput("du vil sette klokken til");
+        clock.setClock(hour, minute);
+        System.out.println(clock.getClock());
     }
 
     private Integer tryInt(String tall, int dummyValue){

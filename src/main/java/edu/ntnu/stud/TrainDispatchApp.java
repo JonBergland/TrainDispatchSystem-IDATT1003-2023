@@ -29,7 +29,10 @@ public class TrainDispatchApp {
 
     //userInterface.setDelayToTrain();
     //userInterface.printTrainDeparture();
-    table.getTable().get(0).toStrin();
+
+    //table.getTable().get(0).toStrin();
+
+    userInterface.findTrainDeparture();
 
 
 

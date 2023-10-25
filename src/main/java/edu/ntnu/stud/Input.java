@@ -12,8 +12,8 @@ public class Input {
     public Input(Table table){this.table = table;}
     Scanner in = new Scanner(System.in);
 
-    public int hourInput(){
-        System.out.println("Skriv inn ved hvilken time toget går" );
+    public int hourInput(String detaljer){
+        System.out.println("Skriv inn ved hvilken time " + detaljer);
         String hourInput = in.nextLine();
         int dummyValue = 0;
         int hour = tryInt(hourInput, 0);
@@ -23,8 +23,8 @@ public class Input {
         return hour;
     }
 
-    public int minuteInput(){
-        System.out.println("Skriv inn ved hvilken minutt toget går (mellom 0-59)" );
+    public int minuteInput(String detaljer){
+        System.out.println("Skriv inn ved hvilken minutt" + detaljer);
         String minuteInput = in.nextLine();
         int dummyValue = 0;
         int minute = tryInt(minuteInput, dummyValue);
