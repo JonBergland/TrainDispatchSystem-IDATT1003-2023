@@ -14,8 +14,10 @@ public class TrainDispatchApp {
   public static void main(String[] args) {
 
     UserInterface userInterface = new UserInterface();
-    userInterface.start();
-    userInterface.init();
+
+
+    //userInterface.start();
+    //userInterface.init();
     //userInterface.printTrainDeparture();
 
     //userInterface.addTraindeparture();

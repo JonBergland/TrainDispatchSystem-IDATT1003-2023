@@ -63,7 +63,7 @@ public class TrainDeparture {
         return departureTime;
     }
 
-    public void toStrin() {
+    public String toStrin() {
         String output = getOriginalDepartureTime() + " " + getLine() + " "
                 + getTrainNumber() + " " + getDestination();
         if (getTrack() > -1) {
@@ -72,7 +72,7 @@ public class TrainDeparture {
         if (getDelay().isAfter(LocalTime.of(0, 0))) {
             output += " Forsinkelse: " + getDelay();
         }
-        System.out.println(output);
+        return output;
     }
 
     public void setDelay(LocalTime delay){

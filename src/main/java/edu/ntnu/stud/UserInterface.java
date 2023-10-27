@@ -35,7 +35,7 @@ public class UserInterface {
     public void printTrainDeparture() { //lager en metode som printer tog-oversikten ut til bruker
         System.out.println("Time: " + clock.getClock());
         table.getTable().sort(new sortByTime()); //sorterer tabellen med hjelp av sortByTime
-        table.getTable().forEach(TrainDeparture::toStrin);
+        table.getTable().forEach(t-> System.out.println(t.toStrin()));
     }
     public void addTraindeparture(){
         //ber bruker skrive inn timen toget går
@@ -77,12 +77,12 @@ public class UserInterface {
 
     public void findTrainByTrainNumber(){
         int trainNumber = chooseTrainNumber();
-        table.getTrainByTrainNumber(trainNumber).toStrin();
+        System.out.println(table.getTrainByTrainNumber(trainNumber).toStrin());
     }
 
     public void findTrainByDestination(){
         ArrayList<TrainDeparture> destinationList = chooseDestination();
-        destinationList.forEach(TrainDeparture::toStrin);
+        destinationList.forEach(t-> System.out.println(t.toStrin()));
     }
 
     public void setNewTime(){
@@ -170,11 +170,5 @@ public class UserInterface {
         } else {
             System.exit(0);
         }
-
-
-    }
-
-    public void setTable(Table table){
-        this.table = table;
     }
 }
