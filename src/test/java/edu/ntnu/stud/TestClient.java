@@ -1,6 +1,7 @@
 package edu.ntnu.stud;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class TestClient {
 
@@ -13,13 +14,20 @@ public class TestClient {
     public void alleTester(){
         String utskrift = "";
 
+        //tester for trainDeparture
         utskrift += testTrainDepartureGet();
         utskrift += testTrainDepartureSet();
         utskrift += testTrainDeparturetoStrin();
 
+        //tester for table
+        utskrift += testTableGet();
+
         System.out.println(utskrift);
     }
 
+    /**
+     *Enhetstester for TrainDeparture
+     */
     private String testTrainDepartureGet(){ //test som tester alle get metodene i TrainDeparture
         LocalTime originalDepartureTime = LocalTime.of(8,30);
         String line = "L4";
@@ -105,8 +113,7 @@ public class TestClient {
         trainDeparture.setTrack(newTrack);
         toStrinTest = trainDeparture.getOriginalDepartureTime() + " " + trainDeparture.getLine() + " "
                 + trainDeparture.getTrainNumber() + " " + trainDeparture.getDestination() + " Spor: " + trainDeparture.getTrack();
-        System.out.println(toStrinTest);
-        System.out.println(trainDeparture.toStrin());
+
         if (!trainDeparture.toStrin().equals(toStrinTest)){
             utskrift += "toString() printer ikke riktig for synlige spor\n";
         }
@@ -122,11 +129,39 @@ public class TestClient {
         }
 
         if (utskrift.isEmpty()){
-            utskrift += "Test av toStrin i TrainDeparture er vellykket";
+            utskrift += "Test av toStrin i TrainDeparture er vellykket\n";
         }
 
         return utskrift;
     }
 
+    /**
+     * Enhetstester for table
+     */
+
+    private String testTableGet(){
+        ArrayList<TrainDeparture> tableList = new ArrayList<>();
+        tableList.add(new TrainDeparture(LocalTime.of(12, 15), "L1", 600, "Oslo", -1, LocalTime.of(0, 0)));
+        tableList.add(new TrainDeparture(LocalTime.of(15, 30), "L2", 300, "Hamar",-1,  LocalTime.of(0, 0)));
+
+        Table table = new Table();
+        table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "L1", 600, "Oslo", -1, LocalTime.of(0, 0)));
+        table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "L2", 300, "Hamar",-1,  LocalTime.of(0, 0)));
+
+        String utskrift = "";
+
+        for (int i = 0; i < table.getTable().size(); i++) {
+            if (table.getTable().get(i).getTrainNumber() != tableList.get(i).getTrainNumber()){
+                utskrift += "Get table gir ikke liste over togavganger tilbake\n";
+            }
+
+        }
+
+        if (utskrift.isEmpty()){
+            utskrift += "Testen av get-metodene til Table er vellykket\n";
+        }
+
+        return utskrift;
+    }
 }
 
