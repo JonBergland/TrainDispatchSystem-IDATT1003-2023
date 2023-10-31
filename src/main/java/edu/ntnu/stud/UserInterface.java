@@ -7,14 +7,13 @@ import java.util.*;
  * Dette er klassen for brukergrensesnittet
  */
 public class UserInterface {
-    Scanner in = new Scanner(System.in);
     /**
      * Objekstvariabler
      * Lager nye instanser av hvert objekt fordi dette er klassen som brukeren
      * kommer til å bruke for å kommunisere med resten av klassene
      */
     private Table table = new Table();
-    private Clock clock = new Clock();
+    private final Clock clock = new Clock();
     //setter input til final fordi den bare henter brukerinputt eller bruker mutable-metoder som endrer på andre objekt
     private final Input input = new Input(table, clock);
 
@@ -109,19 +108,21 @@ public class UserInterface {
     }
 
     private int menuList() { //en metode som lager en meny over funksjonene til programmet og lar bruker velge en av dem
-        int menuChoice = 0;
+        int menuChoice;
         do {
             String s = "-"; //en streng som skal markere et skille mellom tidligere kjørt funksjon og menyen
             System.out.println(s.repeat(30));
             //skriver ut funksjonene til bruker
-            System.out.println("[1] Vis tog avgangene\n" +
-                    "[2] Legg til ny togavgang\n" +
-                    "[3] Tildel spor til avgang\n" +
-                    "[4] Legg inn forsinkelse\n" +
-                    "[5] Søk etter togavgang basert på tognummer\n" +
-                    "[6] Søk etter togavgang basert på destinasjon\n" +
-                    "[7] Oppdater klokken\n" +
-                    "[8] Avslutt\n");
+            System.out.println("""
+                    [1] Vis tog avgangene
+                    [2] Legg til ny togavgang
+                    [3] Tildel spor til avgang
+                    [4] Legg inn forsinkelse
+                    [5] Søk etter togavgang basert på tognummer
+                    [6] Søk etter togavgang basert på destinasjon
+                    [7] Oppdater klokken
+                    [8] Avslutt
+                    """);
 
             //får inn valgt funksjon fra bruker og legger i variablen menuChoice
             menuChoice = input.intInput("Skriv inn tallet som korresponderer med handlingen du vil utføre: ", 0);
@@ -133,32 +134,15 @@ public class UserInterface {
     private void doOperation(int menuChoice) { //en metode som tar inn tallverdien som bruker satte inn som parameter
         do { //kjører en do-while løkke som kjører så lenge meny-valget ikke er 8
             switch (menuChoice) { //bruker switch til å kjøre metoden som tilsvarer til den brukervalgte verdien
-                case 1:
-                    printTrainDeparture();
-                    break;
-                case 2:
-                    addTraindeparture();
-                    break;
-                case 3:
-                    setTrackToTrain();
-                    break;
-                case 4:
-                    setDelayToTrain();
-                    break;
-                case 5:
-                    findTrainByTrainNumber();
-                    break;
-                case 6:
-                    findTrainByDestination();
-                    break;
-                case 7:
-                    updateClock();
-                    break;
-                case 8:
-                    System.exit(0);
-
-                default: //hvis bruker ikke satte inn en verdi innenfor rekkeviden 1-8, kommer en streng-feilmelding
-                    System.out.println("Tallet du satte inn samsvarer ikke med et tall fra listen");
+                case 1 -> printTrainDeparture();
+                case 2 -> addTraindeparture();
+                case 3 -> setTrackToTrain();
+                case 4 -> setDelayToTrain();
+                case 5 -> findTrainByTrainNumber();
+                case 6 -> findTrainByDestination();
+                case 7 -> updateClock();
+                case 8 -> System.exit(0);
+                default -> System.out.println("Tallet du satte inn samsvarer ikke med et tall fra listen");
             }
             //finner ny menuChoice ved hjelp av menuList-metoden
             menuChoice = menuList();
