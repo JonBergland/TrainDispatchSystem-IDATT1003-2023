@@ -57,38 +57,67 @@ public final class TrainDeparture {
 
 
   /**
-   * Objekstmetoder
+   *
+   * @return trainNumber              Returns the train departure's trainNumber
    */
   public int getTrainNumber() {
     return trainNumber;
   }
 
+  /**
+   *
+   * @return track                    Returns the train departure's track
+   */
   public int getTrack() {
     return track;
   }
 
+  /**
+   *
+   * @return delay                    Returns the train departure's delay
+   */
   public LocalTime getDelay() {
     return delay;
   }
 
+  /**
+   *
+   * @return originalDepartureTime   Returns the train departure's original departure time
+   */
   public LocalTime getOriginalDepartureTime() {
     return originalDepartureTime;
   }
 
+  /**
+   *
+   * @return destination             Returns the train departure's destination
+   */
   public String getDestination() {
     return destination;
   }
 
+  /**
+   *
+   * @return line                    Returns the train departure's line
+   */
   public String getLine() {
     return line;
   }
 
+  /**
+   *
+   * @return departureTime           Returns departure time (original + delay)
+   */
   public LocalTime getDepartureTime() {
     LocalTime departureTime = this.originalDepartureTime.plusHours(this.delay.getHour());
     departureTime = departureTime.plusMinutes(this.delay.getMinute());
     return departureTime;
   }
 
+  /**
+   *
+   * @return String                 Returns the train departure as a string
+   */
   public String toStrin() {
     String output = getOriginalDepartureTime() + " " + getLine() + " " + getTrainNumber() + " " + getDestination();
     if (getTrack() > -1) {
@@ -100,11 +129,19 @@ public final class TrainDeparture {
     return output;
   }
 
+  /**
+   *
+   * @param delay                   sets delay as the LocalTime parameter
+   */
   public void setDelay(LocalTime delay) {
     this.delay = this.delay.plusHours(delay.getHour());
     this.delay = this.delay.plusMinutes(delay.getMinute());
   }
 
+  /**
+   *
+   * @param track                   sets track as the integer parameter
+   */
   public void setTrack(int track) {
     this.track = track;
   }
