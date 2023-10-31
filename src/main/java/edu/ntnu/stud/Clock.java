@@ -12,21 +12,21 @@ public class Clock {
     private LocalTime clock;
 
     /**
-     * Konstruktør
+     * Initialize the Clock object with a LocalTime of 0
      */
     public Clock(){ //når Clock blir initialisert settes den til 00:00
         this.clock = LocalTime.of(0, 0);
     }
 
     /**
-     * @return LocalTime
+     * @return LocalTime        Gets the current time
      */
     public LocalTime getClock(){ //en get-metode for å returnere klokkeslettet
         return clock;
     }
 
     /**
-     * @param time
+     * @param time              The time the new clock is set to be
      */
     public void setClock(LocalTime time){ //en setmetode som setter parameteren lik klokkeslettet
         this.clock = time;

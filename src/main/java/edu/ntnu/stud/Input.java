@@ -111,7 +111,7 @@ public class Input {
     }
 
     /**
-     * @return LocalTime
+     * @return LocalTime            Returns hours and minutes set by user
      */
     public LocalTime delayInput(){ //en metode for delay-input fra bruker
         String print = "toget er forsinket med"; //en tekst-streng som skal skrives ut til bruker

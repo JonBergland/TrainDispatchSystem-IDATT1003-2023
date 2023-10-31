@@ -12,7 +12,7 @@ public class UserInterface {
      * Lager nye instanser av hvert objekt fordi dette er klassen som brukeren
      * kommer til å bruke for å kommunisere med resten av klassene
      */
-    private Table table = new Table();
+    private final Table table = new Table();
     private final Clock clock = new Clock();
     //setter input til final fordi den bare henter brukerinputt eller bruker mutable-metoder som endrer på andre objekt
     private final Input input = new Input(table, clock);
@@ -20,10 +20,10 @@ public class UserInterface {
 
     public void init() { //metode for oppstart av programmet
         // Oppretter først 4 objekter av klassen TrainDeparture og legger dem inn i et objekt av klassen Table
-        table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "", 601, "Frognerseteren", -1, LocalTime.of(0, 0)));
-        table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "Linje 2", 305, "Sognsvann", -1, LocalTime.of(0, 0)));
-        table.getTable().add(new TrainDeparture(LocalTime.of(10, 30), "Linje 3", 404, "Bergkrystallen", -1, LocalTime.of(0, 0)));
-        table.getTable().add(new TrainDeparture(LocalTime.of(10, 40), "Linje 4", 406, "Bergkrystallen", -1, LocalTime.of(0, 0)));
+        table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "", 601, "Frognerseteren", -1));
+        table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "Linje 2", 305, "Sognsvann", -1));
+        table.getTable().add(new TrainDeparture(LocalTime.of(10, 30), "Linje 3", 404, "Bergkrystallen", -1));
+        table.getTable().add(new TrainDeparture(LocalTime.of(10, 40), "Linje 4", 406, "Bergkrystallen", -1));
         //kjører metodene som printer menyen til bruker, tar inn hva bruker velger og kjører tilhørende metode
         doOperation(menuList());
     }
@@ -54,11 +54,8 @@ public class UserInterface {
         //ber brukeren om å sette spor til toget
         int track = input.trackInput();
 
-        //ber bruker om å sette inn eventuell forsinkelse
-        LocalTime delay = input.delayInput();
-
         //Lager en objekt av TrainDeparture med verdiene vi fikk fra bruker og legger den inn i Table-objektet
-        TrainDeparture newTraindeparture = new TrainDeparture(LocalTime.of(hour, minute), line, trainNumber, destination, track, delay);
+        TrainDeparture newTraindeparture = new TrainDeparture(LocalTime.of(hour, minute), line, trainNumber, destination, track);
         table.getTable().add(newTraindeparture);
     }
 
