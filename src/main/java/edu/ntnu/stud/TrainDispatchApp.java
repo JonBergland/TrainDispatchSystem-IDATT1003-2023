@@ -13,7 +13,6 @@ public class TrainDispatchApp {
   public static void start() {
     UserInterface userInterface = new UserInterface();
     userInterface.init();
-    //userInterface.menu();
   }
 }
 

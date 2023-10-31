@@ -2,6 +2,8 @@ package edu.ntnu.stud;
 
 import java.time.LocalTime;
 
+import static java.lang.Math.abs;
+
 /**
  * Dette er entitetsklassen for en tog-avgang
  */
@@ -23,11 +25,21 @@ public class TrainDeparture {
      * Konstruktør
      */
     public TrainDeparture(LocalTime OriginalDepartureTime, String line, int trainNumber, String destination,  int track, LocalTime delay){
-        this.originalDepartureTime = OriginalDepartureTime;
-        this.line = line;
-        this.trainNumber = trainNumber;
-        this.destination = destination;
-        this.track = track;
+        this.originalDepartureTime = OriginalDepartureTime; //tester om tiden er innenfor riktig rekkevidde i input-klassen
+        if (line.isEmpty()){
+            this.line = "NULL";
+        } else { this.line = line;}
+
+        this.trainNumber = abs(trainNumber); //tar absolutt verdien av konstruktør verdien
+
+        if (destination.isEmpty()){
+            this.destination = "NULL";
+        } else { this.destination = destination;}
+
+        if (track < -1){
+            this.track = -1;
+        } else { this.track = track;}
+
         this.delay = delay;
     }
 

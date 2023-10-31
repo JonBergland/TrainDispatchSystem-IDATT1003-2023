@@ -1,5 +1,6 @@
 package edu.ntnu.stud;
 
+import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ public class TestClient {
         String utskrift = "";
 
         //tester for trainDeparture
+        testTraindepartureConstructor();
         testTrainDepartureGet();
         utskrift += testTrainDepartureSet();
         utskrift += testTrainDeparturetoStrin();
@@ -29,6 +31,42 @@ public class TestClient {
     /**
      *Enhetstester for TrainDeparture
      */
+    private void testTraindepartureConstructor(){
+        LocalTime originalDepartureTime = LocalTime.of(8,30);
+        String line = "";
+        int trainNumber = -204;
+        String destination = "";
+        int track = -3;
+        LocalTime delay = LocalTime.of(0,0);
+
+        String utskrift = "";
+        try {
+            originalDepartureTime = LocalTime.of(-1, 3);
+        }
+        catch (DateTimeException e) {
+            utskrift += "Negativ test av departureTime er vellykket\n";
+        }
+
+        try {
+            TrainDeparture trainDeparture = new TrainDeparture(originalDepartureTime, line, trainNumber, destination, track, delay);
+            if (!trainDeparture.getLine().equals("NULL")){
+                throw new IllegalArgumentException("Line-dummyvalue blir ikke satt");
+            }
+            if (trainDeparture.getTrainNumber() != 204){
+                throw new IllegalArgumentException("Trainnumber absolutt verdi blir ikke satt");
+            }
+            if (!trainDeparture.getDestination().equals("NULL")){
+                throw new IllegalArgumentException("Destination-dummyvalue blir ikke satt");
+            }
+            if (trainDeparture.getTrack() != -1){
+                throw new IllegalArgumentException("Track dummyvalue blir ikke satt");
+            }
+            utskrift += "Test av konstruktøren i TrainDeparture var vellykket";
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        System.out.println(utskrift);
+    }
     private void testTrainDepartureGet(){ //test som tester alle get metodene i TrainDeparture
         LocalTime originalDepartureTime = LocalTime.of(8,30);
         String line = "L4";

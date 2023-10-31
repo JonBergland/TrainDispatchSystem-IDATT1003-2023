@@ -17,14 +17,12 @@ public class UserInterface {
      * Konstruktør
      */
     public void init(){
-        table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "Linje 1", 601, "Frognerseteren", -1, LocalTime.of(0, 0)));
+        table.getTable().add(new TrainDeparture(LocalTime.of(-12, 15), "", 601, "Frognerseteren", -1, LocalTime.of(0, 0)));
         table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "Linje 2", 305, "Sognsvann",-1,  LocalTime.of(0, 0)));
         table.getTable().add(new TrainDeparture(LocalTime.of(10, 30), "Linje 3", 404, "Bergkrystallen", -1, LocalTime.of(0, 0)));
         table.getTable().add(new TrainDeparture(LocalTime.of(10, 40), "Linje 4", 406, "Bergkrystallen", -1, LocalTime.of(0, 0)));
-        while (true) {
-            int menuChoice = menuList();
-            doOperation(menuChoice);
-        }
+
+        doOperation(menuList());
     }
     public void printTrainDeparture() { //lager en metode som printer tog-oversikten ut til bruker
         System.out.println("Time: " + clock.getClock());
@@ -147,6 +145,42 @@ public class UserInterface {
     }
 
     private void doOperation(int menuChoice){
+        do {
+            switch (menuChoice) {
+                case 1:
+                    printTrainDeparture();
+                    break;
+                case 2:
+                    addTraindeparture();
+                    break;
+                case 3:
+                    setTrackToTrain();
+                    break;
+                case 4:
+                    setDelayToTrain();
+                    break;
+                case 5:
+                    findTrainByTrainNumber();
+                    break;
+                case 6:
+                    findTrainByDestination();
+                    break;
+                case 7:
+                    updateClock();
+                    break;
+                case 8:
+                    System.exit(0);
+
+                default:
+                    System.out.println("Tallet du satte inn korosponderer ikke med et tall fra listen");
+
+            }
+
+            menuChoice = menuList();
+
+        } while (menuChoice != 8);
+
+        /*
         if(menuChoice == 1){
             printTrainDeparture();
         } else if (menuChoice == 2) {
@@ -163,6 +197,6 @@ public class UserInterface {
             updateClock();
         } else {
             System.exit(0);
-        }
+        }*/
     }
 }
