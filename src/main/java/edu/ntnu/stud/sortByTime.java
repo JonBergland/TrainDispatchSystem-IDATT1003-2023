@@ -6,6 +6,6 @@ import java.util.Comparator;
 public class sortByTime implements Comparator<TrainDeparture> {
     public int compare(TrainDeparture a, TrainDeparture b){
         //har en metode som sammenligner den reele avgangstiden med hverandre
-        return a.getDepartureTime().compareTo(b.getDepartureTime());
+        return a.getOriginalDepartureTime().compareTo(b.getOriginalDepartureTime());
     }
 }

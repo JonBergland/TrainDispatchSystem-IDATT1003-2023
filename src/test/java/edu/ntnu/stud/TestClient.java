@@ -15,12 +15,13 @@ public class TestClient {
         String utskrift = "";
 
         //tester for trainDeparture
-        utskrift += testTrainDepartureGet();
+        testTrainDepartureGet();
         utskrift += testTrainDepartureSet();
         utskrift += testTrainDeparturetoStrin();
 
         //tester for table
         utskrift += testTableGet();
+        utskrift += testTableCheckTrainNumber();
 
         System.out.println(utskrift);
     }
@@ -28,7 +29,7 @@ public class TestClient {
     /**
      *Enhetstester for TrainDeparture
      */
-    private String testTrainDepartureGet(){ //test som tester alle get metodene i TrainDeparture
+    private void testTrainDepartureGet(){ //test som tester alle get metodene i TrainDeparture
         LocalTime originalDepartureTime = LocalTime.of(8,30);
         String line = "L4";
         int trainNumber = 204;
@@ -37,31 +38,31 @@ public class TestClient {
         LocalTime delay = LocalTime.of(0,0);
 
         TrainDeparture trainDeparture = new TrainDeparture(originalDepartureTime, line, trainNumber, destination, track, delay);
-        String utskrift = "";
-        
-        if (!trainDeparture.getOriginalDepartureTime().equals(originalDepartureTime)){
-            utskrift += "Avgangstiden er ikke den samme\n";
-        }
-        if (!trainDeparture.getLine().equals(line)) {
-            utskrift += "Linjen er ikke den samme\n";
-        }
-        if (trainDeparture.getTrainNumber() != trainNumber) {
-            utskrift += "Tognummeret er ikke det samme\n";
-        }
-        if (!trainDeparture.getDestination().equals(destination)) {
-            utskrift += "Destinasjonen er ikke den samme\n";
-        }
-        if (trainDeparture.getTrack() != track) {
-            utskrift += "Sporet er ikke det samme\n";
-        }
-        if (!trainDeparture.getDelay().equals(delay)){
-            utskrift += "Forsinkelsen er ikke det samme\n";
-        }
 
-        if (utskrift.isEmpty()){
-            utskrift += "Test av get-metodene i TrainDeparture var vellykket\n";
+        try {
+            if (!trainDeparture.getOriginalDepartureTime().equals(originalDepartureTime)){
+                throw new IllegalArgumentException("Get-metode for original avgangstid gir ikke riktig output");
+            }
+            if (!trainDeparture.getLine().equals(line)) {
+                throw new IllegalArgumentException("Get-metode for linjenavnet gir ikke riktig output");
+            }
+            if (trainDeparture.getTrainNumber() != trainNumber) {
+                throw new IllegalArgumentException("Get-metode for tognummeret gir ikke riktig output");
+            }
+            if (!trainDeparture.getDestination().equals(destination)) {
+                throw new IllegalArgumentException("Get-metode for destinasjonen gir ikke riktig output");
+            }
+            if (trainDeparture.getTrack() != track) {
+                throw new IllegalArgumentException("Get-metode for sporet gir ikke riktig output");
+            }
+            if (!trainDeparture.getDelay().equals(delay)){
+                throw new IllegalArgumentException("Get-metode for forsinkelsen gir ikke riktig output");
+            }
+            System.out.println("Test av get-metodene var vellykket");
+
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
         }
-        return utskrift;
     }
     private String testTrainDepartureSet(){
         LocalTime originalDepartureTime = LocalTime.of(8,30);
@@ -163,5 +164,22 @@ public class TestClient {
 
         return utskrift;
     }
+    private String testTableCheckTrainNumber(){
+        Table table = new Table();
+        table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "L1", 600, "Oslo", -1, LocalTime.of(0, 0)));
+        table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "L2", 300, "Hamar",-1,  LocalTime.of(0, 0)));
+
+        String utskrift = "";
+
+        if (table.checkTrainNumber(600) && !table.checkTrainNumber(601)){
+            utskrift += "Testen for checkTrainNumber var vellykket\n";
+        }
+        else {
+            utskrift += "ChechTrainNumber gir ikke riktig output\n";
+        }
+        return utskrift;
+    }
+
+
 }
 

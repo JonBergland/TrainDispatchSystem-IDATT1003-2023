@@ -9,25 +9,19 @@ public class UserInterface {
      * Objekstvariabler
      */
     private Table table = new Table();
-    private final Input input = new Input(table);
-
     private Clock clock = new Clock();
+    private final Input input = new Input(table, clock);
+
 
     /**
      * Konstruktør
      */
-
-
-    public void start(){
+    public void init(){
         table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "Linje 1", 601, "Frognerseteren", -1, LocalTime.of(0, 0)));
         table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "Linje 2", 305, "Sognsvann",-1,  LocalTime.of(0, 0)));
         table.getTable().add(new TrainDeparture(LocalTime.of(10, 30), "Linje 3", 404, "Bergkrystallen", -1, LocalTime.of(0, 0)));
         table.getTable().add(new TrainDeparture(LocalTime.of(10, 40), "Linje 4", 406, "Bergkrystallen", -1, LocalTime.of(0, 0)));
-
-    }
-
-    public void init(){
-        while (true){
+        while (true) {
             int menuChoice = menuList();
             doOperation(menuChoice);
         }
@@ -39,10 +33,10 @@ public class UserInterface {
     }
     public void addTraindeparture(){
         //ber bruker skrive inn timen toget går
-        int hour = input.hourInput("toget går (mellom 0-23");
+        int hour = input.hourInput("toget går");
 
         //ber bruker skrive inn minuttet toget går
-        int minute = input.minuteInput("toget går (mellom 0-59)");
+        int minute = input.minuteInput("toget går");
 
         //ber brukeren skrive inn navnet på den nye linjen
         String line = input.lineInput();
@@ -103,7 +97,7 @@ public class UserInterface {
     }
 
     private void updateTable(){
-        table.getTable().removeIf(trainDeparture -> trainDeparture.getOriginalDepartureTime().isBefore(clock.getClock()));
+        table.getTable().removeIf(trainDeparture -> trainDeparture.getDepartureTime().isBefore(clock.getClock()));
     }
 
     private int chooseTrainNumber(){

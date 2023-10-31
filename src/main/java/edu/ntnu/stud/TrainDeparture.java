@@ -2,11 +2,11 @@ package edu.ntnu.stud;
 
 import java.time.LocalTime;
 
-
+/**
+ * Dette er entitetsklassen for en tog-avgang
+ */
 public class TrainDeparture {
     /**
-     * Dette er entitetsklassen for en tog-avgang
-     *
      *Objektsvariabler
      * Lager en variabel til hver av atributtene til objektet
      */
@@ -62,7 +62,6 @@ public class TrainDeparture {
         departureTime = departureTime.plusMinutes(this.delay.getMinute());
         return departureTime;
     }
-
     public String toStrin() {
         String output = getOriginalDepartureTime() + " " + getLine() + " "
                 + getTrainNumber() + " " + getDestination();
@@ -74,12 +73,10 @@ public class TrainDeparture {
         }
         return output;
     }
-
     public void setDelay(LocalTime delay){
         this.delay = this.delay.plusHours(delay.getHour());
         this.delay = this.delay.plusMinutes(delay.getMinute());
     }
-
     public void setTrack(int track){
         this.track = track;
     }
