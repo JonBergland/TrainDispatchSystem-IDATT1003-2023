@@ -26,7 +26,8 @@ public class Table{
         boolean output = false; //setter variablen til false
         for(TrainDeparture i: table){ //løkker gjennom alle objektene i Table-objektet
             if (i.getTrainNumber() == newTrainNumber){ //sjekker om tognumrene er de samme
-                output = true; //setter output til true, hvis tognumrene er like
+                output = true; //setter output til true hvis tognumrene er like og breaker
+                break;
             }
         }
         return output; //returnerer den bolske verdien
@@ -43,7 +44,7 @@ public class Table{
                     String destination = trainDeparture.getDestination();
                     if (!unique.contains(destination)) { //sjekker om listen ikke inneholder destinasjonen
                         //hvis en ny, unik destinasjon printes destinasjonen ut og legges til i listen
-                        System.out.println(destination + " \n");
+                        System.out.println(destination + " ");
                         unique.add(destination);
                     }
         });
