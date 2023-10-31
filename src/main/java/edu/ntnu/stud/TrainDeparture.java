@@ -7,9 +7,10 @@ import static java.lang.Math.abs;
 /**
  * Dette er entitetsklassen for en tog-avgang
  */
-public class TrainDeparture {
+public final class TrainDeparture {
+
     /**
-     *Objektsvariabler
+     * Objektsvariabler
      * Lager en variabel til hver av atributtene til objektet
      */
 
@@ -20,25 +21,31 @@ public class TrainDeparture {
     private int track;
     private LocalTime delay;
 
-
     /**
      * Konstruktør
      */
-    public TrainDeparture(LocalTime OriginalDepartureTime, String line, int trainNumber, String destination,  int track, LocalTime delay){
-        this.originalDepartureTime = OriginalDepartureTime; //tester om tiden er innenfor riktig rekkevidde i input-klassen
-        if (line.isEmpty()){
+    public TrainDeparture(LocalTime OriginalDepartureTime, String line, int trainNumber, String destination, int track, LocalTime delay) {
+        //tester om tiden er innenfor riktig rekkevidde i input-klassen
+        this.originalDepartureTime = OriginalDepartureTime;
+        if (line.isEmpty()) { //setter inn dummy-verdi hvis strengen er tom
             this.line = "NULL";
-        } else { this.line = line;}
+        } else {
+            this.line = line;
+        }
 
         this.trainNumber = abs(trainNumber); //tar absolutt verdien av konstruktør verdien
 
-        if (destination.isEmpty()){
+        if (destination.isEmpty()) { //setter inn dummy-verdi hvis strengen er tom
             this.destination = "NULL";
-        } else { this.destination = destination;}
+        } else {
+            this.destination = destination;
+        }
 
-        if (track < -1){
+        if (track < -1) { //setter track til -1, altså usynlig, hvis variablen er mindre enn -1
             this.track = -1;
-        } else { this.track = track;}
+        } else {
+            this.track = track;
+        }
 
         this.delay = delay;
     }
@@ -50,6 +57,7 @@ public class TrainDeparture {
     public int getTrainNumber() {
         return trainNumber;
     }
+
     public int getTrack() {
         return track;
     }
@@ -69,14 +77,15 @@ public class TrainDeparture {
     public String getLine() {
         return line;
     }
-    public LocalTime getDepartureTime(){
+
+    public LocalTime getDepartureTime() {
         LocalTime departureTime = this.originalDepartureTime.plusHours(this.delay.getHour());
         departureTime = departureTime.plusMinutes(this.delay.getMinute());
         return departureTime;
     }
+
     public String toStrin() {
-        String output = getOriginalDepartureTime() + " " + getLine() + " "
-                + getTrainNumber() + " " + getDestination();
+        String output = getOriginalDepartureTime() + " " + getLine() + " " + getTrainNumber() + " " + getDestination();
         if (getTrack() > -1) {
             output += " Spor: " + getTrack();
         }
@@ -85,11 +94,13 @@ public class TrainDeparture {
         }
         return output;
     }
-    public void setDelay(LocalTime delay){
+
+    public void setDelay(LocalTime delay) {
         this.delay = this.delay.plusHours(delay.getHour());
         this.delay = this.delay.plusMinutes(delay.getMinute());
     }
-    public void setTrack(int track){
+
+    public void setTrack(int track) {
         this.track = track;
     }
 

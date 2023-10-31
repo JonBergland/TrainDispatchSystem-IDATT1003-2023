@@ -3,33 +3,40 @@ package edu.ntnu.stud;
 import java.time.LocalTime;
 import java.util.*;
 
+/**
+ * Dette er klassen for brukergrensesnittet
+ */
 public class UserInterface {
     Scanner in = new Scanner(System.in);
     /**
      * Objekstvariabler
+     * Lager nye instanser av hvert objekt fordi dette er klassen som brukeren
+     * kommer til å bruke for å kommunisere med resten av klassene
      */
     private Table table = new Table();
     private Clock clock = new Clock();
+    //setter input til final fordi den bare henter brukerinputt eller bruker mutable-metoder som endrer på andre objekt
     private final Input input = new Input(table, clock);
 
 
-    /**
-     * Konstruktør
-     */
-    public void init(){
-        table.getTable().add(new TrainDeparture(LocalTime.of(-12, 15), "", 601, "Frognerseteren", -1, LocalTime.of(0, 0)));
-        table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "Linje 2", 305, "Sognsvann",-1,  LocalTime.of(0, 0)));
+    public void init() { //metode for oppstart av programmet
+        // Oppretter først 4 objekter av klassen TrainDeparture og legger dem inn i et objekt av klassen Table
+        table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "", 601, "Frognerseteren", -1, LocalTime.of(0, 0)));
+        table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "Linje 2", 305, "Sognsvann", -1, LocalTime.of(0, 0)));
         table.getTable().add(new TrainDeparture(LocalTime.of(10, 30), "Linje 3", 404, "Bergkrystallen", -1, LocalTime.of(0, 0)));
         table.getTable().add(new TrainDeparture(LocalTime.of(10, 40), "Linje 4", 406, "Bergkrystallen", -1, LocalTime.of(0, 0)));
-
+        //kjører metodene som printer menyen til bruker, tar inn hva bruker velger og kjører tilhørende metode
         doOperation(menuList());
     }
+
     public void printTrainDeparture() { //lager en metode som printer tog-oversikten ut til bruker
-        System.out.println("Time: " + clock.getClock());
+        System.out.println("Time: " + clock.getClock()); //printer først den nåværende tiden
         table.getTable().sort(new sortByTime()); //sorterer tabellen med hjelp av sortByTime
-        table.getTable().forEach(t-> System.out.println(t.toStrin()));
+        //bruker en lambda expression for å skrive ut hvert TrainDeparture-objekt i Table-objektet
+        table.getTable().forEach(t -> System.out.println(t.toStrin()));
     }
-    public void addTraindeparture(){
+
+    public void addTraindeparture() {//metoden for å legge til en objekt av klassen TrainDeparture
         //ber bruker skrive inn timen toget går
         int hour = input.hourInput("toget går");
 
@@ -37,13 +44,13 @@ public class UserInterface {
         int minute = input.minuteInput("toget går");
 
         //ber brukeren skrive inn navnet på den nye linjen
-        String line = input.lineInput();
+        String line = input.stringInput("Skriv inn navnet på linjen");
 
         //ber brukeren skrive inn tognummeret
         int trainNumber = input.trainNumberInput();
 
         //ber brukeren skrive inn navnet til destinasjonen til linjen
-        String destination = input.destinationInput();
+        String destination = input.stringInput("Skriv inn navnet på destinasjonen");
 
         //ber brukeren om å sette spor til toget
         int track = input.trackInput();
@@ -51,85 +58,62 @@ public class UserInterface {
         //ber bruker om å sette inn eventuell forsinkelse
         LocalTime delay = input.delayInput();
 
+        //Lager en objekt av TrainDeparture med verdiene vi fikk fra bruker og legger den inn i Table-objektet
         TrainDeparture newTraindeparture = new TrainDeparture(LocalTime.of(hour, minute), line, trainNumber, destination, track, delay);
         table.getTable().add(newTraindeparture);
     }
 
-    public void setTrackToTrain(){
-        int trainNumber = chooseTrainNumber();
+    public void setTrackToTrain() { //metode for å sette spor til en togavgang basert på tognummeret til avgangen
+        //bruker metoder fra klassen Input for å få trainNumber og track fra bruker
+        int trainNumber = input.chooseTrainNumber();
         int track = input.trackInput();
+        //setter track til valgt track på objekt av TrainDeparture som samsvarer til riktig trainNumber
         table.getTrainByTrainNumber(trainNumber).setTrack(track);
     }
 
-    public void setDelayToTrain(){
-        int trainNumber = chooseTrainNumber();
+    public void setDelayToTrain() {
+        //bruker metoder fra klassen Input for å få trainNumber og delay fra bruker
+        int trainNumber = input.chooseTrainNumber();
         LocalTime delay = input.delayInput();
+        //setter delay til valgt delay på objekt av TrainDeparture som samsvarer til riktig trainNumber
         table.getTrainByTrainNumber(trainNumber).setDelay(delay);
     }
 
-    public void findTrainByTrainNumber(){
-        int trainNumber = chooseTrainNumber();
+    public void findTrainByTrainNumber() { //en metode som finner en TrainDeparture basert på trainNumber
+        //bruker velger en av de eksisterende trainNumber med hjelp av input-klassen
+        int trainNumber = input.chooseTrainNumber();
+        //bruker toStrin() for å skrive ut riktig TrainDeparture
         System.out.println(table.getTrainByTrainNumber(trainNumber).toStrin());
     }
 
-    public void findTrainByDestination(){
-        ArrayList<TrainDeparture> destinationList = chooseDestination();
-        destinationList.forEach(t-> System.out.println(t.toStrin()));
+    public void findTrainByDestination() { //en metode som finner en TrainDeparture basert på destination
+        //lager en arrayList som tar inn en liste med trainDepartures som har valgt destination som destination
+        ArrayList<TrainDeparture> destinationList = input.chooseDestination();
+        destinationList.forEach(t -> System.out.println(t.toStrin())); //bruker et lambda-utrykk for å skrive ut objektene
     }
 
-    public void setNewTime(){
-        updateClock();
-        updateTable();
-    }
-
-    private void updateClock(){
-        int hour = 0;
-        int minute = 0;
+    private void updateClock() { //en metode som oppdaterer klokka til ny tid satt av bruker
         LocalTime time;
-        do {
+        do { //bruker en do-while løkke som får input av bruker om nytt klokkeslett
             time = input.clockInput();
-        } while(time.isBefore(clock.getClock()));
-
+        } while (time.isBefore(clock.getClock())); //gjentas hvis klokkeslettet gitt er før det nåværende klokkeslettet
+        //setter klokka til nytt klokkeslett som er det samme eller etter det gamle klokkeslettet
         clock.setClock(time);
+        //fjerner togavganger som har vært med metoden updateTable
         updateTable();
     }
 
-    private void updateTable(){
-        table.getTable().removeIf(trainDeparture -> trainDeparture.getDepartureTime().isBefore(clock.getClock()));
+    private void updateTable() {
+        //en metode for å fjerne objekter av TrainDeparture fra Table hvis departureTime er før klokkeslettet
+        table.getTable().removeIf(t -> t.getDepartureTime().isBefore(clock.getClock()));
     }
 
-    private int chooseTrainNumber(){
-        int trainNumber = 0;
-        String utskrift = "";
-        do {
-            System.out.print(utskrift);
-            table.printTrainNumberList();
-
-            trainNumber = input.intInput("\nVelg en av togavgangene", 0);
-            utskrift = "Du må sette inn et tognummer fra listen\n";
-        } while (!table.checkTrainNumber(trainNumber));
-        return trainNumber;
-    }
-
-    private ArrayList<TrainDeparture> chooseDestination(){
-        ArrayList<TrainDeparture> destinationList = new ArrayList<>();
-        String utskrift = "";
-        do {
-            System.out.print(utskrift);
-            table.printDestinationList();
-            System.out.println("\nVelg en av destinasjonene");
-            String destination = in.nextLine();
-            destinationList = table.getTrainByDestination(destination);
-            utskrift = "Du må sette inn en destinasjon fra listen\n";
-        } while (destinationList.isEmpty());
-        return destinationList;
-    }
-
-    private int menuList(){
+    private int menuList() { //en metode som lager en meny over funksjonene til programmet og lar bruker velge en av dem
         int menuChoice = 0;
         do {
-            String s = "-";
+            String s = "-"; //en streng som skal markere et skille mellom tidligere kjørt funksjon og menyen
             System.out.println(s.repeat(30));
+            //skriver ut funksjonene til bruker
             System.out.println("[1] Vis tog avgangene\n" +
                     "[2] Legg til ny togavgang\n" +
                     "[3] Tildel spor til avgang\n" +
@@ -139,14 +123,16 @@ public class UserInterface {
                     "[7] Oppdater klokken\n" +
                     "[8] Avslutt\n");
 
+            //får inn valgt funksjon fra bruker og legger i variablen menuChoice
             menuChoice = input.intInput("Skriv inn tallet som korresponderer med handlingen du vil utføre: ", 0);
+            //hvis det som ble satt inn ikke var et tall, blir dummy-verdien 0 satt inn og løkka gjentas
         } while (menuChoice == 0);
-        return menuChoice;
+        return menuChoice; //returnerer valgt int verdi
     }
 
-    private void doOperation(int menuChoice){
-        do {
-            switch (menuChoice) {
+    private void doOperation(int menuChoice) { //en metode som tar inn tallverdien som bruker satte inn som parameter
+        do { //kjører en do-while løkke som kjører så lenge meny-valget ikke er 8
+            switch (menuChoice) { //bruker switch til å kjøre metoden som tilsvarer til den brukervalgte verdien
                 case 1:
                     printTrainDeparture();
                     break;
@@ -171,32 +157,12 @@ public class UserInterface {
                 case 8:
                     System.exit(0);
 
-                default:
-                    System.out.println("Tallet du satte inn korosponderer ikke med et tall fra listen");
-
+                default: //hvis bruker ikke satte inn en verdi innenfor rekkeviden 1-8, kommer en streng-feilmelding
+                    System.out.println("Tallet du satte inn samsvarer ikke med et tall fra listen");
             }
-
+            //finner ny menuChoice ved hjelp av menuList-metoden
             menuChoice = menuList();
-
+            //løkken kjøres "uendelig" fordi hvis bruker velger 8, avsluttes programmet med hjelp av system.exit
         } while (menuChoice != 8);
-
-        /*
-        if(menuChoice == 1){
-            printTrainDeparture();
-        } else if (menuChoice == 2) {
-            addTraindeparture();
-        } else if (menuChoice == 3) {
-            setTrackToTrain();
-        } else if (menuChoice == 4) {
-            setDelayToTrain();
-        } else if (menuChoice == 5) {
-            findTrainByTrainNumber();
-        } else if (menuChoice == 6) {
-            findTrainByDestination();
-        } else if (menuChoice == 7) {
-            updateClock();
-        } else {
-            System.exit(0);
-        }*/
     }
 }
