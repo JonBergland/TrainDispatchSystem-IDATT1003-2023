@@ -1,5 +1,8 @@
 package edu.ntnu.stud;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Nested;
+
 import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -24,18 +27,15 @@ public class TestClient {
         utskrift += testTrainDepartureSet();
         utskrift += testTrainDeparturetoStrin();
 
-        /**
-         //tester for table
-         utskrift += testTableGet();
-         utskrift += testTableCheckTrainNumber();
-         */
         System.out.println(utskrift);
     }
 
     /**
      * Enhetstester for TrainDeparture
      */
-    private void testTraindepartureConstructor() {
+    @Nested
+    @Test
+    public void testTraindepartureConstructor() {
         LocalTime originalDepartureTime = LocalTime.of(8, 30);
         String line = "";
         int trainNumber = -204;
@@ -51,7 +51,7 @@ public class TestClient {
         }
 
         try {
-            TrainDeparture trainDeparture = new TrainDeparture(originalDepartureTime, line, trainNumber, destination, track, delay);
+            TrainDeparture trainDeparture = new TrainDeparture(originalDepartureTime, line, trainNumber, destination, track);
             if (!trainDeparture.getLine().equals("NULL")) {
                 throw new IllegalArgumentException("Line-dummyvalue blir ikke satt");
             }
@@ -77,9 +77,9 @@ public class TestClient {
         int trainNumber = 204;
         String destination = "Oslo";
         int track = 3;
-        LocalTime delay = LocalTime.of(0, 0);
+        LocalTime delay = LocalTime.of(0,0);
 
-        TrainDeparture trainDeparture = new TrainDeparture(originalDepartureTime, line, trainNumber, destination, track, delay);
+        TrainDeparture trainDeparture = new TrainDeparture(originalDepartureTime, line, trainNumber, destination, track);
 
         try {
             if (!trainDeparture.getOriginalDepartureTime().equals(originalDepartureTime)) {
@@ -115,7 +115,7 @@ public class TestClient {
         int track = -1;
         LocalTime delay = LocalTime.of(0, 0);
 
-        TrainDeparture trainDeparture = new TrainDeparture(originalDepartureTime, line, trainNumber, destination, track, delay);
+        TrainDeparture trainDeparture = new TrainDeparture(originalDepartureTime, line, trainNumber, destination, track);
         String utskrift = "";
 
         int newTrack = 3;
@@ -143,7 +143,7 @@ public class TestClient {
         int track = -1;
         LocalTime delay = LocalTime.of(0, 0);
 
-        TrainDeparture trainDeparture = new TrainDeparture(originalDepartureTime, line, trainNumber, destination, track, delay);
+        TrainDeparture trainDeparture = new TrainDeparture(originalDepartureTime, line, trainNumber, destination, track);
         String utskrift = "";
 
         //tester toStrin() med track og delay usynlige
@@ -186,33 +186,33 @@ public class TestClient {
 
     private String testTableGet() {
         ArrayList<TrainDeparture> tableList = new ArrayList<>();
-        tableList.add(new TrainDeparture(LocalTime.of(12, 15), "L1", 600, "Oslo", -1, LocalTime.of(0, 0)));
-        tableList.add(new TrainDeparture(LocalTime.of(15, 30), "L2", 300, "Hamar", -1, LocalTime.of(0, 0)));
+        tableList.add(new TrainDeparture(LocalTime.of(12, 15), "L1", 600, "Oslo", -1));
+        tableList.add(new TrainDeparture(LocalTime.of(15, 30), "L2", 300, "Hamar", -1));
 
         Table table = new Table();
-        table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "L1", 600, "Oslo", -1, LocalTime.of(0, 0)));
-        table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "L2", 300, "Hamar", -1, LocalTime.of(0, 0)));
+        table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "L1", 600, "Oslo", -1));
+        table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "L2", 300, "Hamar", -1));
 
-        String utskrift = "";
+        StringBuilder print = new StringBuilder();
 
         for (int i = 0; i < table.getTable().size(); i++) {
             if (table.getTable().get(i).getTrainNumber() != tableList.get(i).getTrainNumber()) {
-                utskrift += "Get table gir ikke liste over togavganger tilbake\n";
+                print.append("Get table gir ikke liste over togavganger tilbake\n");
             }
 
         }
 
-        if (utskrift.isEmpty()) {
-            utskrift += "Testen av get-metodene til Table er vellykket\n";
+        if (print.isEmpty()) {
+            print.append("Testen av get-metodene til Table er vellykket\n");
         }
 
-        return utskrift;
+        return print.toString();
     }
 
     private String testTableCheckTrainNumber() {
         Table table = new Table();
-        table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "L1", 600, "Oslo", -1, LocalTime.of(0, 0)));
-        table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "L2", 300, "Hamar", -1, LocalTime.of(0, 0)));
+        table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "L1", 600, "Oslo", -1));
+        table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "L2", 300, "Hamar", -1));
 
         String utskrift = "";
 
