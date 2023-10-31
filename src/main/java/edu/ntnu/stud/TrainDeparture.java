@@ -41,11 +41,8 @@ public final class TrainDeparture {
             this.destination = destination;
         }
 
-        if (track < -1) { //setter track til -1, altså usynlig, hvis variablen er mindre enn -1
-            this.track = -1;
-        } else {
-            this.track = track;
-        }
+        //bruker Math.max til å sjekke om input er større enn -1. Hvis ikke så blir track -1
+        this.track = Math.max(track, -1);
 
         this.delay = delay;
     }
