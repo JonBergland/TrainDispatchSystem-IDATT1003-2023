@@ -5,11 +5,9 @@ package edu.ntnu.stud;
  */
 public class TrainDispatchApp {
   /**
-   *
    * @param args
    */
   // TODO: Fill in the main method and any other methods you need.
-
   public static void main(String[] args) {
     start(); //starter programmet
   }

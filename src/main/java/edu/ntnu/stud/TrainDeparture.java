@@ -22,12 +22,12 @@ public final class TrainDeparture {
   private LocalTime delay;
 
   /**
-   * @param OriginalDepartureTime      Original time for departure
-   * @param line                       The name of the line
-   * @param trainNumber                A number that is unique to each Train
-   * @param destination                The trains destination
-   * @param track                      The track that the train arrives on
-   * delay                             Eventual delay, sat to 0 on initializing
+   * @param OriginalDepartureTime Original time for departure
+   * @param line                  The name of the line
+   * @param trainNumber           A number that is unique to each Train
+   * @param destination           The trains destination
+   * @param track                 The track that the train arrives at
+   *                              delay                             Eventual delay, sat to 0 on initializing
    */
   public TrainDeparture(LocalTime OriginalDepartureTime, String line, int trainNumber, String destination, int track) {
     //tester om tiden er innenfor riktig rekkevidde i input-klassen
@@ -57,7 +57,6 @@ public final class TrainDeparture {
 
 
   /**
-   *
    * @return trainNumber              Returns the train departure's trainNumber
    */
   public int getTrainNumber() {
@@ -65,7 +64,6 @@ public final class TrainDeparture {
   }
 
   /**
-   *
    * @return track                    Returns the train departure's track
    */
   public int getTrack() {
@@ -73,7 +71,6 @@ public final class TrainDeparture {
   }
 
   /**
-   *
    * @return delay                    Returns the train departure's delay
    */
   public LocalTime getDelay() {
@@ -81,7 +78,6 @@ public final class TrainDeparture {
   }
 
   /**
-   *
    * @return originalDepartureTime   Returns the train departure's original departure time
    */
   public LocalTime getOriginalDepartureTime() {
@@ -89,7 +85,6 @@ public final class TrainDeparture {
   }
 
   /**
-   *
    * @return destination             Returns the train departure's destination
    */
   public String getDestination() {
@@ -97,7 +92,6 @@ public final class TrainDeparture {
   }
 
   /**
-   *
    * @return line                    Returns the train departure's line
    */
   public String getLine() {
@@ -105,7 +99,6 @@ public final class TrainDeparture {
   }
 
   /**
-   *
    * @return departureTime           Returns departure time (original + delay)
    */
   public LocalTime getDepartureTime() {
@@ -115,7 +108,6 @@ public final class TrainDeparture {
   }
 
   /**
-   *
    * @return String                 Returns the train departure as a string
    */
   public String toStrin() {
@@ -130,8 +122,7 @@ public final class TrainDeparture {
   }
 
   /**
-   *
-   * @param delay                   sets delay as the LocalTime parameter
+   * @param delay sets delay as the LocalTime parameter
    */
   public void setDelay(LocalTime delay) {
     this.delay = this.delay.plusHours(delay.getHour());
@@ -139,8 +130,7 @@ public final class TrainDeparture {
   }
 
   /**
-   *
-   * @param track                   sets track as the integer parameter
+   * @param track sets track as the integer parameter
    */
   public void setTrack(int track) {
     this.track = track;
