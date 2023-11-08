@@ -37,6 +37,7 @@ public class Input {
   }
 
   /**
+   *
    * @param print
    * @param dummyValue
    * @return int

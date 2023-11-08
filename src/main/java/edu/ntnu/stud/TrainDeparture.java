@@ -27,16 +27,14 @@ public final class TrainDeparture {
    * @param trainNumber           A number that is unique to each Train
    * @param destination           The trains destination
    * @param track                 The track that the train arrives at
-   *                              delay                             Eventual delay, sat to 0 on initializing
    */
   public TrainDeparture(LocalTime OriginalDepartureTime, String line, int trainNumber, String destination, int track) {
     //tester om tiden er innenfor riktig rekkevidde i input-klassen
     this.originalDepartureTime = OriginalDepartureTime;
-    if (line.isEmpty()) { //setter inn dummy-verdi hvis strengen er tom
-      this.line = "NULL";
-    } else {
-      this.line = line;
-    }
+    if (line.isEmpty()) {//setter inn dummy-verdi hvis strengen er tom
+      throw new IllegalArgumentException("Linjen er ikke oppgitt");
+    } else {this.line = line;}
+
     /**
      * Endre til at alle thrower feilmeldinger
      */
@@ -44,10 +42,8 @@ public final class TrainDeparture {
     this.trainNumber = abs(trainNumber); //tar absolutt verdien av konstruktør verdien
 
     if (destination.isEmpty()) { //setter inn dummy-verdi hvis strengen er tom
-      this.destination = "NULL";
-    } else {
-      this.destination = destination;
-    }
+      throw new IllegalArgumentException("Destinasjonen er ikke oppgitt");
+    } else {this.destination = destination;}
 
     //bruker Math.max til å sjekke om input er større enn -1. Hvis ikke så blir track -1
     this.track = Math.max(track, -1);
@@ -55,12 +51,32 @@ public final class TrainDeparture {
     this.delay = LocalTime.of(0, 0); //initialize the delay at 0 hours and 0 minutes
   }
 
+  /**
+   * @return originalDepartureTime   Returns the train departure's original departure time
+   */
+  public LocalTime getOriginalDepartureTime() {
+    return originalDepartureTime;
+  }
+
+  /**
+   * @return line                    Returns the train departure's line
+   */
+  public String getLine() {
+    return line;
+  }
 
   /**
    * @return trainNumber              Returns the train departure's trainNumber
    */
   public int getTrainNumber() {
     return trainNumber;
+  }
+
+  /**
+   * @return destination             Returns the train departure's destination
+   */
+  public String getDestination() {
+    return destination;
   }
 
   /**
@@ -78,27 +94,6 @@ public final class TrainDeparture {
   }
 
   /**
-   * @return originalDepartureTime   Returns the train departure's original departure time
-   */
-  public LocalTime getOriginalDepartureTime() {
-    return originalDepartureTime;
-  }
-
-  /**
-   * @return destination             Returns the train departure's destination
-   */
-  public String getDestination() {
-    return destination;
-  }
-
-  /**
-   * @return line                    Returns the train departure's line
-   */
-  public String getLine() {
-    return line;
-  }
-
-  /**
    * @return departureTime           Returns departure time (original + delay)
    */
   public LocalTime getDepartureTime() {
@@ -110,8 +105,9 @@ public final class TrainDeparture {
   /**
    * @return String                 Returns the train departure as a string
    */
-  public String toStrin() {
-    String output = getOriginalDepartureTime() + " " + getLine() + " " + getTrainNumber() + " " + getDestination();
+  @Override
+  public String toString() {
+    String output = originalDepartureTime + " " + line + " " + trainNumber + " " + destination;
     if (getTrack() > -1) {
       output += " Spor: " + getTrack();
     }
@@ -122,18 +118,17 @@ public final class TrainDeparture {
   }
 
   /**
-   * @param delay sets delay as the LocalTime parameter
-   */
-  public void setDelay(LocalTime delay) {
-    this.delay = this.delay.plusHours(delay.getHour());
-    this.delay = this.delay.plusMinutes(delay.getMinute());
-  }
-
-  /**
    * @param track sets track as the integer parameter
    */
   public void setTrack(int track) {
     this.track = track;
   }
 
+  /**
+   * @param delay sets delay as the LocalTime parameter
+   */
+  public void setDelay(LocalTime delay) {
+    this.delay = this.delay.plusHours(delay.getHour());
+    this.delay = this.delay.plusMinutes(delay.getMinute());
+  }
 }
