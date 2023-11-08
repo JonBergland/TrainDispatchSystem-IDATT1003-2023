@@ -20,10 +20,15 @@ public class UserInterface {
 
   public void init() { //metode for oppstart av programmet
     // Oppretter først 4 objekter av klassen TrainDeparture og legger dem inn i et objekt av klassen Table
-    table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "", 601, "Frognerseteren", -1));
-    table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "Linje 2", 305, "Sognsvann", -1));
-    table.getTable().add(new TrainDeparture(LocalTime.of(10, 30), "Linje 3", 404, "Bergkrystallen", -1));
-    table.getTable().add(new TrainDeparture(LocalTime.of(10, 40), "Linje 4", 406, "Bergkrystallen", -1));
+    try {
+      table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "L3", 601, "Frognerseteren", -1));
+      table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "Linje 2", 305, "Sognsvann", -1));
+      table.getTable().add(new TrainDeparture(LocalTime.of(10, 30), "Linje 3", 404, "Bergkrystallen", -1));
+      table.getTable().add(new TrainDeparture(LocalTime.of(10, 40), "Linje 4", 406, "Bergkrystallen", -1));
+    } catch (IllegalArgumentException e){
+      System.out.println(e);
+      System.exit(0);
+    }
     //kjører metodene som printer menyen til bruker, tar inn hva bruker velger og kjører tilhørende metode
     doOperation(menuList());
   }
@@ -32,7 +37,7 @@ public class UserInterface {
     System.out.println("Time: " + clock.getClock()); //printer først den nåværende tiden
     table.getTable().sort(new sortByTime()); //sorterer tabellen med hjelp av sortByTime
     //bruker en lambda expression for å skrive ut hvert TrainDeparture-objekt i Table-objektet
-    table.getTable().forEach(t -> System.out.println(t.toStrin()));
+    table.getTable().forEach(t -> System.out.println(t.toString()));
   }
 
   public void addTraindeparture() {//metoden for å legge til en objekt av klassen TrainDeparture
@@ -55,8 +60,13 @@ public class UserInterface {
     int track = input.trackInput();
 
     //Lager en objekt av TrainDeparture med verdiene vi fikk fra bruker og legger den inn i Table-objektet
-    TrainDeparture newTraindeparture = new TrainDeparture(LocalTime.of(hour, minute), line, trainNumber, destination, track);
-    table.getTable().add(newTraindeparture);
+    try {
+      TrainDeparture newTraindeparture = new TrainDeparture(LocalTime.of(hour, minute), line, trainNumber, destination, track);
+      table.getTable().add(newTraindeparture);
+    } catch (IllegalArgumentException e){
+      System.out.println("Kunne ikke legge til ny togavgang grunnet feilmelding " + e);
+    }
+
   }
 
   public void setTrackToTrain() { //metode for å sette spor til en togavgang basert på tognummeret til avgangen
@@ -78,14 +88,14 @@ public class UserInterface {
   public void findTrainByTrainNumber() { //en metode som finner en TrainDeparture basert på trainNumber
     //bruker velger en av de eksisterende trainNumber med hjelp av input-klassen
     int trainNumber = input.chooseTrainNumber();
-    //bruker toStrin() for å skrive ut riktig TrainDeparture
-    System.out.println(table.getTrainByTrainNumber(trainNumber).toStrin());
+    //bruker toString() for å skrive ut riktig TrainDeparture
+    System.out.println(table.getTrainByTrainNumber(trainNumber).toString());
   }
 
   public void findTrainByDestination() { //en metode som finner en TrainDeparture basert på destination
     //lager en arrayList som tar inn en liste med trainDepartures som har valgt destination som destination
     ArrayList<TrainDeparture> destinationList = input.chooseDestination();
-    destinationList.forEach(t -> System.out.println(t.toStrin())); //bruker et lambda-utrykk for å skrive ut objektene
+    destinationList.forEach(t -> System.out.println(t.toString())); //bruker et lambda-utrykk for å skrive ut objektene
   }
 
   private void updateClock() { //en metode som oppdaterer klokka til ny tid satt av bruker
