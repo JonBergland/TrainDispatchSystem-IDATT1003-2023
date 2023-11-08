@@ -1,229 +1,160 @@
 package edu.ntnu.stud;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Nested;
+import org.junit.jupiter.api.Nested;
 
-import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import static java.lang.Math.abs;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TestClient {
-  /**
-   * @param args
-   */
+  LocalTime originalDepartureTime;
+  String line;
+  int trainNumber;
+  String destination;
+  int track;
+  TrainDeparture trainDeparture;
 
-  public static void main(String[] args) {
-    TestClient testClient = new TestClient();
-
-    testClient.alleTester();
+  @BeforeEach
+  public void beforeEach() {
+    originalDepartureTime = LocalTime.of(8, 30);
+    line = "L3";
+    trainNumber = 204;
+    destination = "Oslo";
+    track = 3;
+    trainDeparture = new TrainDeparture(originalDepartureTime, line, trainNumber,
+        destination, track);
   }
 
-  public void alleTester() {
-    String utskrift = "";
-
-    //tester for trainDeparture
-    testTraindepartureConstructor();
-    testTrainDepartureGet();
-    utskrift += testTrainDepartureSet();
-    utskrift += testTrainDeparturetoStrin();
-
-    System.out.println(utskrift);
-  }
-
-  /**
-   * Enhetstester for TrainDeparture
-   */
   @Nested
-  @Test
-  public void testTraindepartureConstructor() {
-    LocalTime originalDepartureTime = LocalTime.of(8, 30);
-    String line = "";
-    int trainNumber = -204;
-    String destination = "";
-    int track = -3;
-    LocalTime delay = LocalTime.of(0, 0);
-
-    String utskrift = "";
-    try {
-      originalDepartureTime = LocalTime.of(-1, 3);
-    } catch (DateTimeException e) {
-      utskrift += "Negativ test av departureTime er vellykket\n";
+  @DisplayName("TrainDeparture-Constructor")
+  class traindepartureConstructor {
+    @Test
+    void line_when_empty() {
+      line = "";
+      assertThrows(IllegalArgumentException.class, () -> new TrainDeparture(originalDepartureTime,
+          line, trainNumber, destination, track));
     }
 
-    try {
-      TrainDeparture trainDeparture = new TrainDeparture(originalDepartureTime, line, trainNumber, destination, track);
-      if (!trainDeparture.getLine().equals("NULL")) {
-        throw new IllegalArgumentException("Line-dummyvalue blir ikke satt");
-      }
-      if (trainDeparture.getTrainNumber() != 204) {
-        throw new IllegalArgumentException("Trainnumber absolutt verdi blir ikke satt");
-      }
-      if (!trainDeparture.getDestination().equals("NULL")) {
-        throw new IllegalArgumentException("Destination-dummyvalue blir ikke satt");
-      }
-      if (trainDeparture.getTrack() != -1) {
-        throw new IllegalArgumentException("Track dummyvalue blir ikke satt");
-      }
-      utskrift += "Test av konstruktøren i TrainDeparture var vellykket";
-    } catch (IllegalArgumentException e) {
-      e.printStackTrace();
+    @Test
+    void trainNumber_when_negative() {
+      trainNumber = -201;
+      trainDeparture = new TrainDeparture(originalDepartureTime,
+          line, trainNumber, destination, track);
+      assert (trainDeparture.getTrainNumber() == abs(trainNumber));
     }
-    System.out.println(utskrift);
-  }
 
-  private void testTrainDepartureGet() { //test som tester alle get metodene i TrainDeparture
-    LocalTime originalDepartureTime = LocalTime.of(8, 30);
-    String line = "L4";
-    int trainNumber = 204;
-    String destination = "Oslo";
-    int track = 3;
-    LocalTime delay = LocalTime.of(0, 0);
+    @Test
+    void destination_when_empty() {
+      destination = "";
+      assertThrows(IllegalArgumentException.class, () -> new TrainDeparture(originalDepartureTime,
+          line, trainNumber, destination, track));
+    }
 
-    TrainDeparture trainDeparture = new TrainDeparture(originalDepartureTime, line, trainNumber, destination, track);
-
-    try {
-      if (!trainDeparture.getOriginalDepartureTime().equals(originalDepartureTime)) {
-        throw new IllegalArgumentException("Get-metode for original avgangstid gir ikke riktig output");
-      }
-      if (!trainDeparture.getLine().equals(line)) {
-        throw new IllegalArgumentException("Get-metode for linjenavnet gir ikke riktig output");
-      }
-      if (trainDeparture.getTrainNumber() != trainNumber) {
-        throw new IllegalArgumentException("Get-metode for tognummeret gir ikke riktig output");
-      }
-      if (!trainDeparture.getDestination().equals(destination)) {
-        throw new IllegalArgumentException("Get-metode for destinasjonen gir ikke riktig output");
-      }
-      if (trainDeparture.getTrack() != track) {
-        throw new IllegalArgumentException("Get-metode for sporet gir ikke riktig output");
-      }
-      if (!trainDeparture.getDelay().equals(delay)) {
-        throw new IllegalArgumentException("Get-metode for forsinkelsen gir ikke riktig output");
-      }
-      System.out.println("Test av get-metodene i TrainDeparture var vellykket");
-
-    } catch (IllegalArgumentException e) {
-      e.printStackTrace();
+    @Test
+    void track_when_less_than_minusOne() {
+      track = -4;
+      trainDeparture = new TrainDeparture(originalDepartureTime,
+          line, trainNumber, destination, track);
+      assert (trainDeparture.getTrack() == Math.max(track, -1));
     }
   }
 
-  private String testTrainDepartureSet() {
-    LocalTime originalDepartureTime = LocalTime.of(8, 30);
-    String line = "L4";
-    int trainNumber = 204;
-    String destination = "Oslo";
-    int track = -1;
-    LocalTime delay = LocalTime.of(0, 0);
-
-    TrainDeparture trainDeparture = new TrainDeparture(originalDepartureTime, line, trainNumber, destination, track);
-    String utskrift = "";
-
-    int newTrack = 3;
-    LocalTime newDelay = LocalTime.of(1, 30);
-    trainDeparture.setTrack(newTrack);
-    trainDeparture.setDelay(newDelay);
-
-    if (trainDeparture.getTrack() != newTrack) {
-      utskrift += "Det nye sporet er ikke satt\n";
+  @Nested
+  @DisplayName("get() methods")
+  class trainDepartureGetMethods {
+    @Test
+    void test_getOriginalDepartureTime() {
+      assert (trainDeparture.getOriginalDepartureTime().equals(originalDepartureTime));
     }
-    if (!trainDeparture.getDelay().equals(newDelay)) {
-      utskrift += "Den nye forsinkelsen er ikke satt\n";
+
+    @Test
+    void test_getLine() {
+      assert (trainDeparture.getLine().equals(line));
     }
-    if (utskrift.isEmpty()) {
-      utskrift += "Test av set-metodene i Traindeparture er vellykket\n";
+
+    @Test
+    void test_getTrainNumber() {
+      assert (trainDeparture.getTrainNumber() == trainNumber);
     }
-    return utskrift;
+
+    @Test
+    void test_getDestination() {
+      assert (trainDeparture.getDestination().equals(destination));
+    }
+
+    @Test
+    void test_getTrack() {
+      assert (trainDeparture.getTrack() == track);
+    }
+
+    @Test
+    void test_getDelay() {
+      assert (trainDeparture.getDelay().equals(LocalTime.of(0, 0)));
+    }
+
+    @Test
+    void test_getDepartureTime() {
+      assert (trainDeparture.getDepartureTime().equals(originalDepartureTime));
+    }
   }
 
-  private String testTrainDeparturetoStrin() {
-    LocalTime originalDepartureTime = LocalTime.of(8, 30);
-    String line = "L4";
-    int trainNumber = 204;
-    String destination = "Oslo";
-    int track = -1;
-    LocalTime delay = LocalTime.of(0, 0);
-
-    TrainDeparture trainDeparture = new TrainDeparture(originalDepartureTime, line, trainNumber, destination, track);
-    String utskrift = "";
-
-    //tester toStrin() med track og delay usynlige
-    String toStrinTest = trainDeparture.getOriginalDepartureTime() + " " + trainDeparture.getLine() + " "
-        + trainDeparture.getTrainNumber() + " " + trainDeparture.getDestination();
-    if (!trainDeparture.toStrin().equals(toStrinTest)) {
-      utskrift += "toStrin() printer ikke riktig for usynlige spor og forsinkelser\n";
+  @Nested
+  @DisplayName("set() methods")
+  class trainDepartureSetMethods {
+    @Test
+    void test_setTrack() {
+      track = 1;
+      trainDeparture.setTrack(track);
+      assert (trainDeparture.getTrack() == track);
     }
 
-    //tester toStrin() med track synlig og delay usynlige
-    int newTrack = 3;
-    trainDeparture.setTrack(newTrack);
-    toStrinTest = trainDeparture.getOriginalDepartureTime() + " " + trainDeparture.getLine() + " "
-        + trainDeparture.getTrainNumber() + " " + trainDeparture.getDestination() + " Spor: " + trainDeparture.getTrack();
-
-    if (!trainDeparture.toStrin().equals(toStrinTest)) {
-      utskrift += "toString() printer ikke riktig for synlige spor\n";
+    @Test
+    void test_setDelay() {
+      LocalTime delay = LocalTime.of(1, 0);
+      trainDeparture.setDelay(delay);
+      assert (trainDeparture.getDelay().equals(delay));
     }
-
-    LocalTime newDelay = LocalTime.of(1, 30);
-    trainDeparture.setDelay(newDelay);
-    toStrinTest = trainDeparture.getOriginalDepartureTime() + " " + trainDeparture.getLine() + " "
-        + trainDeparture.getTrainNumber() + " " + trainDeparture.getDestination()
-        + " Spor: " + trainDeparture.getTrack() + " Forsinkelse: " + trainDeparture.getDelay();
-
-    if (!trainDeparture.toStrin().equals(toStrinTest)) {
-      utskrift += "toString() printer ikke riktig for synlige forsinkelser\n";
-    }
-
-    if (utskrift.isEmpty()) {
-      utskrift += "Test av toStrin i TrainDeparture er vellykket\n";
-    }
-
-    return utskrift;
   }
 
-  /**
-   * Enhetstester for table
-   */
+  @Nested
+  @DisplayName("toString()")
+  class trainDepartureToString {
+    LocalTime delay = LocalTime.of(1, 0);
 
-  private String testTableGet() {
-    ArrayList<TrainDeparture> tableList = new ArrayList<>();
-    tableList.add(new TrainDeparture(LocalTime.of(12, 15), "L1", 600, "Oslo", -1));
-    tableList.add(new TrainDeparture(LocalTime.of(15, 30), "L2", 300, "Hamar", -1));
-
-    Table table = new Table();
-    table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "L1", 600, "Oslo", -1));
-    table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "L2", 300, "Hamar", -1));
-
-    StringBuilder print = new StringBuilder();
-
-    for (int i = 0; i < table.getTable().size(); i++) {
-      if (table.getTable().get(i).getTrainNumber() != tableList.get(i).getTrainNumber()) {
-        print.append("Get table gir ikke liste over togavganger tilbake\n");
-      }
-
+    @Test
+    void test_toString_without_track_and_delay() {
+      String normalOutput = originalDepartureTime + " " + line + " " + trainNumber + " " + destination;
+      track = -1;
+      trainDeparture.setTrack(-1);
+      assert (trainDeparture.toString().equals(normalOutput));
     }
 
-    if (print.isEmpty()) {
-      print.append("Testen av get-metodene til Table er vellykket\n");
+    @Test
+    void test_toString_without_delay() {
+      String normalOutput = originalDepartureTime + " " + line + " " + trainNumber + " " + destination
+          + " Spor: " + track;
+      assert (trainDeparture.toString().equals(normalOutput));
     }
 
-    return print.toString();
+    @Test
+    void test_toString_without_track() {
+      String normalOutput = originalDepartureTime + " " + line + " " + trainNumber + " " + destination
+          + " Forsinkelse: " + delay;
+      trainDeparture.setDelay(delay);
+      trainDeparture.setTrack(-1);
+      assert (trainDeparture.toString().equals(normalOutput));
+    }
+
+    @Test
+    void test_toString() {
+      String normalOutput = originalDepartureTime + " " + line + " " + trainNumber + " " + destination
+          + " Spor: " + track + " Forsinkelse: " + delay;
+      trainDeparture.setDelay(delay);
+      assert (trainDeparture.toString().equals(normalOutput));
+    }
   }
-
-  private String testTableCheckTrainNumber() {
-    Table table = new Table();
-    table.getTable().add(new TrainDeparture(LocalTime.of(12, 15), "L1", 600, "Oslo", -1));
-    table.getTable().add(new TrainDeparture(LocalTime.of(15, 30), "L2", 300, "Hamar", -1));
-
-    String utskrift = "";
-
-    if (table.checkTrainNumber(600) && !table.checkTrainNumber(601)) {
-      utskrift += "Testen for checkTrainNumber var vellykket\n";
-    } else {
-      utskrift += "ChechTrainNumber gir ikke riktig output\n";
-    }
-    return utskrift;
-  }
-
-
 }
-
