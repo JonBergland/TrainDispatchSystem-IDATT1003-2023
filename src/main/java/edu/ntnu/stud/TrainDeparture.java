@@ -17,7 +17,7 @@ public final class TrainDeparture {
 
   private final LocalTime originalDepartureTime;
   private final String line;
-  private final int trainNumber;
+  //private final int trainNumber;
   private final String destination;
   private int track;
   private LocalTime delay;
@@ -27,12 +27,11 @@ public final class TrainDeparture {
    *
    * @param originalDepartureTime Original time for departure
    * @param line                  The name of the line
-   * @param trainNumber           A number that is unique to each Train
+   * //@param trainNumber           A number that is unique to each Train
    * @param destination           The trains destination
    * @param track                 The track that the train arrives at
    */
-  public TrainDeparture(LocalTime originalDepartureTime, String line,
-                        int trainNumber, String destination, int track) {
+  public TrainDeparture(LocalTime originalDepartureTime, String line, String destination, int track) {
     //tester om tiden er innenfor riktig rekkevidde i input-klassen
     this.originalDepartureTime = originalDepartureTime;
     if (line.isEmpty()) { //setter inn dummy-verdi hvis strengen er tom
@@ -40,7 +39,7 @@ public final class TrainDeparture {
     } else {
       this.line = line;
     }
-    this.trainNumber = abs(trainNumber); //tar absolutt verdien av konstruktør verdien
+    //this.trainNumber = abs(trainNumber); //tar absolutt verdien av konstruktør verdien
 
     if (destination.isEmpty()) { //setter inn dummy-verdi hvis strengen er tom
       throw new IllegalArgumentException("Destinasjonen er ikke oppgitt");
@@ -77,9 +76,9 @@ public final class TrainDeparture {
    *
    * @return trainNumber
    */
-  public int getTrainNumber() {
-    return trainNumber;
-  }
+  //public int getTrainNumber() {
+    //return trainNumber;
+  //}
 
   /**
    * Gets the destination for the train departure.
@@ -124,8 +123,8 @@ public final class TrainDeparture {
    *
    * @return String
    */
-  @Override
-  public String toString() {
+  //@Override
+  public String toString(int trainNumber) {
     String output = originalDepartureTime + " " + line + " " + trainNumber + " " + destination;
     if (getTrack() > -1) {
       output += " Spor: " + getTrack();
