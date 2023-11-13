@@ -1,16 +1,17 @@
 package edu.ntnu.stud;
 
-import java.time.LocalTime;
-
 import static java.lang.Math.abs;
 
+import java.time.LocalTime;
+
+
 /**
- * Dette er entitetsklassen for en tog-avgang
+ * Dette er entitetsklassen for en tog-avgang.
  */
 public final class TrainDeparture {
 
   /**
-   * Objektsvariabler
+   * Objektsvariabler.
    * Lager en variabel til hver av atributtene til objektet
    */
 
@@ -22,28 +23,30 @@ public final class TrainDeparture {
   private LocalTime delay;
 
   /**
-   * @param OriginalDepartureTime Original time for departure
+   * The TrainDeparture-class constructor.
+   *
+   * @param originalDepartureTime Original time for departure
    * @param line                  The name of the line
    * @param trainNumber           A number that is unique to each Train
    * @param destination           The trains destination
    * @param track                 The track that the train arrives at
    */
-  public TrainDeparture(LocalTime OriginalDepartureTime, String line, int trainNumber, String destination, int track) {
+  public TrainDeparture(LocalTime originalDepartureTime, String line,
+                        int trainNumber, String destination, int track) {
     //tester om tiden er innenfor riktig rekkevidde i input-klassen
-    this.originalDepartureTime = OriginalDepartureTime;
-    if (line.isEmpty()) {//setter inn dummy-verdi hvis strengen er tom
+    this.originalDepartureTime = originalDepartureTime;
+    if (line.isEmpty()) { //setter inn dummy-verdi hvis strengen er tom
       throw new IllegalArgumentException("Linjen er ikke oppgitt");
-    } else {this.line = line;}
-
-    /**
-     * Endre til at alle thrower feilmeldinger
-     */
-
+    } else {
+      this.line = line;
+    }
     this.trainNumber = abs(trainNumber); //tar absolutt verdien av konstruktør verdien
 
     if (destination.isEmpty()) { //setter inn dummy-verdi hvis strengen er tom
       throw new IllegalArgumentException("Destinasjonen er ikke oppgitt");
-    } else {this.destination = destination;}
+    } else {
+      this.destination = destination;
+    }
 
     //bruker Math.max til å sjekke om input er større enn -1. Hvis ikke så blir track -1
     this.track = Math.max(track, -1);
@@ -52,49 +55,63 @@ public final class TrainDeparture {
   }
 
   /**
-   * @return originalDepartureTime   Returns the train departure's original departure time
+   * Gets the original departure time of the train.
+   *
+   * @return originalDepartureTime
    */
   public LocalTime getOriginalDepartureTime() {
     return originalDepartureTime;
   }
 
   /**
-   * @return line                    Returns the train departure's line
+   * Gets the line of the train.
+   *
+   * @return line
    */
   public String getLine() {
     return line;
   }
 
   /**
-   * @return trainNumber              Returns the train departure's trainNumber
+   * Gets the train number for the train departure.
+   *
+   * @return trainNumber
    */
   public int getTrainNumber() {
     return trainNumber;
   }
 
   /**
-   * @return destination             Returns the train departure's destination
+   * Gets the destination for the train departure.
+   *
+   * @return destination
    */
   public String getDestination() {
     return destination;
   }
 
   /**
-   * @return track                    Returns the train departure's track
+   * Gets the designated track for the train departure.
+   *
+   * @return track
    */
   public int getTrack() {
     return track;
   }
 
   /**
-   * @return delay                    Returns the train departure's delay
+   * Gets the delay for the train departure.
+   *
+   * @return delay
    */
   public LocalTime getDelay() {
     return delay;
   }
 
   /**
-   * @return departureTime           Returns departure time (original + delay)
+   * Gets the departure time (orginial + delay) for the train departure.
+   *
+   * @return departureTime
    */
   public LocalTime getDepartureTime() {
     LocalTime departureTime = this.originalDepartureTime.plusHours(this.delay.getHour());
@@ -103,7 +120,9 @@ public final class TrainDeparture {
   }
 
   /**
-   * @return String                 Returns the train departure as a string
+   * Turn all the information in the TrainDeparture object to a String.
+   *
+   * @return String
    */
   @Override
   public String toString() {
@@ -118,14 +137,18 @@ public final class TrainDeparture {
   }
 
   /**
-   * @param track sets track as the integer parameter
+   * Sets a track for the train departure using the integer parameter.
+   *
+   * @param track                   sets track as the integer parameter
    */
   public void setTrack(int track) {
     this.track = track;
   }
 
   /**
-   * @param delay sets delay as the LocalTime parameter
+   * Sets a delay for the train departure using the LocalTime parameter.
+   *
+   * @param delay                   sets delay as the LocalTime parameter
    */
   public void setDelay(LocalTime delay) {
     this.delay = this.delay.plusHours(delay.getHour());

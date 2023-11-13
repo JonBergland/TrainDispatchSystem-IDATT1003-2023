@@ -1,6 +1,7 @@
 package edu.ntnu.stud;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Dette er enitetsklassen for listen over tog-avganger
@@ -9,13 +10,19 @@ public class Table {
   /**
    * Objektsvaribel som skal inneholde alle TrainDeparture-objektene
    */
-  private ArrayList<TrainDeparture> table = new ArrayList<>();
+  private final List<TrainDeparture> table;
+
+  public Table(){
+    this.table = new ArrayList<>();
+  }
 
   /**
-   * @return ArrayList<TrainDeparture>
+   * Gets the list over trainDepartures
+   *
+   * @return List<TrainDeparture>
    */
-  public ArrayList<TrainDeparture> getTable() { //en get-metode som returnere listen over TrainDeparture-objektene
-    return table;
+  public List<TrainDeparture> getTable() { //en get-metode som returnere listen over TrainDeparture-objektene
+    return this.table;
   }
 
   /**

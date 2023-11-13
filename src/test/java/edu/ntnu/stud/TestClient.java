@@ -5,9 +5,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;
 
+
 import java.time.LocalTime;
-import java.util.ArrayList;
 import static java.lang.Math.abs;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TestClient {
@@ -19,7 +20,7 @@ public class TestClient {
   TrainDeparture trainDeparture;
 
   @BeforeEach
-  public void beforeEach() {
+  public void setup() {
     originalDepartureTime = LocalTime.of(8, 30);
     line = "L3";
     trainNumber = 204;
@@ -44,7 +45,7 @@ public class TestClient {
       trainNumber = -201;
       trainDeparture = new TrainDeparture(originalDepartureTime,
           line, trainNumber, destination, track);
-      assert (trainDeparture.getTrainNumber() == abs(trainNumber));
+      assertEquals(trainDeparture.getTrainNumber(), abs(trainNumber));
     }
 
     @Test
@@ -59,7 +60,7 @@ public class TestClient {
       track = -4;
       trainDeparture = new TrainDeparture(originalDepartureTime,
           line, trainNumber, destination, track);
-      assert (trainDeparture.getTrack() == Math.max(track, -1));
+      assertEquals(trainDeparture.getTrack(), Math.max(track, -1));
     }
   }
 
@@ -68,37 +69,37 @@ public class TestClient {
   class trainDepartureGetMethods {
     @Test
     void test_getOriginalDepartureTime() {
-      assert (trainDeparture.getOriginalDepartureTime().equals(originalDepartureTime));
+      assertEquals(trainDeparture.getOriginalDepartureTime(), originalDepartureTime);
     }
 
     @Test
     void test_getLine() {
-      assert (trainDeparture.getLine().equals(line));
+      assertEquals(trainDeparture.getLine(), line);
     }
 
     @Test
     void test_getTrainNumber() {
-      assert (trainDeparture.getTrainNumber() == trainNumber);
+      assertEquals(trainDeparture.getTrainNumber(), trainNumber);
     }
 
     @Test
     void test_getDestination() {
-      assert (trainDeparture.getDestination().equals(destination));
+      assertEquals(trainDeparture.getDestination(), destination);
     }
 
     @Test
     void test_getTrack() {
-      assert (trainDeparture.getTrack() == track);
+      assertEquals(trainDeparture.getTrack(), track);
     }
 
     @Test
     void test_getDelay() {
-      assert (trainDeparture.getDelay().equals(LocalTime.of(0, 0)));
+      assertEquals(trainDeparture.getDelay(), LocalTime.of(0, 0));
     }
 
     @Test
     void test_getDepartureTime() {
-      assert (trainDeparture.getDepartureTime().equals(originalDepartureTime));
+      assertEquals(trainDeparture.getDepartureTime(), originalDepartureTime);
     }
   }
 
@@ -109,14 +110,14 @@ public class TestClient {
     void test_setTrack() {
       track = 1;
       trainDeparture.setTrack(track);
-      assert (trainDeparture.getTrack() == track);
+      assertEquals(trainDeparture.getTrack(), track);
     }
 
     @Test
     void test_setDelay() {
       LocalTime delay = LocalTime.of(1, 0);
       trainDeparture.setDelay(delay);
-      assert (trainDeparture.getDelay().equals(delay));
+      assertEquals(trainDeparture.getDelay(), delay);
     }
   }
 
@@ -130,14 +131,14 @@ public class TestClient {
       String normalOutput = originalDepartureTime + " " + line + " " + trainNumber + " " + destination;
       track = -1;
       trainDeparture.setTrack(-1);
-      assert (trainDeparture.toString().equals(normalOutput));
+      assertEquals(trainDeparture.toString(), normalOutput);
     }
 
     @Test
     void test_toString_without_delay() {
       String normalOutput = originalDepartureTime + " " + line + " " + trainNumber + " " + destination
           + " Spor: " + track;
-      assert (trainDeparture.toString().equals(normalOutput));
+      assertEquals(trainDeparture.toString(), normalOutput);
     }
 
     @Test
@@ -146,7 +147,7 @@ public class TestClient {
           + " Forsinkelse: " + delay;
       trainDeparture.setDelay(delay);
       trainDeparture.setTrack(-1);
-      assert (trainDeparture.toString().equals(normalOutput));
+      assertEquals(trainDeparture.toString(), normalOutput);
     }
 
     @Test
@@ -154,7 +155,7 @@ public class TestClient {
       String normalOutput = originalDepartureTime + " " + line + " " + trainNumber + " " + destination
           + " Spor: " + track + " Forsinkelse: " + delay;
       trainDeparture.setDelay(delay);
-      assert (trainDeparture.toString().equals(normalOutput));
+      assertEquals(trainDeparture.toString(), normalOutput);
     }
   }
 }
