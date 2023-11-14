@@ -29,6 +29,11 @@ public class Clock {
    * @param time The time the new clock is set to be
    */
   public void setClock(LocalTime time) { //en setmetode som setter parameteren lik klokkeslettet
-    this.clock = time;
+    if (time.isBefore(clock)){
+      throw new IllegalArgumentException("Tiden satt inn er før den nåverende tiden");
+    }
+    else {
+      this.clock = time;
+    }
   }
 }
