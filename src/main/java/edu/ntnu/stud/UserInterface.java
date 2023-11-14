@@ -17,14 +17,16 @@ public class UserInterface {
   //setter input til final fordi den bare henter brukerinputt eller bruker mutable-metoder som endrer på andre objekt
   private final Input input = new Input(table, clock);
 
+  private final String buffer = "_".repeat(60);
+
 
   public void init() { //metode for oppstart av programmet
     // Oppretter først 4 objekter av klassen TrainDeparture og legger dem inn i et objekt av klassen Table
     try {
-      table.getHashMap().put(601, new TrainDeparture(LocalTime.of(12, 15), "L3", "Frognerseteren", -1));
-      table.getHashMap().put(305, new TrainDeparture(LocalTime.of(15, 30), "Linje 2", "Sognsvann", -1));
-      table.getHashMap().put(404, new TrainDeparture(LocalTime.of(10, 30), "Linje 3",  "Bergkrystallen", -1));
-      table.getHashMap().put(406, new TrainDeparture(LocalTime.of(10, 40), "Linje 4",  "Bergkrystallen", -1));
+      table.add(601, new TrainDeparture(LocalTime.of(12, 15), "L3", "Frognerseteren", -1));
+      table.add(305, new TrainDeparture(LocalTime.of(15, 30), "L2", "Sognsvann", -1));
+      table.add(404, new TrainDeparture(LocalTime.of(10, 30), "L13",  "Bergkrystallen", -1));
+      table.add(406, new TrainDeparture(LocalTime.of(10, 40), "L4",  "Bergkrystallen", -1));
     } catch (IllegalArgumentException e){
       System.out.println(e);
       System.exit(0);
@@ -34,8 +36,15 @@ public class UserInterface {
   }
 
   public void printTrainDeparture() { //lager en metode som printer tog-oversikten ut til bruker
-    System.out.println("Time: " + clock.getClock()); //printer først den nåværende tiden
+    table.setHashMap(new SortByTime(table).sort());
     new SortByTime(table);
+    System.out.println(String.format("%" + -19 + "s", "Time: " + clock.getClock())
+        + String.format("%" + -19 + "s", "Togavganger")
+        + String.format("%" + -8 + "s", "Spor: ")
+        + String.format("%" + -10 + "s", "Forsinkelse: ") + "\n"
+        + this.buffer);
+        //+ String.format("%" + -40 + "s", "").replace(" ", "_"));
+    //new SortByTime(table);
     //table.getHashMap().sort(new SortByTime(table)); //sorterer tabellen med hjelp av sortByTime
     //bruker en lambda expression for å skrive ut hvert TrainDeparture-objekt i Table-objektet
     for (int trainNumber : table.getHashMap().keySet()) {
@@ -66,7 +75,7 @@ public class UserInterface {
     //Lager en objekt av TrainDeparture med verdiene vi fikk fra bruker og legger den inn i Table-objektet
     try {
       TrainDeparture newTraindeparture = new TrainDeparture(LocalTime.of(hour, minute), line, destination, track);
-      table.getHashMap().put(trainNumber, newTraindeparture);
+      table.add(trainNumber, newTraindeparture);
     } catch (IllegalArgumentException e){
       System.out.println("Kunne ikke legge til ny togavgang grunnet feilmelding " + e);
     }
@@ -78,7 +87,7 @@ public class UserInterface {
     int trainNumber = input.chooseTrainNumber();
     int track = input.trackInput();
     //setter track til valgt track på objekt av TrainDeparture som samsvarer til riktig trainNumber
-    table.getTrainByTrainNumber(trainNumber).setTrack(track);
+    table.getHashMap().get(trainNumber).setTrack(track);
   }
 
   public void setDelayToTrain() {
@@ -86,20 +95,22 @@ public class UserInterface {
     int trainNumber = input.chooseTrainNumber();
     LocalTime delay = input.delayInput();
     //setter delay til valgt delay på objekt av TrainDeparture som samsvarer til riktig trainNumber
-    table.getTrainByTrainNumber(trainNumber).setDelay(delay);
+    table.getHashMap().get(trainNumber).setDelay(delay);
   }
 
   public void findTrainByTrainNumber() { //en metode som finner en TrainDeparture basert på trainNumber
     //bruker velger en av de eksisterende trainNumber med hjelp av input-klassen
     int trainNumber = input.chooseTrainNumber();
     //bruker toString() for å skrive ut riktig TrainDeparture
-    System.out.println(table.getTrainByTrainNumber(trainNumber).toString());
+    System.out.println(table.getHashMap().get(trainNumber).toString(trainNumber));
   }
 
   public void findTrainByDestination() { //en metode som finner en TrainDeparture basert på destination
     //lager en arrayList som tar inn en liste med trainDepartures som har valgt destination som destination
-    ArrayList<TrainDeparture> destinationList = input.chooseDestination();
-    destinationList.forEach(t -> System.out.println(t.toString())); //bruker et lambda-utrykk for å skrive ut objektene
+    HashMap<Integer, TrainDeparture> destinationList = input.chooseDestination();
+    destinationList.forEach((key, value) -> {
+      System.out.println(value.toString(key)); //bruker et lambda-utrykk for å skrive ut objektene
+    });
   }
 
   private void updateClock() { //en metode som oppdaterer klokka til ny tid satt av bruker
@@ -115,19 +126,13 @@ public class UserInterface {
 
   private void updateTable() {
     //en metode for å fjerne objekter av TrainDeparture fra Table hvis departureTime er før klokkeslettet
-    for (int trainNumber : table.getHashMap().keySet()){
-      if (table.getHashMap().get(trainNumber).getDepartureTime().isBefore(clock.getClock())){
-        table.getHashMap().remove(trainNumber);
-      }
-    }
-    //table.getHashMap().removeIf(t -> t.getDepartureTime().isBefore(clock.getClock()));
+    table.getHashMap().entrySet().removeIf(map -> map.getValue().getDepartureTime().isBefore(clock.getClock()));
   }
 
   private int menuList() { //en metode som lager en meny over funksjonene til programmet og lar bruker velge en av dem
     int menuChoice;
     do {
-      String s = "-"; //en streng som skal markere et skille mellom tidligere kjørt funksjon og menyen
-      System.out.println(s.repeat(30));
+      System.out.println(buffer);
       //skriver ut funksjonene til bruker
       System.out.println("""
           [1] Vis tog avgangene

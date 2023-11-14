@@ -2,6 +2,7 @@ package edu.ntnu.stud;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Input {
@@ -97,7 +98,7 @@ public class Input {
   public int trainNumberInput() {
     int trainNumber = intInput("Skriv inn et nytt, unikt tognummer", 0);
     //kjører en løkke som kjører så lenge tognummeret ikke er unikt eller inputen er dummyValue
-    while (table.checkTrainNumber(trainNumber) || trainNumber == 0) {
+    while (table.getHashMap().get(trainNumber) != null || trainNumber == 0) {
       trainNumber = intInput("Det nummeret eksisterer allerede. Skriv inn et nytt, unikt tognummer", 0);
     }
     return trainNumber;
@@ -159,8 +160,8 @@ public class Input {
   /**
    * @return ArrayList<TrainDeparture>
    */
-  public ArrayList<TrainDeparture> chooseDestination() { //en metode for å velge en destinasjon fra en liste
-    ArrayList<TrainDeparture> destinationList; //lager en tom arraylist
+  public HashMap<Integer, TrainDeparture> chooseDestination() { //en metode for å velge en destinasjon fra en liste
+    HashMap<Integer, TrainDeparture> destinationList; //lager en tom arraylist
     String print = ""; //lager en tom streng
     do { //en do-while løkke som printer liste over destinasjonene og ber bruker velge en av dem
       //printer en streng som er tom første gjennomgang av løkken og har en feilmelding de neste gjennomgangene

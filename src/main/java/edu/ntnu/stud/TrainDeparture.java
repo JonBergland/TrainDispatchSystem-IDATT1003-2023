@@ -125,13 +125,21 @@ public final class TrainDeparture {
    */
   //@Override
   public String toString(int trainNumber) {
-    String output = originalDepartureTime + " " + line + " " + trainNumber + " " + destination;
+    String output = String.format("%" + -6 + "s", this.originalDepartureTime) + "|"
+         + String.format("%" + 1 + "s", "") + String.format("%" + -4 + "s", this.line) + "|"
+         + String.format("%" + 1 + "s", "") + String.format("%" + -4 + "s", trainNumber) + "|"
+         + String.format("%" + 1 + "s", "") + String.format("%" + -16 + "s", this.destination) + "|";
+
+    String track = String.format("%" + 6 + "s", " ") + "|";
     if (getTrack() > -1) {
-      output += " Spor: " + getTrack();
+      track = String.format("%" + 4 + "s", "") + String.format("%" + -2 + "s", this.track) + "|";
     }
+    output += track;
+    String delay = " ";
     if (getDelay().isAfter(LocalTime.of(0, 0))) {
-      output += " Forsinkelse: " + getDelay();
+      delay += this.delay;
     }
+    output += String.format("%" + 12 + "s", delay);
     return output;
   }
 

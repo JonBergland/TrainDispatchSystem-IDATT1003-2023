@@ -3,6 +3,8 @@ package edu.ntnu.stud;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static java.lang.Math.abs;
+
 /**
  * Dette er enitetsklassen for listen over tog-avganger
  */
@@ -25,9 +27,30 @@ public class Table {
     return this.hashMap;
   }
 
+  /**
+   * Adds a map of key (trainNumber) and value (trainDeparture) to Hashmap
+   *
+   * @param trainNumber
+   * @param trainDeparture
+   */
+  public void add(int trainNumber, TrainDeparture trainDeparture) {
+    if (trainNumber < 0) {
+      trainNumber = abs(trainNumber);
+    } else if (hashMap.get(trainNumber) != null) {
+      throw new IllegalArgumentException("Tog-nummeret er det samme som en annen togavgang");
+    }
+    this.hashMap.put(trainNumber, trainDeparture);
+  }
+
+  /**
+   * Sets a new hashMap to Table
+   *
+   * @param hashMap
+   */
   public void setHashMap(HashMap<Integer, TrainDeparture> hashMap) {
     this.hashMap = hashMap;
   }
+
 
   /**
    * @param newTrainNumber
@@ -38,80 +61,54 @@ public class Table {
     if (this.hashMap.get(newTrainNumber) != null){
       output = true;
     }
-    /**
-    for (TrainDeparture i : table) { //løkker gjennom alle objektene i Table-objektet
-      if (i.getTrainNumber() == newTrainNumber) { //sjekker om tognumrene er de samme
-        output = true; //setter output til true hvis tognumrene er like og breaker
-        break;
-      }
-    }*/
     return output; //returnerer den bolske verdien
   }
 
+  /**
+   * Prints all the trainDeparture's trainNumber
+   */
   public void printTrainNumberList() { //en metode som bruker et lambda-utrykk til å skrive ut alle tognumrene
     for (int trainNumber : hashMap.keySet()) {
       System.out.println(trainNumber);
     }
-    /**
-    hashMap.forEach(trainDeparture -> System.out.println());
-    hashMap.forEach(trainDeparture -> System.out.print(trainDeparture.getTrainNumber() + " \n"));*/
   }
 
+  /**
+   * Prints all the unique trainDeparture destinations
+   */
   public void printDestinationList() { //en metode som skriver ut alle de unike destinasjonene
     //lager en ny arraylist som skal romme alle de unike destinasjonene
     ArrayList<String> unique = new ArrayList<>();
     for (TrainDeparture trainDeparture : hashMap.values()) {
       String destination = trainDeparture.getDestination();
-      if (!unique.contains(destination)) { //sjekker om listen ikke inneholder destinasjonen
-        //hvis en ny, unik destinasjon printes destinasjonen ut og legges til i listen
+      if (!unique.contains(destination)) {
         System.out.println(destination + " ");
         unique.add(destination);
       }
     }
-    /**
-    hashMap.forEach(trainDeparture -> { //bruker lambda-utrykk til å løkke igjen om alle trainDeparture-objektene
-      String destination = trainDeparture.getDestination();
-      if (!unique.contains(destination)) { //sjekker om listen ikke inneholder destinasjonen
-        //hvis en ny, unik destinasjon printes destinasjonen ut og legges til i listen
-        System.out.println(destination + " ");
-        unique.add(destination);
-      }*/
-
   }
 
   /**
    * @param trainNumber
    * @return TrainDeparture
-   */
+
   public TrainDeparture getTrainByTrainNumber(int trainNumber) { //en metode som finner toget med samsvarende tognummer
-    /**
-    for (TrainDeparture i : hashMap.values()) { //løkker igjennom alle objektene i Table-objektet
-      if (i.getTrainNumber() == trainNumber) { //sjekker om tognummeret er likt
-        return i; //returnerer objektet
-      }
-    }*/
     return hashMap.get(trainNumber); //hvis det ikke er et tognummer med samsvarende tognummer, returneres null
-  }
+  }*/
 
   /**
+   * Gets all the trainDeparture with the same destination parameter
+   *
    * @param destination
    * @return ArrayList<TrainDeparture>
    */
-  public ArrayList<TrainDeparture> getTrainByDestination(String destination) { //en metode for å finne togavganger
-    //med lik destinasjon som parameteren
-    //lager en tom liste som skal romme alle TrainDeparture-objektene
-    ArrayList<TrainDeparture> destinationList = new ArrayList<>();
-    for (TrainDeparture trainDeparture : hashMap.values()){
-      if (trainDeparture.getDestination().equalsIgnoreCase(destination)) {
-        destinationList.add(trainDeparture); //legger til objektet i lista
+  public HashMap<Integer, TrainDeparture> getTrainByDestination(String destination) {
+    HashMap<Integer, TrainDeparture> destinationMap = new HashMap<>();
+    hashMap.entrySet().forEach(map -> {
+      if (map.getValue().getDestination().equalsIgnoreCase(destination)) {
+        destinationMap.put(map.getKey(), map.getValue());
       }
-    }
-    /**
-    hashMap.forEach(t -> { //går igjennom alle objektene i Table-objektet
-      //sjekker om destinasjonen er lik destinasjonen til TrainDeparture-objektet uansett størelse på bokstaver
-
-    });*/
-
-    return destinationList; //returnerer lista
+    });
+    return destinationMap; //returnerer lista
   }
 }
