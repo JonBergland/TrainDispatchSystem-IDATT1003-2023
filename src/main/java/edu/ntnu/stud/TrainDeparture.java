@@ -1,7 +1,5 @@
 package edu.ntnu.stud;
 
-import static java.lang.Math.abs;
-
 import java.time.LocalTime;
 
 
@@ -17,7 +15,6 @@ public final class TrainDeparture {
 
   private final LocalTime originalDepartureTime;
   private final String line;
-  //private final int trainNumber;
   private final String destination;
   private int track;
   private LocalTime delay;
@@ -70,15 +67,6 @@ public final class TrainDeparture {
   public String getLine() {
     return line;
   }
-
-  /**
-   * Gets the train number for the train departure.
-   *
-   * @return trainNumber
-   */
-  //public int getTrainNumber() {
-    //return trainNumber;
-  //}
 
   /**
    * Gets the destination for the train departure.

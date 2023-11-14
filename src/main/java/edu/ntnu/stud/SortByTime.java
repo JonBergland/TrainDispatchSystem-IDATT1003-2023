@@ -4,15 +4,15 @@ import java.util.*;
 
 //en klasse som skal sammenligne TrainDeparture objekter
 public class SortByTime {
-  Table table;
+  HashMap<Integer, TrainDeparture> hashMap;
 
-  public SortByTime(Table table) {
-    this.table = table;
+  public SortByTime(HashMap<Integer, TrainDeparture> hashMap) {
+    this.hashMap = hashMap;
   }
 
   public HashMap<Integer, TrainDeparture> sort(){
     List<Map.Entry<Integer, TrainDeparture> > list =
-        new LinkedList<>(table.getHashMap().entrySet());
+        new LinkedList<>(hashMap.entrySet());
 
     list.sort(Comparator.comparing(a -> a.getValue().getOriginalDepartureTime()));
 
@@ -21,9 +21,6 @@ public class SortByTime {
       System.out.println(hashMap.getKey());
       newHashMap.put(hashMap.getKey(), hashMap.getValue());
     }
-
-    //har en metode som sammenligner den orginale avgangstiden til TrainDeparture objektene
-    table.setHashMap(newHashMap);
     return newHashMap;
   }
 
