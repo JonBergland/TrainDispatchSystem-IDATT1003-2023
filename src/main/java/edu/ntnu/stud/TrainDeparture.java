@@ -28,7 +28,8 @@ public final class TrainDeparture {
    * @param destination           The trains destination
    * @param track                 The track that the train arrives at
    */
-  public TrainDeparture(LocalTime originalDepartureTime, String line, String destination, int track) {
+  public TrainDeparture(LocalTime originalDepartureTime, String line, String destination,
+                        int track) throws IllegalArgumentException {
     //tester om tiden er innenfor riktig rekkevidde i input-klassen
     this.originalDepartureTime = originalDepartureTime;
     if (line.isEmpty()) { //setter inn dummy-verdi hvis strengen er tom

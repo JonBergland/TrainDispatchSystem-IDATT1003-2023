@@ -28,7 +28,7 @@ public class UserInterface {
       table.add(406, new TrainDeparture(LocalTime.of(10, 40), "L4",  "Bergkrystallen", -1));
     } catch (IllegalArgumentException e){
       System.out.println(e);
-      System.exit(0);
+      //System.exit(0);
     }
     //kjører metodene som printer menyen til bruker, tar inn hva bruker velger og kjører tilhørende metode
     doOperation(menuList());
@@ -58,7 +58,7 @@ public class UserInterface {
   }
 
   private void doOperation(int menuChoice) { //en metode som tar inn tallverdien som bruker satte inn som parameter
-    do { //kjører en do-while løkke som kjører så lenge meny-valget ikke er 8
+    while(true) { //kjører en do-while løkke som kjører så lenge meny-valget ikke er 8
       switch (menuChoice) { //bruker switch til å kjøre metoden som tilsvarer til den brukervalgte verdien
         case 1 -> table.printTrainDeparture();
         case 2 -> table.addTrainDeparture();
@@ -71,6 +71,6 @@ public class UserInterface {
         default -> System.out.println("Tallet du satte inn samsvarer ikke med et tall fra listen");
       }
       menuChoice = menuList();
-    } while (menuChoice != 8);
+    }
   }
 }

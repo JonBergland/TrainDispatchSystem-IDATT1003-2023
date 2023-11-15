@@ -139,7 +139,7 @@ public class TestClient {
 
 
       @Test
-      void test_toString_without_track_and_delay() {
+      void testToStringWithoutTrack_and_delay() {
         String normalOutput = toStringSetup();
         normalOutput += String.format("%" + 6 + "s", " ") + "|"
             + String.format("%" + 12 + "s", " ");

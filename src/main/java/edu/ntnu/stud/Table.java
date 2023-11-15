@@ -118,7 +118,7 @@ public class Table {
     if (trainNumber < 0) {
       trainNumber = abs(trainNumber);
     } else if (hashMap.get(trainNumber) != null) {
-      throw new IllegalArgumentException("Tog-nummeret er det samme som en annen togavgang");
+      throw new IllegalArgumentException("Train number is not the samme....");
     }
     this.hashMap.put(trainNumber, trainDeparture);
   }
@@ -135,21 +135,23 @@ public class Table {
     String line = input.stringInput("Skriv inn navnet på linjen");
 
     int trainNumber = input.intInput("Skriv inn et nytt, unikt tognummer", 0);
-    while (hashMap.get(trainNumber) != null || trainNumber == 0) {
+    /*while (hashMap.get(trainNumber) != null || trainNumber == 0) {
       trainNumber = input.intInput("Det nummeret eksisterer allerede. Skriv inn et nytt, unikt tognummer", 0);
-    }
+    }*/
 
     String destination = input.stringInput("Skriv inn navnet på destinasjonen");
 
     String print = "Skriv inn ved hvilken spor toget skal gå fra. Hvis ikke bestemt, skriv inn -1";
     int track = input.intInput(print, -1);
-
-    //Lager en objekt av TrainDeparture med verdiene vi fikk fra bruker og legger den inn i Table-objektet
+    TrainDeparture newTrainDeparture = new TrainDeparture(LocalTime.of(hour, minute), line, destination, track);
     try {
-      TrainDeparture newTraindeparture = new TrainDeparture(LocalTime.of(hour, minute), line, destination, track);
-      add(trainNumber, newTraindeparture);
-    } catch (IllegalArgumentException e) {
-      System.out.println("Kunne ikke legge til ny togavgang grunnet feilmelding " + e);
+
+      //TrainDeparture newTrainDeparture = new TrainDeparture(LocalTime.of(hour, minute), line, destination, track);
+
+      add(trainNumber, newTrainDeparture);
+    } catch (IllegalArgumentException e){
+      /*log.error("Noe galt skjedde ved lagingen og tilleggingen av ny train departure" +
+          "i Table. Feilmeldingen er " + e);*/
     }
   }
 
@@ -195,10 +197,9 @@ public class Table {
   }
 
   public HashMap<Integer, TrainDeparture> chooseDestination() { //en metode for å velge en destinasjon fra en liste
-    HashMap<Integer, TrainDeparture> destinationList;
     printDestinationList();
     String destination = input.stringInput("\nVelg en av destinasjonene");
-    destinationList = getTrainByDestination(destination);
+    HashMap<Integer, TrainDeparture> destinationList = getTrainByDestination(destination);
 
     while (destinationList.isEmpty()) {
       System.out.println("Du må sette inn en destinasjon fra listen");
@@ -212,12 +213,11 @@ public class Table {
   public void updateClock() { //en metode som oppdaterer klokka til ny tid satt av bruker
     String print = "du vil sette klokken til";
     LocalTime time = LocalTime.of(input.hourInput(print), input.minuteInput(print));
-
-    if (time.isBefore(clock.getClock())) {
-      throw new IllegalArgumentException(
-          "Klokken blir forsøkt satt til før nåverende tidspunkt");
-    } else {
+    try {
       clock.setClock(time);
+    } catch (IllegalArgumentException e){
+      System.out.println("Det du satte inn ble ikke akseptert. Tiden forblir den samme");
+    } finally {
       hashMap.entrySet().removeIf(map -> map.getValue().getDepartureTime().isBefore(time));
     }
   }
