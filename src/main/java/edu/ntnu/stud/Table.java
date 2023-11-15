@@ -75,7 +75,7 @@ public class Table {
    * Prints an overview of all the traindepartures in the Table class
    */
   public void printTrainDeparture() {
-    this.hashMap = new SortByTime(this.hashMap).sort();
+    this.hashMap = SortByTime.sort(this.hashMap);
     System.out.println(String.format("%" + -19 + "s", "Time: " + clock.getClock())
         + String.format("%" + -19 + "s", "Togavganger")
         + String.format("%" + -8 + "s", "Spor: ")
