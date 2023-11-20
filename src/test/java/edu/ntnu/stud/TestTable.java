@@ -2,16 +2,16 @@ package edu.ntnu.stud;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Table_TrainDeparture_Register-class")
-public class TestTableRegisterClass {
+public class TestTable {
   Table table = new Table();
   int trainNumber1;
   TrainDeparture trainDeparture1;
@@ -39,7 +39,7 @@ public class TestTableRegisterClass {
     table.getHashMap().put(trainNumber4, trainDeparture4);
   }
 
-  @DisplayName("Test of method getTrainByDestination")
+  @DisplayName("Test of getTrainByDestination")
   @Test
   void testGetTrainByDestination() {
     String destination = "Oslo";
@@ -49,7 +49,14 @@ public class TestTableRegisterClass {
     destinationList.put(trainNumber3, trainDeparture3);
 
     assertEquals(destinationList, table.getTrainByDestination(destination));
+  }
 
+  @DisplayName("Test of getUniqueDestinations")
+  @Test
+  void testGetUniqueDestinations() {
+    HashSet<String> uniqueDestinations = new HashSet<>();
+    uniqueDestinations.add("Oslo");
+    uniqueDestinations.add("")
   }
 }
 
