@@ -1,5 +1,6 @@
 package edu.ntnu.stud;
 
+import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,9 +41,9 @@ public class Table {
    */
   public HashMap<Integer, TrainDeparture> getTrainByDestination(String destination) {
     HashMap<Integer, TrainDeparture> destinationMap = new HashMap<>();
-    hashMap.entrySet().forEach(map -> {
-      if (map.getValue().getDestination().equalsIgnoreCase(destination)) {
-        destinationMap.put(map.getKey(), map.getValue());
+    hashMap.forEach((key, value) -> {
+      if (value.getDestination().equalsIgnoreCase(destination)) {
+        destinationMap.put(key, value);
       }
     });
     return destinationMap; //returnerer lista
@@ -81,7 +82,7 @@ public class Table {
         + String.format("%" + -8 + "s", "Spor: ")
         + String.format("%" + -10 + "s", "Forsinkelse: ") + "\n"
         + this.buffer);
-    //bruker en lambda expression for å skrive ut hvert TrainDeparture-objekt i Table-objektet
+
     for (int trainNumber : this.hashMap.keySet()) {
       System.out.println(this.hashMap.get(trainNumber).toString(trainNumber));
     }
@@ -149,10 +150,10 @@ public class Table {
       //TrainDeparture newTrainDeparture = new TrainDeparture(LocalTime.of(hour, minute), line, destination, track);
 
       add(trainNumber, newTrainDeparture);
-    } catch (IllegalArgumentException e){
-      /*log.error("Noe galt skjedde ved lagingen og tilleggingen av ny train departure" +
-          "i Table. Feilmeldingen er " + e);*/
+    } catch (IllegalArgumentException | DateTimeException e){
+      System.out.println("You tried to write something not aceptable: " + e);
     }
+
   }
 
   /**
