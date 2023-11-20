@@ -5,13 +5,12 @@ import org.junit.jupiter.api.*;
 
 
 import java.time.LocalTime;
-import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("TrainDeparture-entity-class")
-public class TestTrainDepartureClass {
+public class TestTrainDeparture {
   LocalTime originalDepartureTime;
   String line;
   int trainNumber;
