@@ -39,15 +39,6 @@ public class TestTrainDeparture {
           line, destination, track));
     }
 
-    /*
-    @Test
-    void trainNumber_when_negative() {
-      trainNumber = -201;
-      trainDeparture = new TrainDeparture(originalDepartureTime,
-          line, destination, track);
-      assertEquals(trainDeparture.getTrainNumber(), abs(trainNumber));
-    }*/
-
     @Test
     void destination_when_empty() {
       destination = "";
@@ -56,11 +47,12 @@ public class TestTrainDeparture {
     }
 
     @Test
-    void track_when_less_than_minusOne() {
+    void trackWhen0OrLess() {
       track = -4;
       trainDeparture = new TrainDeparture(originalDepartureTime,
           line, destination, track);
-      assertEquals(Math.max(track, -1), trainDeparture.getTrack());
+
+      assertEquals(-1, trainDeparture.getTrack());
     }
   }
 
@@ -76,11 +68,6 @@ public class TestTrainDeparture {
     void test_getLine() {
       assertEquals(line, trainDeparture.getLine());
     }
-    /*
-    @Test
-    void test_getTrainNumber() {
-      assertEquals(trainDeparture.getTrainNumber(), trainNumber);
-    }*/
 
     @Test
     void test_getDestination() {
