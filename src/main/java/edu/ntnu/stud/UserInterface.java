@@ -1,5 +1,6 @@
 package edu.ntnu.stud;
 
+import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -18,20 +19,20 @@ public class UserInterface {
 
   private final String buffer = "_".repeat(60);
 
-
+  public void start() {
+    init();
+    doOperation(menuList());
+  }
   public void init() { //metode for oppstart av programmet
     // Oppretter først 4 objekter av klassen TrainDeparture og legger dem inn i et objekt av klassen Table
     try {
-      table.add(601, new TrainDeparture(LocalTime.of(12, 15), "L3", "Frognerseteren", -1));
+      table.add(601, new TrainDeparture(LocalTime.of(12, 15), "L3", "Frognerseteren", 0));
       table.add(305, new TrainDeparture(LocalTime.of(15, 30), "L2", "Sognsvann", -1));
       table.add(404, new TrainDeparture(LocalTime.of(10, 30), "L13",  "Bergkrystallen", -1));
       table.add(406, new TrainDeparture(LocalTime.of(10, 40), "L4",  "Bergkrystallen", -1));
-    } catch (IllegalArgumentException e){
-      System.out.println(e);
-      //System.exit(0);
+    } catch (IllegalArgumentException | DateTimeException e){
+      System.out.println("You tried to write something not aceptable: " + e);
     }
-    //kjører metodene som printer menyen til bruker, tar inn hva bruker velger og kjører tilhørende metode
-    doOperation(menuList());
   }
 
   private int menuList() { //en metode som lager en meny over funksjonene til programmet og lar bruker velge en av dem
