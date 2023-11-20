@@ -50,14 +50,6 @@ public class Table {
   }
 
   /**
-   * A function that prints all the exiting train numbers
-   */
-  private void printTrainNumbers() {
-    for (int existingTrainNumber : hashMap.keySet()) {
-      System.out.println(existingTrainNumber);
-    }
-  }
-  /**
    * Prints all the unique trainDeparture destinations
    */
   public void printDestinationList() { //en metode som skriver ut alle de unike destinasjonene
@@ -187,7 +179,9 @@ public class Table {
   }
 
   public int chooseTrainNumber() {
-    printTrainNumbers();
+    for (int existingTrainNumber : hashMap.keySet()) {
+      System.out.println(existingTrainNumber);
+    }
     int trainNumber = input.intInput("Velg en av togavgangene", 0);
 
     while(hashMap.get(trainNumber) == null || trainNumber == 0){
