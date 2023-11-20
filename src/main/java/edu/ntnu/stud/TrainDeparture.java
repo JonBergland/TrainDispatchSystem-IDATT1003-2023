@@ -24,7 +24,6 @@ public final class TrainDeparture {
    *
    * @param originalDepartureTime Original time for departure
    * @param line                  The name of the line
-   * //@param trainNumber           A number that is unique to each Train
    * @param destination           The trains destination
    * @param track                 The track that the train arrives at
    */
