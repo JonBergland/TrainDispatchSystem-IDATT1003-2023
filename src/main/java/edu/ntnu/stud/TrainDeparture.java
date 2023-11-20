@@ -33,7 +33,7 @@ public final class TrainDeparture {
     //tester om tiden er innenfor riktig rekkevidde i input-klassen
     this.originalDepartureTime = originalDepartureTime;
     if (line.isEmpty()) { //setter inn dummy-verdi hvis strengen er tom
-      throw new IllegalArgumentException("Linjen er ikke oppgitt");
+      throw new IllegalArgumentException("Line is empty");
     } else {
       this.line = line;
     }
@@ -46,6 +46,9 @@ public final class TrainDeparture {
     }
 
     //bruker Math.max til å sjekke om input er større enn -1. Hvis ikke så blir track -1
+    /*if (track >= 0) {
+      this.track = -1;
+    }*/
     this.track = Math.max(track, -1);
 
     this.delay = LocalTime.of(0, 0); //initialize the delay at 0 hours and 0 minutes
