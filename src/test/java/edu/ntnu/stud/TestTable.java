@@ -9,7 +9,9 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import static java.lang.Math.abs;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Table-class")
 public class TestTable {
@@ -40,7 +42,7 @@ public class TestTable {
     tableTest.getHashMap().put(trainNumber4, trainDeparture4);
   }
   @Nested
-  @DisplayName("get() methods")
+  @DisplayName("Test of get() methods")
   class tableGetMethods {
 
     @DisplayName("Test of getHashMap")
@@ -77,5 +79,66 @@ public class TestTable {
       assertEquals(uniqueDestinations, tableTest.getUniqueDestinationList());
     }
   }
+
+  @Nested
+  @DisplayName("Test of add()")
+  class tableAddMethod {
+    @DisplayName("Test of add() with postive trainNumber")
+    @Test
+    void testAddWithPositiveTrainNumber() {
+      int trainNumber = 501;
+      TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(14, 30), "L5",
+          "Skien", -1);
+
+      tableTest.add(trainNumber, trainDeparture);
+      assertEquals(trainDeparture, tableTest.getHashMap().get(trainNumber));
+    }
+
+    @DisplayName("Test of add() with negative trainNumber")
+    @Test
+    void testAddWithNegativeTrainNumber() {
+      int trainNumber = -501;
+      TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(14, 30), "L5",
+          "Skien", -1);
+
+      tableTest.add(trainNumber, trainDeparture);
+      assertEquals(trainDeparture, tableTest.getHashMap().get(abs(trainNumber)));
+    }
+
+    @DisplayName("Test og add() with already existing trainNumber")
+    @Test
+    void testAddWithAlreadyExistingTrainNumber() {
+      TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(14, 30), "L5",
+          "Skien", -1);
+
+      assertThrows(IllegalArgumentException.class, () ->
+          tableTest.add(trainNumber1, trainDeparture));
+    }
+  }
+
+  @Nested
+  @DisplayName("Test of set() methods")
+  class setMethods {
+    @DisplayName("Test of setHashMap")
+    @Test
+    void testOfSetHashMap() {
+      HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
+      newHashMap.put(trainNumber1, trainDeparture1);
+
+      tableTest.setHashMap(newHashMap);
+
+      assertEquals(newHashMap, tableTest.getHashMap());
+    }
+  }
+  /*
+  @Nested
+  @DisplayName("Test of choose() methods")
+  class chooseMethods {
+    @DisplayName("Test of chooseTrainNumber")
+    @Test
+    void testOfChooseTrainNumber() {
+
+    }
+  }*/
 }
 
