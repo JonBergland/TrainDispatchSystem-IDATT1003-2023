@@ -63,22 +63,6 @@ public class Table {
   }
 
   /**
-   * Prints an overview of all the traindepartures in the Table class
-   */
-  public void printTrainDeparture() {
-    this.hashMap = SortByTime.sort(this.hashMap);
-    System.out.println(String.format("%" + -19 + "s", "Time: " + clock.getClock())
-        + String.format("%" + -19 + "s", "Togavganger")
-        + String.format("%" + -8 + "s", "Spor: ")
-        + String.format("%" + -10 + "s", "Forsinkelse: ") + "\n"
-        + this.buffer);
-
-    for (int trainNumber : this.hashMap.keySet()) {
-      System.out.println(this.hashMap.get(trainNumber).toString(trainNumber));
-    }
-  }
-
-  /**
    * A function that prints a train departure that corresponds to a
    * user picked train number.
    */
@@ -108,10 +92,12 @@ public class Table {
   public void add(int trainNumber, TrainDeparture trainDeparture) {
     if (trainNumber < 0) {
       trainNumber = abs(trainNumber);
-    } else if (hashMap.get(trainNumber) != null) {
-      throw new IllegalArgumentException("Train number is not the samme....");
     }
-    this.hashMap.put(trainNumber, trainDeparture);
+    if (hashMap.get(trainNumber) != null) {
+      throw new IllegalArgumentException("The train-number already exists");
+    } else {
+      this.hashMap.put(trainNumber, trainDeparture);
+    }
   }
 
   /**
