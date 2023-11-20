@@ -45,11 +45,11 @@ public final class TrainDeparture {
       this.destination = destination;
     }
 
-    //bruker Math.max til å sjekke om input er større enn -1. Hvis ikke så blir track -1
-    /*if (track >= 0) {
+    if (track <= 0) { //sets track to -1 if track is 0 or less
       this.track = -1;
-    }*/
-    this.track = Math.max(track, -1);
+    } else {
+      this.track = track;
+    }
 
     this.delay = LocalTime.of(0, 0); //initialize the delay at 0 hours and 0 minutes
   }
