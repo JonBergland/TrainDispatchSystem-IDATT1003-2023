@@ -2,8 +2,8 @@ package edu.ntnu.stud;
 
 import java.time.DateTimeException;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import static java.lang.Math.abs;
 
@@ -50,18 +50,16 @@ public class Table {
   }
 
   /**
-   * Prints all the unique trainDeparture destinations
+   * Gets all the unique destinations in Table
+   *
+   * @return uniqueDestinations
    */
-  public void printDestinationList() { //en metode som skriver ut alle de unike destinasjonene
-    //lager en ny arraylist som skal romme alle de unike destinasjonene
-    ArrayList<String> unique = new ArrayList<>();
+  public HashSet<String> getUniqueDestinationList() {
+    HashSet<String> uniqueDestination = new HashSet<>();
     for (TrainDeparture trainDeparture : hashMap.values()) {
-      String destination = trainDeparture.getDestination();
-      if (!unique.contains(destination)) {
-        System.out.println(destination + " ");
-        unique.add(destination);
-      }
+      uniqueDestination.add(trainDeparture.getDestination());
     }
+    return uniqueDestination;
   }
 
   /**
@@ -192,13 +190,14 @@ public class Table {
   }
 
   public HashMap<Integer, TrainDeparture> chooseDestination() { //en metode for å velge en destinasjon fra en liste
-    printDestinationList();
+    HashSet<String> uniqueDestinations = getUniqueDestinationList();
+    uniqueDestinations.forEach(System.out::println);
     String destination = input.stringInput("\nVelg en av destinasjonene");
     HashMap<Integer, TrainDeparture> destinationList = getTrainByDestination(destination);
 
     while (destinationList.isEmpty()) {
       System.out.println("Du må sette inn en destinasjon fra listen");
-      printDestinationList();
+      uniqueDestinations.forEach(System.out::println);
       destination = input.stringInput("\nVelg en av destinasjonene");
       destinationList = getTrainByDestination(destination);
     }
