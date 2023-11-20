@@ -115,38 +115,6 @@ public class Table {
   }
 
   /**
-   * A function that adds a new traindeparture to the Table-class
-   * with the help of user-input
-   */
-  public void addTrainDeparture() {
-    int hour = input.hourInput("toget går");
-
-    int minute = input.minuteInput("toget går");
-
-    String line = input.stringInput("Skriv inn navnet på linjen");
-
-    int trainNumber = input.intInput("Skriv inn et nytt, unikt tognummer", 0);
-    /*while (hashMap.get(trainNumber) != null || trainNumber == 0) {
-      trainNumber = input.intInput("Det nummeret eksisterer allerede. Skriv inn et nytt, unikt tognummer", 0);
-    }*/
-
-    String destination = input.stringInput("Skriv inn navnet på destinasjonen");
-
-    String print = "Skriv inn ved hvilken spor toget skal gå fra. Hvis ikke bestemt, skriv inn -1";
-    int track = input.intInput(print, -1);
-    TrainDeparture newTrainDeparture = new TrainDeparture(LocalTime.of(hour, minute), line, destination, track);
-    try {
-
-      //TrainDeparture newTrainDeparture = new TrainDeparture(LocalTime.of(hour, minute), line, destination, track);
-
-      add(trainNumber, newTrainDeparture);
-    } catch (IllegalArgumentException | DateTimeException e){
-      System.out.println("You tried to write something not aceptable: " + e);
-    }
-
-  }
-
-  /**
    * Sets a new hashMap to Table
    *
    * @param hashMap The new hashmap that overrides the original
