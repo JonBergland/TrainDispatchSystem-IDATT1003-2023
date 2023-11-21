@@ -29,27 +29,20 @@ public final class TrainDeparture {
    */
   public TrainDeparture(LocalTime originalDepartureTime, String line, String destination,
                         int track) throws IllegalArgumentException {
-    //tester om tiden er innenfor riktig rekkevidde i input-klassen
-    this.originalDepartureTime = originalDepartureTime;
-    if (line.isEmpty()) { //setter inn dummy-verdi hvis strengen er tom
+    if (line.isEmpty()) {
       throw new IllegalArgumentException("Line is empty");
-    } else {
-      this.line = line;
     }
-    //this.trainNumber = abs(trainNumber); //tar absolutt verdien av konstruktør verdien
-
-    if (destination.isEmpty()) { //setter inn dummy-verdi hvis strengen er tom
+    if (destination.isEmpty()) {
       throw new IllegalArgumentException("Destinasjonen er ikke oppgitt");
-    } else {
-      this.destination = destination;
+    }
+    if (track <= 0 && track != -1) {
+      throw new IllegalArgumentException("Track is not -1 or a positive integer");
     }
 
-    if (track <= 0) { //sets track to -1 if track is 0 or less
-      this.track = -1;
-    } else {
-      this.track = track;
-    }
-
+    this.originalDepartureTime = originalDepartureTime;
+    this.line = line;
+    this.destination = destination;
+    this.track = track;
     this.delay = LocalTime.of(0, 0); //initialize the delay at 0 hours and 0 minutes
   }
 
@@ -110,31 +103,6 @@ public final class TrainDeparture {
   }
 
   /**
-   * Turn all the information in the TrainDeparture object to a String.
-   *
-   * @return String
-   */
-  //@Override
-  public String toString(int trainNumber) {
-    String output = String.format("%" + -6 + "s", this.originalDepartureTime) + "|"
-         + String.format("%" + 1 + "s", "") + String.format("%" + -4 + "s", this.line) + "|"
-         + String.format("%" + 1 + "s", "") + String.format("%" + -4 + "s", trainNumber) + "|"
-         + String.format("%" + 1 + "s", "") + String.format("%" + -16 + "s", this.destination) + "|";
-
-    String track = String.format("%" + 6 + "s", " ") + "|";
-    if (getTrack() > -1) {
-      track = String.format("%" + 4 + "s", "") + String.format("%" + -2 + "s", this.track) + "|";
-    }
-    output += track;
-    String delay = " ";
-    if (getDelay().isAfter(LocalTime.of(0, 0))) {
-      delay += this.delay;
-    }
-    output += String.format("%" + 12 + "s", delay);
-    return output;
-  }
-
-  /**
    * Sets a track for the train departure using the integer parameter.
    *
    * @param track                   sets track as the integer parameter
@@ -151,5 +119,30 @@ public final class TrainDeparture {
   public void setDelay(LocalTime delay) {
     this.delay = this.delay.plusHours(delay.getHour());
     this.delay = this.delay.plusMinutes(delay.getMinute());
+  }
+
+  /**
+   * Turn all the information in the TrainDeparture object to a String.
+   *
+   * @return String
+   */
+  //@Override
+  public String toString(int trainNumber) {
+    String output = String.format("%" + -6 + "s", this.originalDepartureTime) + "|"
+        + String.format("%" + 1 + "s", "") + String.format("%" + -4 + "s", this.line) + "|"
+        + String.format("%" + 1 + "s", "") + String.format("%" + -4 + "s", trainNumber) + "|"
+        + String.format("%" + 1 + "s", "") + String.format("%" + -16 + "s", this.destination) + "|";
+
+    String track = String.format("%" + 6 + "s", " ") + "|";
+    if (getTrack() > -1) {
+      track = String.format("%" + 4 + "s", "") + String.format("%" + -2 + "s", this.track) + "|";
+    }
+    output += track;
+    String delay = " ";
+    if (getDelay().isAfter(LocalTime.of(0, 0))) {
+      delay += this.delay;
+    }
+    output += String.format("%" + 12 + "s", delay);
+    return output;
   }
 }
