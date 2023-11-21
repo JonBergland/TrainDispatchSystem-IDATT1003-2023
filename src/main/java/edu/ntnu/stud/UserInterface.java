@@ -3,10 +3,9 @@ package edu.ntnu.stud;
 import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
- * Dette er klassen for brukergrensesnittet
+ * This is the class for interactions with user
  */
 public class UserInterface {
   private final Table table = new Table();
@@ -22,11 +21,18 @@ public class UserInterface {
   private final int UPDATE_CLOCK = 7;
   private final String buffer = "_".repeat(60);
 
+  /**
+   * Method for initializing Table and starting the program.
+   */
   public void start() {
     init();
     doOperation(menuList());
   }
-  public void init() { //metode for oppstart av programmet
+
+  /**
+   * Method for adding 4 elements of trainDeparture to table
+   */
+  public void init() {
     // Oppretter først 4 objekter av klassen TrainDeparture og legger dem inn i et objekt av klassen Table
     try {
       table.add(601, new TrainDeparture(LocalTime.of(12, 15), "L3", "Hamar", 3));
@@ -39,7 +45,12 @@ public class UserInterface {
     }
   }
 
-  private int menuList() { //en metode som lager en meny over funksjonene til programmet og lar bruker velge en av dem
+  /**
+   * Prints out a menu to user, takes in an int from user and returns the int
+   *
+   * @return menuChoice
+   */
+  private int menuList() {
     int menuChoice;
     do {
       System.out.println("_".repeat(60));
@@ -62,6 +73,13 @@ public class UserInterface {
     return menuChoice; //returnerer valgt int verdi
   }
 
+  /**
+   * Takes in an int and does the corresponding operation in a switch. It then uses
+   * {@link #menuList() menuList} to get new int for user and loops
+   * @see #menuList() menuList to get new int from user and loops
+   *
+   * @param menuChoice         takes in an int that it does the corresponding int to
+   */
   private void doOperation(int menuChoice) {
     while(true) {
       switch (menuChoice) {
@@ -79,6 +97,9 @@ public class UserInterface {
     }
   }
 
+  /**
+   * Prints out all the trainDepartures in Table
+   */
   private void printTrainDeparture() {
     table.setHashMap(SortByTime.sort(table.getHashMap()));
     System.out.println(String.format("%" + -19 + "s", "Time: " + clock.getClock())
@@ -144,14 +165,21 @@ public class UserInterface {
    */
   public void findTrainByTrainNumber() {
     int trainNumber = chooseTrainNumber();
-    System.out.println(table.findTrainByTrainNumber(trainNumber).toString(trainNumber));
+    System.out.println(table.getTrainByTrainNumber(trainNumber).toString(trainNumber));
   }
 
+  /**
+   * Prints out all the train-numbers in Table and lets user write one.
+   * If user doesn't put in an existing train-number, it loops until user
+   * puts in a valid input. Returns an existing, user-picked train-number.
+   *
+   * @return trainNumber
+   */
   public int chooseTrainNumber() {
     table.getTrainNumberList().forEach(System.out::println);
     int trainNumber = input.intInput("Velg en av togavgangene", 0);
 
-    while(table.findTrainByTrainNumber(trainNumber) == null || trainNumber == 0){
+    while(table.getTrainByTrainNumber(trainNumber) == null || trainNumber == 0){
       table.getTrainNumberList().forEach(System.out::println);
       System.out.println( "Du må sette inn et tognummer fra listen");
       trainNumber = input.intInput("Velg en av togavgangene", 0);
@@ -159,11 +187,22 @@ public class UserInterface {
     return trainNumber;
   }
 
+  /**
+   * Uses {@link #chooseDestination() chooseDestination} to get a destination from user.
+   * Prints all the trainDepartures that matches the destination
+   */
   public void findTrainByDestination() {
     HashMap<Integer, TrainDeparture> destinationList = chooseDestination();
     destinationList.forEach((key, value) -> value.toString(key));
   }
 
+  /**
+   * Prints an out all the unique destinations in Table to user.
+   * Method will loop until user picks one of the destinations.
+   * Returns a HashMap over all the trainDepartures with matching destinations
+   *
+   * @return destinationsList
+   */
   public HashMap<Integer, TrainDeparture> chooseDestination() {
     table.getUniqueDestinationList().forEach(System.out::println);
     String destination = input.stringInput("\nVelg en av destinasjonene");
@@ -178,6 +217,11 @@ public class UserInterface {
     return destinationList;
   }
 
+  /**
+   * Gets input on new hour and minute from user. If new time is before old time,
+   * an exception is sent and time stays the same. Removes all the trainDepartures
+   * that has departureTime after new time
+   */
   public void updateClock() { //en metode som oppdaterer klokka til ny tid satt av bruker
     String print = "du vil sette klokken til";
     LocalTime time = LocalTime.of(input.hourInput(print), input.minuteInput(print));
