@@ -1,6 +1,5 @@
 package edu.ntnu.stud;
 
-import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,7 +63,7 @@ public class Table {
    * A function that prints a train departure that corresponds to a
    * user picked train number.
    */
-  public TrainDeparture findTrainByTrainNumber(int trainNumber) {
+  public TrainDeparture getTrainByTrainNumber(int trainNumber) {
     return hashMap.get(trainNumber);
   }
 
@@ -98,14 +97,29 @@ public class Table {
     this.hashMap = hashMap;
   }
 
+  /**
+   *
+   *
+   * @param trainNumber
+   * @param track
+   */
   public void setTrackToTrain(int trainNumber, int track) {
     this.hashMap.get(trainNumber).setTrack(track);
   }
 
+  /**
+   *
+   * @param trainNumber
+   * @param delay
+   */
   public void setDelayToTrain(int trainNumber, LocalTime delay) {
     this.hashMap.get(trainNumber).setDelay(delay);
   }
 
+  /**
+   *
+   * @param time
+   */
   public void removeTrainDepartureBeforeTime(LocalTime time) {
     hashMap.entrySet().removeIf(map -> map.getValue().getDepartureTime().isBefore(time));
   }
