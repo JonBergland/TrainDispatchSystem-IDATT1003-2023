@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import static java.lang.Math.abs;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -78,6 +79,19 @@ public class TestTable {
 
       assertEquals(uniqueDestinations, tableTest.getUniqueDestinationList());
     }
+
+    @DisplayName("Test of getTrainNumberList")
+    @Test
+    void testGetTrainNumberList() {
+      HashSet<Integer> trainNumberHashSet = new HashSet<>(tableTest.getHashMap().keySet());
+      assertEquals(trainNumberHashSet, tableTest.getTrainNumberList());
+    }
+
+    @DisplayName("Test of getTrainByTrainNumber")
+    @Test
+    void testGetTrainByTrainNumber() {
+      assertEquals(trainDeparture1, tableTest.getTrainByTrainNumber(trainNumber1));
+    }
   }
 
   @Nested
@@ -129,7 +143,63 @@ public class TestTable {
 
       assertEquals(newHashMap, tableTest.getHashMap());
     }
+
+    @DisplayName("Test of setTrackToTrain")
+    @Test
+    void testSetTrackToTrain() {
+      int newTrack = 2;
+      tableTest.setTrackToTrain(trainNumber2, newTrack);
+
+      assertEquals(newTrack, trainDeparture2.getTrack());
+    }
+
+    @DisplayName("Test of setDelayToTrain")
+    @Test
+    void testSetDelayToTrain() {
+      LocalTime delay = LocalTime.of(1,0);
+      tableTest.setDelayToTrain(trainNumber3, delay);
+
+      assertEquals(delay, trainDeparture3.getDelay());
+    }
   }
+
+  @Nested
+  @DisplayName("Test of remove method")
+  class removeMethods {
+    @DisplayName("Test of removeTrainDepartureBeforeTime with no effect")
+    @Test
+    void testRemoveTrainDepartureBeforeTimeWithNoEffect() {
+      HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>(tableTest.getHashMap());
+      LocalTime time = LocalTime.of(10, 0);
+      tableTest.removeTrainDepartureBeforeTime(time);
+      assertEquals(newHashMap, tableTest.getHashMap());
+    }
+
+    @DisplayName("Test of removeTrainDepartureBeforeTime")
+    @Test
+    void testRemoveTrainDepartureBeforeTime() {
+      HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
+      newHashMap.put(trainNumber1, trainDeparture1);
+      newHashMap.put(trainNumber2, trainDeparture2);
+
+      LocalTime time = LocalTime.of(12, 0);
+      tableTest.removeTrainDepartureBeforeTime(time);
+      assertEquals(newHashMap, tableTest.getHashMap());
+    }
+
+    @DisplayName("Test of removeTrainDepartureBeforeTime with time sett as a departure time")
+    @Test
+    void testRemoveTrainDepartureBeforeTimeWithTimeAsDepartureTime() {
+      HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
+      newHashMap.put(trainNumber1, trainDeparture1);
+      newHashMap.put(trainNumber2, trainDeparture2);
+
+      LocalTime time = LocalTime.of(12, 15);
+      tableTest.removeTrainDepartureBeforeTime(time);
+      assertEquals(newHashMap, tableTest.getHashMap());
+    }
+  }
+
   /*
   @Nested
   @DisplayName("Test of choose() methods")
