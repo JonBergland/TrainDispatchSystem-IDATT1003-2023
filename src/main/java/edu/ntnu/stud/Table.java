@@ -62,14 +62,16 @@ public class Table {
     return uniqueDestination;
   }
 
+  public HashSet<Integer> getTrainNumberList() {
+    return new HashSet<>(this.hashMap.keySet());
+  }
+
   /**
    * A function that prints a train departure that corresponds to a
    * user picked train number.
    */
-  public void findTrainByTrainNumber() {
-    int trainNumber = chooseTrainNumber();
-    //bruker toString() for å skrive ut riktig TrainDeparture
-    System.out.println(hashMap.get(trainNumber).toString(trainNumber));
+  public TrainDeparture findTrainByTrainNumber(int trainNumber) {
+    return hashMap.get(trainNumber);
   }
 
   /**
@@ -86,10 +88,14 @@ public class Table {
   /**
    * Adds a map of key (trainNumber) and value (trainDeparture) to Hashmap
    *
-   * @param trainNumber    The unique train number that is set as the key in the hash map
-   * @param trainDeparture The trainDeparture entity that the train number belongs to
+   * @param trainNumber               The unique train number that is set as the key in the hash map
+   * @param trainDeparture            The trainDeparture entity that the train number belongs to
+   *
+   * @throws IllegalArgumentException Throws Exception if the trainNumber
+   *                                  already exists in the register
    */
-  public void add(int trainNumber, TrainDeparture trainDeparture) {
+  public void add(int trainNumber, TrainDeparture trainDeparture)
+      throws IllegalArgumentException {
     if (trainNumber < 0) {
       trainNumber = abs(trainNumber);
     }
@@ -109,24 +115,11 @@ public class Table {
     this.hashMap = hashMap;
   }
 
-
-  /**
-   * A function that lets the user pick a track which the train leaves at
-   */
-  public void setTrackToTrain() {
-    int trainNumber = chooseTrainNumber();
-    String print = "Skriv inn ved hvilken spor toget skal gå fra. Hvis ikke bestemt, skriv inn -1";
-    int track = input.intInput(print, -1);
+  public void setTrackToTrain(int trainNumber, int track) {
     this.hashMap.get(trainNumber).setTrack(track);
   }
 
-  /**
-   * A function that lets the user set the delay for a train departure
-   */
-  public void setDelayToTrain() {
-    int trainNumber = chooseTrainNumber();
-    String print = "toget er forsinket med";
-    LocalTime delay = LocalTime.of(input.hourInput(print), input.minuteInput(print));
+  public void setDelayToTrain(int trainNumber, LocalTime delay) {
     this.hashMap.get(trainNumber).setDelay(delay);
   }
 
