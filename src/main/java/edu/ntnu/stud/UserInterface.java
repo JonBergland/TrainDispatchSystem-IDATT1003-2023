@@ -2,7 +2,6 @@ package edu.ntnu.stud;
 
 import java.time.DateTimeException;
 import java.time.LocalTime;
-import java.util.*;
 
 /**
  * Dette er klassen for brukergrensesnittet
@@ -31,7 +30,7 @@ public class UserInterface {
       table.add(404, new TrainDeparture(LocalTime.of(10, 30), "L13",  "Bergkrystallen", -1));
       table.add(406, new TrainDeparture(LocalTime.of(10, 40), "L4",  "Bergkrystallen", -1));
     } catch (IllegalArgumentException | DateTimeException e){
-      System.out.println("You tried to write something not aceptable: " + e);
+      System.out.println("You tried to write something not acceptable: " + e);
     }
   }
 
@@ -63,9 +62,9 @@ public class UserInterface {
       switch (menuChoice) { //bruker switch til å kjøre metoden som tilsvarer til den brukervalgte verdien
         case 1 -> printTrainDeparture();
         case 2 -> addTrainDeparture();
-        case 3 -> table.setTrackToTrain();
-        case 4 -> table.setDelayToTrain();
-        case 5 -> table.findTrainByTrainNumber();
+        case 3 -> setTrackToTrain();
+        case 4 -> setDelayToTrain();
+        case 5 -> findTrainByTrainNumber();
         case 6 -> table.findTrainByDestination();
         case 7 -> table.updateClock();
         case 8 -> System.exit(0);
@@ -111,5 +110,46 @@ public class UserInterface {
     } catch (IllegalArgumentException | DateTimeException e) {
       System.out.println("You tried to write something not aceptable: " + e);
     }
+  }
+
+  /**
+   * A function that lets the user pick a track which the train leaves at
+   */
+  public void setTrackToTrain() {
+    int trainNumber = chooseTrainNumber();
+    String print = "Skriv inn ved hvilken spor toget skal gå fra. Hvis ikke bestemt, skriv inn -1";
+    int track = input.intInput(print, -1);
+    table.setTrackToTrain(trainNumber, track);
+  }
+
+  /**
+   * A function that lets the user set the delay for a train departure
+   */
+  public void setDelayToTrain() {
+    int trainNumber = chooseTrainNumber();
+    String print = "toget er forsinket med";
+    LocalTime delay = LocalTime.of(input.hourInput(print), input.minuteInput(print));
+    table.setDelayToTrain(trainNumber, delay);
+  }
+
+  /**
+   * A function that prints a train departure that corresponds to a
+   * user picked train number.
+   */
+  public void findTrainByTrainNumber() {
+    int trainNumber = chooseTrainNumber();
+    System.out.println(table.findTrainByTrainNumber(trainNumber).toString(trainNumber));
+  }
+
+  public int chooseTrainNumber() {
+    table.getTrainNumberList().forEach(System.out::println);
+    int trainNumber = input.intInput("Velg en av togavgangene", 0);
+
+    while(table.findTrainByTrainNumber(trainNumber) == null || trainNumber == 0){
+      table.getTrainNumberList().forEach(System.out::println);
+      System.out.println( "Du må sette inn et tognummer fra listen");
+      trainNumber = input.intInput("Velg en av togavgangene", 0);
+    }
+    return trainNumber;
   }
 }
