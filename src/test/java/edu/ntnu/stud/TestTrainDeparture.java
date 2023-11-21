@@ -8,6 +8,8 @@ import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 
 @DisplayName("TrainDeparture-entity-class")
 public class TestTrainDeparture {
@@ -16,6 +18,7 @@ public class TestTrainDeparture {
   int trainNumber;
   String destination;
   int track;
+  LocalTime delay;
   TrainDeparture trainDeparture;
 
   @BeforeEach
@@ -25,6 +28,8 @@ public class TestTrainDeparture {
     trainNumber = 204;
     destination = "Oslo";
     track = 3;
+    delay = LocalTime.of(1,0);
+
     trainDeparture = new TrainDeparture(originalDepartureTime, line,
         destination, track);
   }
@@ -32,14 +37,24 @@ public class TestTrainDeparture {
   @Nested
   @DisplayName("TrainDeparture-Constructor")
   class trainDepartureConstructor {
+
     @Test
-    void line_when_empty() {
+    @DisplayName("Test of constructor")
+    void testConstructor() {
+      assertDoesNotThrow(() -> new TrainDeparture(originalDepartureTime,
+          line, destination, track));
+    }
+
+    @Test
+    @DisplayName("Test of constructor when line empty")
+    void testLineWhenEmpty() {
       line = "";
       assertThrows(IllegalArgumentException.class, () -> new TrainDeparture(originalDepartureTime,
           line, destination, track));
     }
 
     @Test
+    @DisplayName("Test of constructor when destination is empty")
     void destination_when_empty() {
       destination = "";
       assertThrows(IllegalArgumentException.class, () -> new TrainDeparture(originalDepartureTime,
@@ -47,12 +62,11 @@ public class TestTrainDeparture {
     }
 
     @Test
+    @DisplayName("Test of constructor when track is 0 or less")
     void trackWhen0OrLess() {
       track = -4;
-      trainDeparture = new TrainDeparture(originalDepartureTime,
-          line, destination, track);
-
-      assertEquals(-1, trainDeparture.getTrack());
+      assertThrows(IllegalArgumentException.class, () -> new TrainDeparture(originalDepartureTime,
+          line, destination, track));
     }
   }
 
@@ -60,31 +74,37 @@ public class TestTrainDeparture {
   @DisplayName("get() methods")
   class trainDepartureGetMethods {
     @Test
+    @DisplayName("Test of get OriginalDepartureTime")
     void test_getOriginalDepartureTime() {
       assertEquals(originalDepartureTime, trainDeparture.getOriginalDepartureTime());
     }
 
     @Test
+    @DisplayName("Test of get line")
     void test_getLine() {
       assertEquals(line, trainDeparture.getLine());
     }
 
     @Test
+    @DisplayName("Test of get destination")
     void test_getDestination() {
       assertEquals(destination, trainDeparture.getDestination());
     }
 
     @Test
+    @DisplayName("Test of get track")
     void test_getTrack() {
       assertEquals(track, trainDeparture.getTrack());
     }
 
     @Test
+    @DisplayName("Test of get delay")
     void test_getDelay() {
       assertEquals(LocalTime.of(0, 0), trainDeparture.getDelay());
     }
 
     @Test
+    @DisplayName("Test of get departure time")
     void test_getDepartureTime() {
       assertEquals(originalDepartureTime, trainDeparture.getDepartureTime());
     }
@@ -94,6 +114,7 @@ public class TestTrainDeparture {
   @DisplayName("set() methods")
   class trainDepartureSetMethods {
     @Test
+    @DisplayName("Test of set track")
     void test_setTrack() {
       track = 1;
       trainDeparture.setTrack(track);
@@ -101,8 +122,8 @@ public class TestTrainDeparture {
     }
 
     @Test
+    @DisplayName("Test of set delay")
     void test_setDelay() {
-      LocalTime delay = LocalTime.of(1, 0);
       trainDeparture.setDelay(delay);
       assertEquals(delay, trainDeparture.getDelay());
     }
@@ -118,10 +139,8 @@ public class TestTrainDeparture {
           + String.format("%" + 1 + "s", "") + String.format("%" + -16 + "s", destination) + "|";
     }
 
-    LocalTime delay = LocalTime.of(1, 0);
-
-
     @Test
+    @DisplayName("Test of ToString without track and delay")
     void testToStringWithoutTrackAndDelay() {
       String normalOutput = toStringSetup();
       normalOutput += String.format("%" + 6 + "s", " ") + "|"
@@ -132,6 +151,7 @@ public class TestTrainDeparture {
     }
 
     @Test
+    @DisplayName("Test of ToString without delay")
     void testToStringWithoutDelay() {
       String normalOutput = toStringSetup();
       normalOutput += String.format("%" + 4 + "s", "") + String.format("%" + -2 + "s", track) + "|"
@@ -140,6 +160,7 @@ public class TestTrainDeparture {
     }
 
     @Test
+    @DisplayName("Test of ToString without track")
     void testToStringWithoutTrack() {
       String normalOutput = toStringSetup();
       normalOutput += String.format("%" + 6 + "s", " ") + "|"
@@ -150,6 +171,7 @@ public class TestTrainDeparture {
     }
 
     @Test
+    @DisplayName("Test of ToString")
     void testToString() {
       String normalOutput = toStringSetup();
       normalOutput += String.format("%" + 4 + "s", "") + String.format("%" + -2 + "s", track) + "|"
