@@ -13,8 +13,13 @@ public class UserInterface {
   private final Clock clock = new Clock();
   private final Input input = new Input();
 
-  int printTrainDeparture = 1; //osv..
-
+  private final int PRINT_TRAINDEPARTURE = 1;
+  private final int ADD_TRAINDEPARTURE = 2;
+  private final int SET_TRACKTOTRAIN = 3;
+  private final int SET_DELAYTOTRAIN = 4;
+  private final int FIND_TRAINBYTRAINNUMBER = 5;
+  private final int FIND_TRAINBYDESTINATION = 6;
+  private final int UPDATE_CLOCK = 7;
   private final String buffer = "_".repeat(60);
 
   public void start() {
@@ -24,19 +29,20 @@ public class UserInterface {
   public void init() { //metode for oppstart av programmet
     // Oppretter først 4 objekter av klassen TrainDeparture og legger dem inn i et objekt av klassen Table
     try {
-      table.add(601, new TrainDeparture(LocalTime.of(12, 15), "L3", "Frognerseteren", 3));
+      table.add(601, new TrainDeparture(LocalTime.of(12, 15), "L3", "Hamar", 3));
       table.add(305, new TrainDeparture(LocalTime.of(15, 30), "L2", "Sognsvann", -1));
       table.add(404, new TrainDeparture(LocalTime.of(10, 30), "L13",  "Bergkrystallen", -1));
       table.add(406, new TrainDeparture(LocalTime.of(10, 40), "L4",  "Bergkrystallen", -1));
     } catch (IllegalArgumentException | DateTimeException e){
       System.out.println("You tried to write something not acceptable: " + e);
+      System.exit(0);
     }
   }
 
   private int menuList() { //en metode som lager en meny over funksjonene til programmet og lar bruker velge en av dem
     int menuChoice;
     do {
-      System.out.println(buffer);
+      System.out.println("_".repeat(60));
       //skriver ut funksjonene til bruker
       System.out.println("""
           [1] Vis tog avgangene
@@ -56,16 +62,16 @@ public class UserInterface {
     return menuChoice; //returnerer valgt int verdi
   }
 
-  private void doOperation(int menuChoice) { //en metode som tar inn tallverdien som bruker satte inn som parameter
-    while(true) { //kjører en do-while løkke som kjører så lenge meny-valget ikke er 8
-      switch (menuChoice) { //bruker switch til å kjøre metoden som tilsvarer til den brukervalgte verdien
-        case 1 -> printTrainDeparture();
-        case 2 -> addTrainDeparture();
-        case 3 -> setTrackToTrain();
-        case 4 -> setDelayToTrain();
-        case 5 -> findTrainByTrainNumber();
-        case 6 -> findTrainByDestination();
-        case 7 -> updateClock();
+  private void doOperation(int menuChoice) {
+    while(true) {
+      switch (menuChoice) {
+        case PRINT_TRAINDEPARTURE -> printTrainDeparture();
+        case ADD_TRAINDEPARTURE -> addTrainDeparture();
+        case SET_TRACKTOTRAIN -> setTrackToTrain();
+        case SET_DELAYTOTRAIN -> setDelayToTrain();
+        case FIND_TRAINBYTRAINNUMBER -> findTrainByTrainNumber();
+        case FIND_TRAINBYDESTINATION -> findTrainByDestination();
+        case UPDATE_CLOCK -> updateClock();
         case 8 -> System.exit(0);
         default -> System.out.println("Tallet du satte inn samsvarer ikke med et tall fra listen");
       }
