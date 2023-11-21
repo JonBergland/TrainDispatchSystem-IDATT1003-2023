@@ -2,19 +2,18 @@ package edu.ntnu.stud;
 
 import java.time.DateTimeException;
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Dette er klassen for brukergrensesnittet
  */
 public class UserInterface {
-  /**
-   * Objekstvariabler
-   * Lager nye instanser av hvert objekt fordi dette er klassen som brukeren
-   * kommer til å bruke for å kommunisere med resten av klassene
-   */
   private final Table table = new Table();
   private final Clock clock = new Clock();
   private final Input input = new Input();
+
+  int printTrainDeparture = 1; //osv..
 
   private final String buffer = "_".repeat(60);
 
@@ -65,8 +64,8 @@ public class UserInterface {
         case 3 -> setTrackToTrain();
         case 4 -> setDelayToTrain();
         case 5 -> findTrainByTrainNumber();
-        case 6 -> table.findTrainByDestination();
-        case 7 -> table.updateClock();
+        case 6 -> findTrainByDestination();
+        case 7 -> updateClock();
         case 8 -> System.exit(0);
         default -> System.out.println("Tallet du satte inn samsvarer ikke med et tall fra listen");
       }
@@ -104,11 +103,12 @@ public class UserInterface {
 
     String print = "Skriv inn ved hvilken spor toget skal gå fra. Hvis ikke bestemt, skriv inn -1";
     int track = input.intInput(print, -1);
-    TrainDeparture newTrainDeparture = new TrainDeparture(LocalTime.of(hour, minute), line, destination, track);
+
     try {
-     table.add(trainNumber, newTrainDeparture);
+      TrainDeparture newTrainDeparture = new TrainDeparture(LocalTime.of(hour, minute), line, destination, track);
+      table.add(trainNumber, newTrainDeparture);
     } catch (IllegalArgumentException | DateTimeException e) {
-      System.out.println("You tried to write something not aceptable: " + e);
+      System.out.println("You tried to write something not acceptable: " + e);
     }
   }
 
@@ -151,5 +151,35 @@ public class UserInterface {
       trainNumber = input.intInput("Velg en av togavgangene", 0);
     }
     return trainNumber;
+  }
+
+  public void findTrainByDestination() {
+    HashMap<Integer, TrainDeparture> destinationList = chooseDestination();
+    destinationList.forEach((key, value) -> value.toString(key));
+  }
+
+  public HashMap<Integer, TrainDeparture> chooseDestination() {
+    table.getUniqueDestinationList().forEach(System.out::println);
+    String destination = input.stringInput("\nVelg en av destinasjonene");
+    HashMap<Integer, TrainDeparture> destinationList = table.getTrainByDestination(destination);
+
+    while (destinationList.isEmpty()) {
+      System.out.println("Du må sette inn en destinasjon fra listen");
+      table.getUniqueDestinationList().forEach(System.out::println);
+      destination = input.stringInput("\nVelg en av destinasjonene");
+      destinationList = table.getTrainByDestination(destination);
+    }
+    return destinationList;
+  }
+
+  public void updateClock() { //en metode som oppdaterer klokka til ny tid satt av bruker
+    String print = "du vil sette klokken til";
+    LocalTime time = LocalTime.of(input.hourInput(print), input.minuteInput(print));
+    try {
+      clock.setClock(time);
+    } catch (IllegalArgumentException e){
+      System.out.println("Det du satte inn ble ikke akseptert. Tiden forblir den samme");
+    }
+    table.removeTrainDepartureBeforeTime(time);
   }
 }
