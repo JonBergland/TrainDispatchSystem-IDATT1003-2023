@@ -1,5 +1,6 @@
 package edu.ntnu.stud;
 
+import edu.ntnu.stud.Exceptions.TrainDepartureConstructorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -8,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 import static java.lang.Math.abs;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,15 +27,15 @@ public class TestTable {
   TrainDeparture trainDeparture4;
 
   @BeforeEach
-  void setupTable() {
+  void setupTable() throws TrainDepartureConstructorException, IllegalArgumentException {
     trainNumber1 = 601;
-    trainDeparture1 = new TrainDeparture(LocalTime.of(12, 15), "L3", "Oslo", -1);
+    trainDeparture1 = new TrainDeparture("12:15", "L3", "Oslo", -1);
     trainNumber2 = 305;
-    trainDeparture2 = new TrainDeparture(LocalTime.of(15, 30), "L2", "Hamar", -1);
+    trainDeparture2 = new TrainDeparture("15:30", "L2", "Hamar", -1);
     trainNumber3 = 404;
-    trainDeparture3 = new TrainDeparture(LocalTime.of(10, 30), "L13", "Oslo", -1);
+    trainDeparture3 = new TrainDeparture("10:30", "L13", "Oslo", -1);
     trainNumber4 = 406;
-    trainDeparture4 = new TrainDeparture(LocalTime.of(10, 40), "L4", "Lillehammer", -1);
+    trainDeparture4 = new TrainDeparture("15:40", "L4", "Lillehammer", -1);
 
     tableTest.getHashMap().put(trainNumber1, trainDeparture1);
     tableTest.getHashMap().put(trainNumber2, trainDeparture2);
@@ -99,9 +99,9 @@ public class TestTable {
   class tableAddMethod {
     @DisplayName("Test of add() with postive trainNumber")
     @Test
-    void testAddWithPositiveTrainNumber() {
+    void testAddWithPositiveTrainNumber() throws TrainDepartureConstructorException {
       int trainNumber = 501;
-      TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(14, 30), "L5",
+      TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
 
       tableTest.add(trainNumber, trainDeparture);
@@ -110,9 +110,9 @@ public class TestTable {
 
     @DisplayName("Test of add() with negative trainNumber")
     @Test
-    void testAddWithNegativeTrainNumber() {
+    void testAddWithNegativeTrainNumber() throws TrainDepartureConstructorException {
       int trainNumber = -501;
-      TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(14, 30), "L5",
+      TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
 
       tableTest.add(trainNumber, trainDeparture);
@@ -121,8 +121,8 @@ public class TestTable {
 
     @DisplayName("Test og add() with already existing trainNumber")
     @Test
-    void testAddWithAlreadyExistingTrainNumber() {
-      TrainDeparture trainDeparture = new TrainDeparture(LocalTime.of(14, 30), "L5",
+    void testAddWithAlreadyExistingTrainNumber() throws TrainDepartureConstructorException {
+      TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
 
       assertThrows(IllegalArgumentException.class, () ->
