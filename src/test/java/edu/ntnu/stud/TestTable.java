@@ -1,5 +1,6 @@
 package edu.ntnu.stud;
 
+import edu.ntnu.stud.Exceptions.TableAddException;
 import edu.ntnu.stud.Exceptions.TrainDepartureConstructorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +36,7 @@ public class TestTable {
     trainNumber3 = 404;
     trainDeparture3 = new TrainDeparture("10:30", "L13", "Oslo", -1);
     trainNumber4 = 406;
-    trainDeparture4 = new TrainDeparture("15:40", "L4", "Lillehammer", -1);
+    trainDeparture4 = new TrainDeparture("10:40", "L4", "Lillehammer", -1);
 
     tableTest.getHashMap().put(trainNumber1, trainDeparture1);
     tableTest.getHashMap().put(trainNumber2, trainDeparture2);
@@ -99,7 +100,7 @@ public class TestTable {
   class tableAddMethod {
     @DisplayName("Test of add() with postive trainNumber")
     @Test
-    void testAddWithPositiveTrainNumber() throws TrainDepartureConstructorException {
+    void testAddWithPositiveTrainNumber() throws TrainDepartureConstructorException, TableAddException {
       int trainNumber = 501;
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
@@ -110,7 +111,7 @@ public class TestTable {
 
     @DisplayName("Test of add() with negative trainNumber")
     @Test
-    void testAddWithNegativeTrainNumber() throws TrainDepartureConstructorException {
+    void testAddWithNegativeTrainNumber() throws TrainDepartureConstructorException, TableAddException {
       int trainNumber = -501;
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
@@ -119,13 +120,24 @@ public class TestTable {
       assertEquals(trainDeparture, tableTest.getHashMap().get(abs(trainNumber)));
     }
 
-    @DisplayName("Test og add() with already existing trainNumber")
+    @DisplayName("Test of add() with 0 as trainNumber")
+    @Test
+    void addWithZeroAsTrainNumber() throws TrainDepartureConstructorException, TableAddException {
+      int trainNumber = 0;
+      TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
+          "Skien", -1);
+
+      assertThrows(TableAddException.class, () ->
+          tableTest.add(trainNumber, trainDeparture));
+    }
+
+    @DisplayName("Test of add() with already existing trainNumber")
     @Test
     void testAddWithAlreadyExistingTrainNumber() throws TrainDepartureConstructorException {
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
 
-      assertThrows(IllegalArgumentException.class, () ->
+      assertThrows(TableAddException.class, () ->
           tableTest.add(trainNumber1, trainDeparture));
     }
   }
