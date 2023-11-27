@@ -50,7 +50,7 @@ public class TestTrainDeparture {
     @DisplayName("Test of constructor when line empty")
     void lineWhenEmpty() {
       line = "";
-      assertThrows(IllegalArgumentException.class, () -> new TrainDeparture(originalDepartureTime,
+      assertThrows(TrainDepartureConstructorException.class, () -> new TrainDeparture(originalDepartureTime,
           line, destination, track));
     }
 
@@ -58,7 +58,7 @@ public class TestTrainDeparture {
     @DisplayName("Test of constructor when destination is empty")
     void destinationWhenEmpty() {
       destination = "";
-      assertThrows(IllegalArgumentException.class, () -> new TrainDeparture(originalDepartureTime,
+      assertThrows(TrainDepartureConstructorException.class, () -> new TrainDeparture(originalDepartureTime,
           line, destination, track));
     }
 
@@ -66,7 +66,7 @@ public class TestTrainDeparture {
     @DisplayName("Test of constructor when track is 0 or less")
     void trackWhen0OrLess() {
       track = -4;
-      assertThrows(IllegalArgumentException.class, () -> new TrainDeparture(originalDepartureTime,
+      assertThrows(TrainDepartureConstructorException.class, () -> new TrainDeparture(originalDepartureTime,
           line, destination, track));
     }
 
