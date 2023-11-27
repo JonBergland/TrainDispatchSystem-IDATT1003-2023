@@ -15,24 +15,22 @@ public class Input {
   //får inn Table-objektet og klokke-objektet som parametere
   public Input() {
   }
-
   Scanner in = new Scanner(System.in);
 
   /**
-   * @param tall
-   * @param dummyValue
-   * @return int
+   * Tries to convert the number into integer
+   *
+   * @param number
+   * @return boolean
    */
-  private int tryInt(String tall, int dummyValue) { //en metode for å sjekke om en streng er et tall (int)
-    int output = 0;
+  private boolean tryInt(String number) { //en metode for å sjekke om en streng er et tall (int)
+    boolean isInt = true;
     try {
-      output = Integer.parseInt(tall); //sjekker om strengen kan konverteres til tall
-    } catch (NumberFormatException e) { //hvis den ikke kan konverteres blir en feilmelding skrevet ut til bruker
-      System.out.println(e + ". Det du skrev inn ble ikke akseptert og verdien "
-          + dummyValue + " ble satt istedet");
-      output = dummyValue; //setter resultatet til dummy-verdien hvis strengen ikke kunne konverteres
-    }
-    return output; //returnerer den konverterte strengen eller dummy-verdien
+      Integer.parseInt(number); //sjekker om strengen kan konverteres til tall
+    } catch (NumberFormatException e) {
+      isInt = false;
+     }
+    return isInt;
   }
 
   /**
@@ -43,8 +41,12 @@ public class Input {
    */
   public int intInput(String print, int dummyValue) { //en metode for en tall-input fra bruker
     System.out.println(print); //skriver ut en egendefinert streng til bruker
-    String intInput = in.nextLine(); //får inn bruker-input
-    return tryInt(intInput, dummyValue); //bruker intInput-metoden for å sjekke at input fra bruker er et tall
+    String intInput = in.nextLine();
+    int output = 0;
+    if (tryInt(intInput)) {
+      output = Integer.parseInt(intInput);
+    }
+    return output; //bruker intInput-metoden for å sjekke at input fra bruker er et tall
   }
 
   /**
@@ -62,10 +64,11 @@ public class Input {
    */
   public int hourInput(String details) {
     String print = "Skriv inn tiden, i timer, " + details + " (mellom 0-23)";
+
     int dummyValue = 0;
     int hour = intInput(print, dummyValue);
     if (hour > 23 || hour < 0) {
-      hour = 0;
+      hour = dummyValue;
       System.out.println("Det som er satt inn er over den gitte rekkevidden. " + dummyValue + " ble satt inn istedet");
     }
     return hour; //retunerer bruker-input eller dummy-veri
