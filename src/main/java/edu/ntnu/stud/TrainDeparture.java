@@ -1,6 +1,8 @@
 package edu.ntnu.stud;
 
+import edu.ntnu.stud.Exceptions.TrackException;
 import edu.ntnu.stud.Exceptions.TrainDepartureConstructorException;
+import edu.ntnu.stud.Verification.Verification;
 
 import java.time.DateTimeException;
 import java.time.LocalTime;
@@ -39,14 +41,12 @@ public final class TrainDeparture {
     if (destination.isEmpty()) {
       throw new TrainDepartureConstructorException("Destinasjonen er ikke oppgitt");
     }
-    if (track <= 0 && track != -1) {
-      throw new TrainDepartureConstructorException("Track is not -1 or a positive integer");
-    }
     try {
       this.originalDepartureTime =
           LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern(originalDepartureTime)));
-    } catch (DateTimeException e) {
-      throw new TrainDepartureConstructorException("The original departuretime was not valid");
+      Verification.requireNonZeroNonLessThanMinus1Integer(track);
+    } catch (DateTimeException | IllegalArgumentException e) {
+      throw new TrainDepartureConstructorException("The original departuretime format was not valid");
     }
     this.line = line;
     this.destination = destination;
@@ -115,8 +115,16 @@ public final class TrainDeparture {
    *
    * @param track                   sets track as the integer parameter
    */
-  public void setTrack(int track) {
-    this.track = track;
+  public boolean setTrack(int track) throws TrackException {
+    boolean trackSet = false;
+    try {
+      Verification.requireNonZeroNonLessThanMinus1Integer(track);
+      this.track = track;
+      trackSet = true;
+    } catch (IllegalArgumentException e) {
+      throw new TrackException("Track was 0 or less than -1");
+    }
+    return trackSet;
   }
 
   /**
