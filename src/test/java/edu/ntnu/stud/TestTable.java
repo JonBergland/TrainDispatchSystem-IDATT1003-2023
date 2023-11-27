@@ -1,6 +1,7 @@
 package edu.ntnu.stud;
 
 import edu.ntnu.stud.Exceptions.TableAddException;
+import edu.ntnu.stud.Exceptions.TrackException;
 import edu.ntnu.stud.Exceptions.TrainDepartureConstructorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import static java.lang.Math.abs;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Table-class")
 public class TestTable {
@@ -106,7 +106,13 @@ public class TestTable {
           "Skien", -1);
 
       tableTest.add(trainNumber, trainDeparture);
-      assertEquals(trainDeparture, tableTest.getHashMap().get(trainNumber));
+      TrainDeparture trainDepartureTable = tableTest.getTrainByTrainNumber(trainNumber);
+      String trainDepartureString1 = trainDeparture.getOriginalDepartureTime() + trainDeparture.getLine() +
+          trainDeparture.getDestination() + trainDeparture.getTrack();
+      String trainDepartureString2 = trainDepartureTable.getOriginalDepartureTime() +
+          trainDepartureTable.getLine() + trainDepartureTable.getDestination()
+          + trainDepartureTable.getTrack();
+      assertEquals(trainDepartureString1, trainDepartureString2);
     }
 
     @DisplayName("Test of add() with negative trainNumber")
@@ -117,7 +123,13 @@ public class TestTable {
           "Skien", -1);
 
       tableTest.add(trainNumber, trainDeparture);
-      assertEquals(trainDeparture, tableTest.getHashMap().get(abs(trainNumber)));
+      TrainDeparture trainDepartureTable = tableTest.getTrainByTrainNumber(abs(trainNumber));
+      String trainDepartureString1 = trainDeparture.getOriginalDepartureTime() + trainDeparture.getLine() +
+          trainDeparture.getDestination() + trainDeparture.getTrack();
+      String trainDepartureString2 = trainDepartureTable.getOriginalDepartureTime() +
+          trainDepartureTable.getLine() + trainDepartureTable.getDestination()
+          + trainDepartureTable.getTrack();
+      assertEquals(trainDepartureString1, trainDepartureString2);
     }
 
     @DisplayName("Test of add() with 0 as trainNumber")
@@ -156,13 +168,29 @@ public class TestTable {
       assertEquals(newHashMap, tableTest.getHashMap());
     }
 
-    @DisplayName("Test of setTrackToTrain")
+    @DisplayName("Test of positive Integer setTrackToTrain")
     @Test
-    void testSetTrackToTrain() {
+    void positiveIntegerSetTrackToTrain() throws TrackException {
       int newTrack = 2;
-      tableTest.setTrackToTrain(trainNumber2, newTrack);
+      assertTrue(tableTest.setTrackToTrain(trainNumber2, newTrack));
+    }
 
-      assertEquals(newTrack, trainDeparture2.getTrack());
+    @DisplayName("Test of negative, non minus 1 Integer setTrackToTrain")
+    @Test
+    void negativeNonMinus1IntegerSetTrackToTrain() throws TrackException {
+      int newTrack = -5;
+      assertThrows(TrackException.class, () ->
+          tableTest.setTrackToTrain(trainNumber2, newTrack));
+    }
+
+    @DisplayName("Test of zero integer setTrackToTrain")
+    @Test
+    void zeroIntegerSetTrackToTrain() throws TrackException {
+      int newTrack = 0;
+      assertThrows(TrackException.class, () ->
+          tableTest.setTrackToTrain(trainNumber2, newTrack));
+
+      //assertTrue(tableTest.setTrackToTrain(trainNumber2, newTrack));
     }
 
     @DisplayName("Test of setDelayToTrain")
