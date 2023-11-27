@@ -1,6 +1,10 @@
 package edu.ntnu.stud;
 
+import edu.ntnu.stud.Exceptions.ClockException;
+
+import java.time.DateTimeException;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Dette er klassen for klokka
@@ -28,9 +32,16 @@ public class Clock {
   /**
    * @param time The time the new clock is set to be
    */
-  public void setClock(LocalTime time) { //en setmetode som setter parameteren lik klokkeslettet
+  public void setClock(String newTime) throws ClockException { //en setmetode som setter parameteren lik klokkeslettet
+    LocalTime time = LocalTime.of(0,0);
+    try {
+      time =
+          LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern(newTime)));
+    } catch (DateTimeException e) {
+      throw new ClockException("The time format was not valid");
+    }
     if (time.isBefore(clock)){
-      throw new IllegalArgumentException("Tiden satt inn er før den nåverende tiden");
+      throw new ClockException("The new time is before the old time");
     }
     else {
       this.clock = time;
