@@ -1,10 +1,13 @@
 package edu.ntnu.stud;
 
+import edu.ntnu.stud.Exceptions.ClockException;
 import edu.ntnu.stud.Exceptions.TableAddException;
+import edu.ntnu.stud.Exceptions.TrackException;
 import edu.ntnu.stud.Exceptions.TrainDepartureConstructorException;
 
 import java.time.DateTimeException;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 /**
@@ -44,9 +47,9 @@ public class UserInterface {
       table.add(404, new TrainDeparture("10:30", "L13",  "Bergkrystallen", -1));
       table.add(406, new TrainDeparture("10:40", "L4",  "Bergkrystallen", -1));
 
-    } catch (TrainDepartureConstructorException | TableAddException e){
+    } catch (Exception e){
       System.out.println("Your train-departures was not added. " + e.getMessage());
-      System.exit(0);
+      System.exit(0); //exits the program if init isn't properly initialized
     }
   }
 
@@ -123,9 +126,6 @@ public class UserInterface {
    * with the help of user-input
    */
   private void addTrainDeparture() {
-    int hour = input.hourInput("toget går");
-
-    int minute = input.minuteInput("toget går");
     String originalDepartureTime = input.stringInput("Skriv inn tiden togetavgangen på formatet HH:mm");
 
     String line = input.stringInput("Skriv inn navnet på linjen");
@@ -139,7 +139,9 @@ public class UserInterface {
 
     try {
       TrainDeparture newTrainDeparture = new TrainDeparture(originalDepartureTime, line, destination, track);
-      table.add(trainNumber, newTrainDeparture);
+      if (table.add(trainNumber, newTrainDeparture)) {
+        System.out.println("The train-departure was added");
+      }
     } catch (TrainDepartureConstructorException | TableAddException e) {
       System.out.println("The train-departure was not added. " + e.getMessage());
     }
@@ -152,7 +154,11 @@ public class UserInterface {
     int trainNumber = chooseTrainNumber();
     String print = "Skriv inn ved hvilken spor toget skal gå fra. Hvis ikke bestemt, skriv inn -1";
     int track = input.intInput(print, -1);
-    table.setTrackToTrain(trainNumber, track);
+    try {
+      table.setTrackToTrain(trainNumber, track);
+    } catch (TrackException e) {
+      System.out.println(e.getMessage() + ". The track was not set to the train");
+    }
   }
 
   /**
@@ -229,13 +235,12 @@ public class UserInterface {
    * that has departureTime after new time
    */
   public void updateClock() { //en metode som oppdaterer klokka til ny tid satt av bruker
-    String print = "du vil sette klokken til";
-    LocalTime time = LocalTime.of(input.hourInput(print), input.minuteInput(print));
+    String newTime = input.stringInput("Skriv inn et nytt klokkeslett på formatet HH:mm");
     try {
-      clock.setClock(time);
-    } catch (IllegalArgumentException e){
-      System.out.println("Det du satte inn ble ikke akseptert. Tiden forblir den samme");
+      clock.setClock(newTime);
+    } catch (ClockException e){
+      System.out.println(e.getMessage() + ". Time stays the same");
     }
-    table.removeTrainDepartureBeforeTime(time);
+    table.removeTrainDepartureBeforeTime(clock.getClock());
   }
 }
