@@ -1,5 +1,7 @@
 package edu.ntnu.stud;
 
+import edu.ntnu.stud.Exceptions.TableAddException;
+
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -77,12 +79,15 @@ public class Table {
    *                                  already exists in the register
    */
   public void add(int trainNumber, TrainDeparture trainDeparture) //legg til at den returnerer bool-verdi
-      throws IllegalArgumentException {
+      throws TableAddException {
     if (trainNumber < 0) {
       trainNumber = abs(trainNumber);
     }
+    if (trainNumber == 0) {
+      throw new TableAddException("The train-number cant be 0");
+    }
     if (hashMap.get(trainNumber) != null) {
-      throw new IllegalArgumentException("The train-number already exists");
+      throw new TableAddException("The train-number already exists");
     } else {
       this.hashMap.put(trainNumber, trainDeparture);
     }
