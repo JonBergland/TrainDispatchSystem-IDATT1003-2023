@@ -1,6 +1,10 @@
 package edu.ntnu.stud;
 
+import edu.ntnu.stud.Exceptions.TrainDepartureConstructorException;
+
+import java.time.DateTimeException;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 
 /**
@@ -27,19 +31,23 @@ public final class TrainDeparture {
    * @param destination           The trains destination
    * @param track                 The track that the train arrives at
    */
-  public TrainDeparture(LocalTime originalDepartureTime, String line, String destination,
-                        int track) throws IllegalArgumentException {
+  public TrainDeparture(String originalDepartureTime, String line, String destination,
+                        int track) throws TrainDepartureConstructorException {
     if (line.isEmpty()) {
-      throw new IllegalArgumentException("Line is empty");
+      throw new TrainDepartureConstructorException("Line is empty");
     }
     if (destination.isEmpty()) {
-      throw new IllegalArgumentException("Destinasjonen er ikke oppgitt");
+      throw new TrainDepartureConstructorException("Destinasjonen er ikke oppgitt");
     }
     if (track <= 0 && track != -1) {
-      throw new IllegalArgumentException("Track is not -1 or a positive integer");
+      throw new TrainDepartureConstructorException("Track is not -1 or a positive integer");
     }
-
-    this.originalDepartureTime = originalDepartureTime;
+    try {
+      this.originalDepartureTime =
+          LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern(originalDepartureTime)));
+    } catch (DateTimeException e) {
+      throw new TrainDepartureConstructorException("The original departuretime was not valid");
+    }
     this.line = line;
     this.destination = destination;
     this.track = track;
