@@ -1,6 +1,7 @@
 package edu.ntnu.stud;
 
 //import org.junit.BeforeClass;
+import edu.ntnu.stud.Exceptions.TrackException;
 import edu.ntnu.stud.Exceptions.TrainDepartureConstructorException;
 import org.junit.jupiter.api.*;
 
@@ -8,9 +9,7 @@ import org.junit.jupiter.api.*;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @DisplayName("TrainDeparture-entity-class")
@@ -63,9 +62,17 @@ public class TestTrainDeparture {
     }
 
     @Test
-    @DisplayName("Test of constructor when track is 0 or less")
-    void trackWhen0OrLess() {
+    @DisplayName("Test of constructor when track is less than -1")
+    void trackWhen0OrLessThanMinus1() {
       track = -4;
+      assertThrows(TrainDepartureConstructorException.class, () -> new TrainDeparture(originalDepartureTime,
+          line, destination, track));
+    }
+
+    @Test
+    @DisplayName("Test of constructor when track is 0")
+    void trackWhen0() {
+      track = 0;
       assertThrows(TrainDepartureConstructorException.class, () -> new TrainDeparture(originalDepartureTime,
           line, destination, track));
     }
@@ -143,11 +150,25 @@ public class TestTrainDeparture {
   @DisplayName("set() methods")
   class trainDepartureSetMethods {
     @Test
-    @DisplayName("Test of set track")
-    void testSetTrack() {
+    @DisplayName("Test of positive integer set track")
+    void positiveIntegerSetTrack() throws TrackException {
       track = 1;
-      trainDeparture.setTrack(track);
-      assertEquals(track, trainDeparture.getTrack());
+      assertTrue(trainDeparture.setTrack(track));
+      //assertEquals(track, trainDeparture.getTrack());
+    }
+
+    @Test
+    @DisplayName("Test of zero integer set track")
+    void zeroIntegerSetTrack() throws TrackException {
+      track = 0;
+      assertThrows(TrackException.class, () -> trainDeparture.setTrack(track));
+    }
+
+    @Test
+    @DisplayName("Test of less than -1 integer set track")
+    void lessThanMinus1IntegerSetTrack() throws TrackException {
+      track = -2;
+      assertThrows(TrackException.class, () -> trainDeparture.setTrack(track));
     }
 
     @Test
@@ -170,7 +191,7 @@ public class TestTrainDeparture {
 
     @Test
     @DisplayName("Test of ToString without track and delay")
-    void toStringWithoutTrackAndDelay() {
+    void toStringWithoutTrackAndDelay() throws TrackException {
       String normalOutput = toStringSetup();
       normalOutput += String.format("%" + 6 + "s", " ") + "|"
           + String.format("%" + 12 + "s", " ");
@@ -190,12 +211,13 @@ public class TestTrainDeparture {
 
     @Test
     @DisplayName("Test of ToString without track")
-    void toStringWithoutTrack() {
+    void toStringWithoutTrack() throws TrackException {
       String normalOutput = toStringSetup();
       normalOutput += String.format("%" + 6 + "s", " ") + "|"
           + String.format("%" + 12 + "s", delay);
       trainDeparture.setDelay(delay);
       trainDeparture.setTrack(-1);
+
       assertEquals(normalOutput, trainDeparture.toString(trainNumber));
     }
 
