@@ -1,5 +1,8 @@
 package edu.ntnu.stud;
 
+import edu.ntnu.stud.Exceptions.TableAddException;
+import edu.ntnu.stud.Exceptions.TrainDepartureConstructorException;
+
 import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -35,12 +38,14 @@ public class UserInterface {
   public void init() {
     // Oppretter først 4 objekter av klassen TrainDeparture og legger dem inn i et objekt av klassen Table
     try {
-      table.add(601, new TrainDeparture(LocalTime.of(12, 15), "L3", "Hamar", 3));
-      table.add(305, new TrainDeparture(LocalTime.of(15, 30), "L2", "Sognsvann", -1));
-      table.add(404, new TrainDeparture(LocalTime.of(10, 30), "L13",  "Bergkrystallen", -1));
-      table.add(406, new TrainDeparture(LocalTime.of(10, 40), "L4",  "Bergkrystallen", -1));
-    } catch (IllegalArgumentException | DateTimeException e){
-      System.out.println("You tried to write something not acceptable: " + e);
+
+      table.add(601, new TrainDeparture("12:15", "L3", "Hamar", 3));
+      table.add(305, new TrainDeparture("15:30", "L2", "Sognsvann", -1));
+      table.add(404, new TrainDeparture("10:30", "L13",  "Bergkrystallen", -1));
+      table.add(406, new TrainDeparture("10:40", "L4",  "Bergkrystallen", -1));
+
+    } catch (TrainDepartureConstructorException | TableAddException e){
+      System.out.println("Your train-departures was not added. " + e.getMessage());
       System.exit(0);
     }
   }
@@ -121,6 +126,7 @@ public class UserInterface {
     int hour = input.hourInput("toget går");
 
     int minute = input.minuteInput("toget går");
+    String originalDepartureTime = input.stringInput("Skriv inn tiden togetavgangen på formatet HH:mm");
 
     String line = input.stringInput("Skriv inn navnet på linjen");
 
@@ -132,10 +138,10 @@ public class UserInterface {
     int track = input.intInput(print, -1);
 
     try {
-      TrainDeparture newTrainDeparture = new TrainDeparture(LocalTime.of(hour, minute), line, destination, track);
+      TrainDeparture newTrainDeparture = new TrainDeparture(originalDepartureTime, line, destination, track);
       table.add(trainNumber, newTrainDeparture);
-    } catch (IllegalArgumentException | DateTimeException e) {
-      System.out.println("You tried to write something not acceptable: " + e);
+    } catch (TrainDepartureConstructorException | TableAddException e) {
+      System.out.println("The train-departure was not added. " + e.getMessage());
     }
   }
 
