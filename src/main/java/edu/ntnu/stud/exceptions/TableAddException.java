@@ -1,4 +1,4 @@
-package edu.ntnu.stud.Exceptions;
+package edu.ntnu.stud.exceptions;
 
 public class TableAddException extends Exception{
   public TableAddException(String errorMessage) {
