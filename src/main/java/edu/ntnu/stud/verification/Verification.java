@@ -42,7 +42,16 @@ public class Verification {
     } catch (DateTimeException e) {
       throw new IllegalArgumentException(formatMessage);
     }
+  }
 
+  public static void requireNonZeroOrLess(int checkInteger, String zeroOrLessMessage) {
+    if (checkInteger <= 0) {
+      throw new IllegalArgumentException(zeroOrLessMessage);
+    }
+  }
+
+  public static void requireNonZeroOrLess(int checkInteger) {
+    requireNonZeroOrLess(checkInteger, "Integer is 0 or less");
   }
 
 }
