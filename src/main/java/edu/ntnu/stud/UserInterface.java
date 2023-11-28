@@ -1,13 +1,11 @@
 package edu.ntnu.stud;
 
-import edu.ntnu.stud.Exceptions.ClockException;
-import edu.ntnu.stud.Exceptions.TableAddException;
-import edu.ntnu.stud.Exceptions.TrackException;
-import edu.ntnu.stud.Exceptions.TrainDepartureConstructorException;
+import edu.ntnu.stud.exceptions.ClockException;
+import edu.ntnu.stud.exceptions.TableAddException;
+import edu.ntnu.stud.exceptions.TrackException;
+import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
 
-import java.time.DateTimeException;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 /**
@@ -144,6 +142,8 @@ public class UserInterface {
       }
     } catch (TrainDepartureConstructorException | TableAddException e) {
       System.out.println("The train-departure was not added. " + e.getMessage());
+    } catch (TrackException e) {
+      System.out.println(e.getMessage());
     }
   }
 
