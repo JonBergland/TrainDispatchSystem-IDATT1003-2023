@@ -24,4 +24,15 @@ public class TrainDepartureConstructorException extends Exception {
   public TrainDepartureConstructorException(String errorMessage) {
     super(errorMessage);
   }
+  /**
+   * Constructs a TrainDepartureConstructorException with predetermined error message.
+   * <p>
+   * This constructor creates an instance of the exception with an predetermined
+   * errormessage providing general details on why the exception is thrown
+   * </p>
+   */
+  public TrainDepartureConstructorException() {
+    super("Something wrong happened during the creation of the train-departure. " +
+        "It was not added");
+  }
 }
