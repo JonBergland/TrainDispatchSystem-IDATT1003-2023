@@ -1,26 +1,29 @@
 package edu.ntnu.stud;
 
-import edu.ntnu.stud.Exceptions.TableAddException;
-import edu.ntnu.stud.Exceptions.TrackException;
-import edu.ntnu.stud.Exceptions.TrainDepartureConstructorException;
+import edu.ntnu.stud.exceptions.TableAddException;
+import edu.ntnu.stud.exceptions.TrackException;
+import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
+import edu.ntnu.stud.verification.Verification;
 
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 
-import static java.lang.Math.abs;
-
 /**
- * Dette er enitetsklassen for listen over tog-avganger
+ * Represents a table of TrainDeparture-objects indexed by train numbers
+ * <p>
+ *   The class contains a HashMap with Integer-keys (train numbers) and
+ *   TrainDeparture-values. This class works as a container for managing and
+ *   organizing TrainDeparture-objects.
+ * </p>
  */
 public class Table {
   private HashMap<Integer, TrainDeparture> hashMap;
 
   /**
-   * The constructor for the Table-class.
-   * Upon initializing it creates a new HashMap
-   * for the hashMap-variable in Table
+   * Constructs a Table object with an empty HashMap for storing TrainDeparture-objects.
+   * Upon initializing, a new HashMap is created for the hashMap-variable in Table.
    */
   public Table() {
     this.hashMap = new HashMap<>();
@@ -90,7 +93,7 @@ public class Table {
    * Adds an Integer-key (trainNumber) and a TrainDeparture-value (trainDeparture)
    * to the Hashmap variable in Table. This method takes a trainNumber (which represents
    * the key in the HashMap) and a TrainDeparture object (which represents the value in
-   * the HashMap.
+   * the HashMap).
    *
    * @param trainNumber               The unique train number that is set as the key in the hash map
    * @param trainDeparture            The trainDeparture entity that the train number belongs to
@@ -99,24 +102,22 @@ public class Table {
    *                                  already exists in the register
    */
   public boolean add(int trainNumber, TrainDeparture trainDeparture) //legg til at den returnerer bool-verdi
-      throws TableAddException, TrainDepartureConstructorException {
-    boolean added = false;
-    if (trainNumber < 0) {
-      trainNumber = abs(trainNumber);
-    }
-    if (trainNumber == 0) {
-      throw new TableAddException("The train-number was 0");
-    }
-    if (hashMap.get(trainNumber) != null) {
-      throw new TableAddException("The train-number already exists");
-    } else { //make a deep copy of trainDeprature
+      throws TableAddException, TrainDepartureConstructorException, TrackException {
+    try {
+      Verification.requireNonZeroOrLess(trainNumber,
+          "The train number was 0 or less");
+      if (hashMap.get(trainNumber) != null) {
+        throw new IllegalArgumentException("The train-number already exists");
+      }
+      //make a deep copy of TrainDeparture
       String originalDepartureTime = trainDeparture.getOriginalDepartureTime().getHour() +
           ":" + trainDeparture.getOriginalDepartureTime().getMinute();
       this.hashMap.put(trainNumber, new TrainDeparture(originalDepartureTime,
           trainDeparture.getLine(), trainDeparture.getDestination(), trainDeparture.getTrack()));
-      added = true;
+    } catch (IllegalArgumentException e) {
+      throw new TableAddException(e.getMessage());
     }
-    return added;
+    return true;
   }
 
   /**
