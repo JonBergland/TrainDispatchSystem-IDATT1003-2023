@@ -12,7 +12,6 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static java.lang.Math.abs;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Table-class")
@@ -117,24 +116,18 @@ public class TestTable {
 
     @DisplayName("Test of add() with negative trainNumber")
     @Test
-    void testAddWithNegativeTrainNumber() throws TrainDepartureConstructorException, TableAddException, TrackException {
+    void testAddWithNegativeTrainNumber() throws TrainDepartureConstructorException, TrackException {
       int trainNumber = -501;
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
 
-      tableTest.add(trainNumber, trainDeparture);
-      TrainDeparture trainDepartureTable = tableTest.getTrainByTrainNumber(abs(trainNumber));
-      String trainDepartureString1 = trainDeparture.getOriginalDepartureTime() + trainDeparture.getLine() +
-          trainDeparture.getDestination() + trainDeparture.getTrack();
-      String trainDepartureString2 = trainDepartureTable.getOriginalDepartureTime() +
-          trainDepartureTable.getLine() + trainDepartureTable.getDestination()
-          + trainDepartureTable.getTrack();
-      assertEquals(trainDepartureString1, trainDepartureString2);
+      assertThrows(TableAddException.class, () ->
+          tableTest.add(trainNumber, trainDeparture));
     }
 
     @DisplayName("Test of add() with 0 as trainNumber")
     @Test
-    void addWithZeroAsTrainNumber() throws TrainDepartureConstructorException, TableAddException, TrackException {
+    void addWithZeroAsTrainNumber() throws TrainDepartureConstructorException, TrackException {
       int trainNumber = 0;
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
@@ -177,7 +170,7 @@ public class TestTable {
 
     @DisplayName("Test of negative, non minus 1 Integer setTrackToTrain")
     @Test
-    void negativeNonMinus1IntegerSetTrackToTrain() throws TrackException {
+    void negativeNonMinus1IntegerSetTrackToTrain() {
       int newTrack = -5;
       assertThrows(TrackException.class, () ->
           tableTest.setTrackToTrain(trainNumber2, newTrack));
@@ -185,7 +178,7 @@ public class TestTable {
 
     @DisplayName("Test of zero integer setTrackToTrain")
     @Test
-    void zeroIntegerSetTrackToTrain() throws TrackException {
+    void zeroIntegerSetTrackToTrain() {
       int newTrack = 0;
       assertThrows(TrackException.class, () ->
           tableTest.setTrackToTrain(trainNumber2, newTrack));
@@ -239,16 +232,5 @@ public class TestTable {
       assertEquals(newHashMap, tableTest.getHashMap());
     }
   }
-
-  /*
-  @Nested
-  @DisplayName("Test of choose() methods")
-  class chooseMethods {
-    @DisplayName("Test of chooseTrainNumber")
-    @Test
-    void testOfChooseTrainNumber() {
-
-    }
-  }*/
 }
 
