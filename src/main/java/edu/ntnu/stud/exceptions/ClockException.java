@@ -24,4 +24,14 @@ public class ClockException extends Exception{
   public ClockException(String errorMessage) {
     super(errorMessage);
   }
+  /**
+   * Constructs a ClockException with predetermined error message.
+   * <p>
+   * This constructor creates an instance of the exception with an predetermined
+   * errormessage providing general details on why the exception is thrown
+   * </p>
+   */
+  public ClockException() {
+    super("The new time was not accepted");
+  }
 }
