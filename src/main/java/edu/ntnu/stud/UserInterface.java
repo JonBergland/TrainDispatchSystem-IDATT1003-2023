@@ -4,6 +4,7 @@ import edu.ntnu.stud.exceptions.ClockException;
 import edu.ntnu.stud.exceptions.TableAddException;
 import edu.ntnu.stud.exceptions.TrackException;
 import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
+import edu.ntnu.stud.verification.Verification;
 
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class UserInterface {
     // Oppretter først 4 objekter av klassen TrainDeparture og legger dem inn i et objekt av klassen Table
     try {
 
-      table.add(601, new TrainDeparture("12:15", "L3", "Hamar", 3));
+      table.add(601, new TrainDeparture("12:15", "L3", "Hamar", -2));
       table.add(305, new TrainDeparture("15:30", "L2", "Sognsvann", -1));
       table.add(404, new TrainDeparture("10:30", "L13",  "Bergkrystallen", -1));
       table.add(406, new TrainDeparture("10:40", "L4",  "Bergkrystallen", -1));
@@ -136,6 +137,13 @@ public class UserInterface {
     int track = input.intInput(print, -1);
 
     try {
+      Verification.requireNonZeroNonLessThanMinus1Integer(track);
+    } catch (IllegalArgumentException e) {
+      System.out.println("Track was not valid and was set to -1");
+      track = -1;
+    }
+
+    try {
       TrainDeparture newTrainDeparture = new TrainDeparture(originalDepartureTime, line, destination, track);
       if (table.add(trainNumber, newTrainDeparture)) {
         System.out.println("The train-departure was added");
@@ -144,6 +152,7 @@ public class UserInterface {
       System.out.println("The train-departure was not added. " + e.getMessage());
     } catch (TrackException e) {
       System.out.println(e.getMessage());
+      //TrainDeparture newTrainDeparture = new TrainDeparture(originalDepartureTime, line, destination, track);
     }
   }
 
@@ -192,8 +201,8 @@ public class UserInterface {
     int trainNumber = input.intInput("Velg en av togavgangene", 0);
 
     while(table.getTrainByTrainNumber(trainNumber) == null || trainNumber == 0){
-      table.getTrainNumberList().forEach(System.out::println);
       System.out.println( "Du må sette inn et tognummer fra listen");
+      table.getTrainNumberList().forEach(System.out::println);
       trainNumber = input.intInput("Velg en av togavgangene", 0);
     }
     return trainNumber;
