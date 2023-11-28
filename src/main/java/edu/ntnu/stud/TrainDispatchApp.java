@@ -1,22 +1,20 @@
 package edu.ntnu.stud;
 
-import java.time.LocalTime;
-
 /**
  * This is the main class for the train dispatch application.
  */
 public class TrainDispatchApp {
   /**
-   * @param args
+   * The main entrypoint for the application.
+   *
+   * @param args       The commandline arguments passed to the program.
+   *                   Not used in this application
    */
   // TODO: Fill in the main method and any other methods you need.
   public static void main(String[] args) {
     UserInterface uI = new UserInterface();
     uI.start();
   }
-
-  //en metode som lager en objekt av klassen UserInterface og bruker init-metoden til å kjøre programet
-
 }
 
 
