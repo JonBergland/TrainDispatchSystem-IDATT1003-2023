@@ -1,8 +1,8 @@
 package edu.ntnu.stud;
 
 //import org.junit.BeforeClass;
-import edu.ntnu.stud.Exceptions.TrackException;
-import edu.ntnu.stud.Exceptions.TrainDepartureConstructorException;
+import edu.ntnu.stud.exceptions.TrackException;
+import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
 import org.junit.jupiter.api.*;
 
 
@@ -23,7 +23,7 @@ public class TestTrainDeparture {
   TrainDeparture trainDeparture;
 
   @BeforeEach
-  void setup() throws TrainDepartureConstructorException, IllegalArgumentException {
+  void setup() throws TrainDepartureConstructorException, IllegalArgumentException, TrackException {
     originalDepartureTime = "08:30";
     line = "L3";
     trainNumber = 204;
@@ -65,7 +65,7 @@ public class TestTrainDeparture {
     @DisplayName("Test of constructor when track is less than -1")
     void trackWhen0OrLessThanMinus1() {
       track = -4;
-      assertThrows(TrainDepartureConstructorException.class, () -> new TrainDeparture(originalDepartureTime,
+      assertThrows(TrackException.class, () -> new TrainDeparture(originalDepartureTime,
           line, destination, track));
     }
 
@@ -73,7 +73,7 @@ public class TestTrainDeparture {
     @DisplayName("Test of constructor when track is 0")
     void trackWhen0() {
       track = 0;
-      assertThrows(TrainDepartureConstructorException.class, () -> new TrainDeparture(originalDepartureTime,
+      assertThrows(TrackException.class, () -> new TrainDeparture(originalDepartureTime,
           line, destination, track));
     }
 
