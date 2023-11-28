@@ -1,24 +1,17 @@
 package edu.ntnu.stud;
 
-import edu.ntnu.stud.Exceptions.TrackException;
-import edu.ntnu.stud.Exceptions.TrainDepartureConstructorException;
-import edu.ntnu.stud.Verification.Verification;
+import edu.ntnu.stud.exceptions.TrackException;
+import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
+import edu.ntnu.stud.verification.Verification;
 
-import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 
 /**
- * Dette er entitetsklassen for en tog-avgang.
+ * This is....
  */
 public final class TrainDeparture {
-
-  /**
-   * Objektsvariabler.
-   * Lager en variabel til hver av atributtene til objektet
-   */
-
   private final LocalTime originalDepartureTime;
   private final String line;
   private final String destination;
@@ -27,12 +20,14 @@ public final class TrainDeparture {
 
   /**
    * Constructs a TrainDeparture object with the specified attributes.
+   * <p>
    * This method creates a TrainDeparture object with a specific departure time,
    * the name of the train line, the train-departure's destination and the track
    * the train arrives at. It validates the parameters to ensure they meet requirements
    * using the Verification class. If a validation fails, a TrainDepartureConstructorException
    * {@link TrainDepartureConstructorException#TrainDepartureConstructorException(String errorMessage)}
    * is thrown. Also initializes the delay variable as a LocalTime of 0 hours and 0 minutes.
+   * </p>
    *
    * @param originalDepartureTime Original time for departure
    * @param line                  The name of the line
@@ -47,7 +42,7 @@ public final class TrainDeparture {
    * @see Verification#requireNonZeroNonLessThanMinus1Integer(int, String, String)
    */
   public TrainDeparture(String originalDepartureTime, String line, String destination,
-                        int track) throws TrainDepartureConstructorException {
+                        int track) throws TrainDepartureConstructorException, TrackException {
     try {
       Verification.requireStringOnFormatHHmm(originalDepartureTime,
           "Departure time was not formatted properly");
@@ -55,17 +50,22 @@ public final class TrainDeparture {
           "Line was empty");
       Verification.requireNonNullOrBlank(destination, "Destination was null",
           "Destination was empty");
-      Verification.requireNonZeroNonLessThanMinus1Integer(track, "Track was 0",
-          "Track was less than -1");
+      //Verification.requireNonZeroNonLessThanMinus1Integer(track,"Track was 0","Track was less than -1");
 
       this.originalDepartureTime =
           LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern(originalDepartureTime)));
       this.line = line;
       this.destination = destination;
-      this.track = track;
     } catch (Exception e) {
       throw new TrainDepartureConstructorException(
           e.getMessage() + ". The train-departure was not created");
+    }
+    try {
+      Verification.requireNonZeroNonLessThanMinus1Integer(track);
+      this.track = track;
+    } catch (IllegalArgumentException e) {
+      this.track = -1; //if track doesn't meet the criteria, -1 is assigned instead
+      throw new TrackException("Track was not valid. Track was set to -1");
     }
 
     this.delay = LocalTime.of(0, 0); //initialize the delay at 0 hours and 0 minutes
@@ -73,9 +73,11 @@ public final class TrainDeparture {
 
   /**
    * Gets the original departure time of the train.
+   * <p>
    * This method returns the LocalTime representing the original departure
    * time of the train-departure. This variable is set during the creation
    * of the TrainDeparture-object and can't be changed.
+   * </p>
    *
    * @return A LocalTime representing the original departure time to
    *         the train-departure
@@ -86,9 +88,11 @@ public final class TrainDeparture {
 
   /**
    * Gets the name of the train-departure's line.
+   * <p>
    * This method returns a String representing the name of the train-departure's
    * line. This variable is set during the creation of the TrainDeparture-object
    * and can't be changed.
+   * </p>
    *
    * @return A String representing the name of the train-departure's line
    */
@@ -98,9 +102,11 @@ public final class TrainDeparture {
 
   /**
    * Gets the destination for the train-departure.
+   * <p>
    * This method returns a String representing the train-departure's
    * destination. This variable is set during the creation of the
    * TrainDeparture-object and can't be changed.
+   * </p>
    *
    * @return A String representing the train-departure's destination
    */
@@ -110,9 +116,11 @@ public final class TrainDeparture {
 
   /**
    * Gets the train-departure's designated track.
+   * <p>
    * This method returns an Integer representing the train-departure's
    * track. This variable is set during the creation of the
    * TrainDeparture-object and can't be changed.
+   * </p>
    *
    * @return An Integer representing the train-departure's track
    */
@@ -122,9 +130,11 @@ public final class TrainDeparture {
 
   /**
    * Gets the delay for the train departure.
+   * <p>
    * This method returns the LocalTime representing the train-departure's
    * delay. This variable is set during the creation of the
    * TrainDeparture-object and can't be changed.
+   * </p>
    *
    * @return A LocalTime representing the train-departure's delay
    */
