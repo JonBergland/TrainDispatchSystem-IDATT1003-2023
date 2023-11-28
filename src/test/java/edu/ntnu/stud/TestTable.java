@@ -1,8 +1,8 @@
 package edu.ntnu.stud;
 
-import edu.ntnu.stud.Exceptions.TableAddException;
-import edu.ntnu.stud.Exceptions.TrackException;
-import edu.ntnu.stud.Exceptions.TrainDepartureConstructorException;
+import edu.ntnu.stud.exceptions.TableAddException;
+import edu.ntnu.stud.exceptions.TrackException;
+import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -28,7 +28,7 @@ public class TestTable {
   TrainDeparture trainDeparture4;
 
   @BeforeEach
-  void setupTable() throws TrainDepartureConstructorException, IllegalArgumentException {
+  void setupTable() throws TrainDepartureConstructorException, IllegalArgumentException, TrackException {
     trainNumber1 = 601;
     trainDeparture1 = new TrainDeparture("12:15", "L3", "Oslo", -1);
     trainNumber2 = 305;
@@ -100,7 +100,7 @@ public class TestTable {
   class tableAddMethod {
     @DisplayName("Test of add() with postive trainNumber")
     @Test
-    void testAddWithPositiveTrainNumber() throws TrainDepartureConstructorException, TableAddException {
+    void testAddWithPositiveTrainNumber() throws TrainDepartureConstructorException, TableAddException, TrackException {
       int trainNumber = 501;
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
@@ -117,7 +117,7 @@ public class TestTable {
 
     @DisplayName("Test of add() with negative trainNumber")
     @Test
-    void testAddWithNegativeTrainNumber() throws TrainDepartureConstructorException, TableAddException {
+    void testAddWithNegativeTrainNumber() throws TrainDepartureConstructorException, TableAddException, TrackException {
       int trainNumber = -501;
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
@@ -134,7 +134,7 @@ public class TestTable {
 
     @DisplayName("Test of add() with 0 as trainNumber")
     @Test
-    void addWithZeroAsTrainNumber() throws TrainDepartureConstructorException, TableAddException {
+    void addWithZeroAsTrainNumber() throws TrainDepartureConstructorException, TableAddException, TrackException {
       int trainNumber = 0;
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
@@ -145,7 +145,7 @@ public class TestTable {
 
     @DisplayName("Test of add() with already existing trainNumber")
     @Test
-    void testAddWithAlreadyExistingTrainNumber() throws TrainDepartureConstructorException {
+    void testAddWithAlreadyExistingTrainNumber() throws TrainDepartureConstructorException, TrackException {
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
 
