@@ -1,4 +1,4 @@
-package edu.ntnu.stud.Exceptions;
+package edu.ntnu.stud.exceptions;
 
 public class TrackException extends Exception {
   public TrackException(String errorMessage) {
