@@ -1,17 +1,17 @@
 package edu.ntnu.stud;
 
+import edu.ntnu.stud.exceptions.DelayException;
 import edu.ntnu.stud.exceptions.TableAddException;
 import edu.ntnu.stud.exceptions.TrackException;
 import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
 import edu.ntnu.stud.verification.Verification;
-
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 
 /**
- * Represents a table of TrainDeparture-objects indexed by train numbers
+ * Represents a table of TrainDeparture-objects indexed by train numbers.
  * <p>
  *   The class contains a HashMap with Integer-keys (train numbers) and
  *   TrainDeparture-values. This class works as a container for managing and
@@ -33,9 +33,9 @@ public class Table {
    * Gets the list over trainDepartures.
    * This method returns the HashMap in the Table-class
    *
-   * @return List<TrainDeparture>
+   * @return The Hashmap with all the TrainDeparture-objects
    */
-  public HashMap<Integer, TrainDeparture> getHashMap() { //en get-metode som returnere listen over TrainDeparture-objektene
+  public HashMap<Integer, TrainDeparture> getHashMap() {
     return this.hashMap;
   }
 
@@ -53,6 +53,7 @@ public class Table {
     HashMap<Integer, TrainDeparture> destinationHashMap = new HashMap<>();
     hashMap.forEach((key, value) -> {
       if (value.getDestination().equalsIgnoreCase(destination)) {
+        //System.out.println((value.toString(key)));
         destinationHashMap.put(key, value);
       }
     });
@@ -101,7 +102,7 @@ public class Table {
    * @throws IllegalArgumentException Throws Exception if the trainNumber
    *                                  already exists in the register
    */
-  public boolean add(int trainNumber, TrainDeparture trainDeparture) //legg til at den returnerer bool-verdi
+  public boolean add(int trainNumber, TrainDeparture trainDeparture)
       throws TableAddException, TrainDepartureConstructorException, TrackException {
     try {
       Verification.requireNonZeroOrLess(trainNumber,
@@ -110,8 +111,8 @@ public class Table {
         throw new IllegalArgumentException("The train-number already exists");
       }
       //make a deep copy of TrainDeparture
-      String originalDepartureTime = trainDeparture.getOriginalDepartureTime().getHour() +
-          ":" + trainDeparture.getOriginalDepartureTime().getMinute();
+      String originalDepartureTime = trainDeparture.getOriginalDepartureTime().getHour()
+          + ":" + trainDeparture.getOriginalDepartureTime().getMinute();
       this.hashMap.put(trainNumber, new TrainDeparture(originalDepartureTime,
           trainDeparture.getLine(), trainDeparture.getDestination(), trainDeparture.getTrack()));
     } catch (IllegalArgumentException e) {
@@ -152,8 +153,14 @@ public class Table {
    * @param trainNumber         The trainDeparture's trainNumber
    * @param delay               The delay you want to assign
    */
-  public void setDelayToTrain(int trainNumber, LocalTime delay) {
-    this.hashMap.get(trainNumber).setDelay(delay);
+  public boolean setDelayToTrain(int trainNumber, String delay) throws DelayException {
+    if (this.hashMap.get(trainNumber) != null) {
+      this.hashMap.get(trainNumber).setDelay(delay);
+    } else {
+      //TODO Add a unique exception to train-number
+      throw new DelayException("Train-number is not unique");
+    }
+    return true;
   }
 
   /**
