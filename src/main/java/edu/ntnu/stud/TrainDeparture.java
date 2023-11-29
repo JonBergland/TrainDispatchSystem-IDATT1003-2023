@@ -3,7 +3,6 @@ package edu.ntnu.stud;
 import edu.ntnu.stud.exceptions.TrackException;
 import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
 import edu.ntnu.stud.verification.Verification;
-
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -21,12 +20,12 @@ public final class TrainDeparture {
   /**
    * Constructs a TrainDeparture object with the specified attributes.
    * <p>
-   * This method creates a TrainDeparture object with a specific departure time,
+   * This method constructs a TrainDeparture object with a specific departure time,
    * the name of the train line, the train-departure's destination and the track
    * the train arrives at. It validates the parameters to ensure they meet requirements
-   * using the Verification class. If a validation fails, a TrainDepartureConstructorException
-   * {@link TrainDepartureConstructorException#TrainDepartureConstructorException(String errorMessage)}
-   * is thrown. Also initializes the delay variable as a LocalTime of 0 hours and 0 minutes.
+   * using the Verification class. If a validation fails, a
+   * {@code TrainDepartureConstructorException} is thrown. Also initializes the {@code delay}
+   * variable as a LocalTime of 0 hours and 0 minutes.
    * </p>
    *
    * @param originalDepartureTime Original time for departure
@@ -35,8 +34,8 @@ public final class TrainDeparture {
    * @param track                 The track that the train arrives at
    * @throws TrainDepartureConstructorException If any parameters fail to meet the requirements
    *                                            set, an exception is thrown. The exception message
-   *                                            provides details about which parameter didn't meet the
-   *                                            requirement and why.
+   *                                            provides details about which parameter didn't meet
+   *                                            the requirement and why.
    * @see Verification#requireStringOnFormatHHmm(String, String)
    * @see Verification#requireNonNullOrBlank(String, String, String)
    * @see Verification#requireNonZeroNonLessThanMinus1Integer(int, String, String)
@@ -50,10 +49,9 @@ public final class TrainDeparture {
           "Line was empty");
       Verification.requireNonNullOrBlank(destination, "Destination was null",
           "Destination was empty");
-      //Verification.requireNonZeroNonLessThanMinus1Integer(track,"Track was 0","Track was less than -1");
 
-      this.originalDepartureTime =
-          LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern(originalDepartureTime)));
+      this.originalDepartureTime = LocalTime.parse(LocalTime.now().format(
+          DateTimeFormatter.ofPattern(originalDepartureTime)));
       this.line = line;
       this.destination = destination;
     } catch (Exception e) {
@@ -64,8 +62,7 @@ public final class TrainDeparture {
       Verification.requireNonZeroNonLessThanMinus1Integer(track);
       this.track = track;
     } catch (IllegalArgumentException e) {
-      this.track = -1; //if track doesn't meet the criteria, -1 is assigned instead
-      throw new TrackException("Track was not valid. Track was set to -1");
+      this.track = -1;
     }
 
     this.delay = LocalTime.of(0, 0); //initialize the delay at 0 hours and 0 minutes
@@ -143,7 +140,7 @@ public final class TrainDeparture {
   }
 
   /**
-   * Gets the departure time (orginial + delay) for the train departure.
+   * Gets the departure time (original + delay) for the train departure.
    *
    * @return departureTime
    */
@@ -159,15 +156,13 @@ public final class TrainDeparture {
    * @param track                   sets track as the integer parameter
    */
   public boolean setTrack(int track) throws TrackException {
-    boolean trackSet = false;
     try {
       Verification.requireNonZeroNonLessThanMinus1Integer(track);
       this.track = track;
-      trackSet = true;
     } catch (IllegalArgumentException e) {
       throw new TrackException("Track was 0 or less than -1");
     }
-    return trackSet;
+    return true;
   }
 
   /**
