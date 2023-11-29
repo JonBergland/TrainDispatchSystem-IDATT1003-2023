@@ -1,5 +1,6 @@
 package edu.ntnu.stud;
 
+import edu.ntnu.stud.exceptions.DelayException;
 import edu.ntnu.stud.exceptions.TrackException;
 import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
 import edu.ntnu.stud.verification.Verification;
@@ -165,12 +166,12 @@ public final class TrainDeparture {
    *
    * @param track                   sets track as the integer parameter
    */
-  public boolean setTrack(int track) throws TrackException {
+  public boolean setTrack(int track) {
     try {
       Verification.requireNonZeroNonLessThanMinus1Integer(track);
       this.track = track;
     } catch (IllegalArgumentException e) {
-      throw new TrackException("Track was 0 or less than -1");
+      this.track = -1;
     }
     return true;
   }
@@ -180,9 +181,15 @@ public final class TrainDeparture {
    *
    * @param delay                   sets delay as the LocalTime parameter
    */
-  public void setDelay(LocalTime delay) {
-    this.delay = this.delay.plusHours(delay.getHour());
-    this.delay = this.delay.plusMinutes(delay.getMinute());
+  public void setDelay(String delay) throws DelayException {
+    try {
+      Verification.requireStringOnFormatHHmm(delay,
+          "The delay was not formatted properly");
+      this.delay = LocalTime.parse(LocalTime.now().format(
+          DateTimeFormatter.ofPattern(delay)));
+    } catch (IllegalArgumentException e) {
+      throw new DelayException(e.getMessage());
+    }
   }
 
   /**
