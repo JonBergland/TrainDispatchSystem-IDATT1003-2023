@@ -8,7 +8,17 @@ import java.time.format.DateTimeFormatter;
 
 
 /**
- * This is....
+ * Represents a train-departure with information such as departure time, line name,
+ * destination, track and eventual delay
+ * <p>
+ *   This class encapsulates details about a train-departure, providing methods to retrieve
+ *   information and perform operations related to the train-departure, including mutable
+ *   for track and delay
+ * </p>
+ *
+ * @see Verification
+ * @see TrainDepartureConstructorException
+ * @see TrackException
  */
 public final class TrainDeparture {
   private final LocalTime originalDepartureTime;
