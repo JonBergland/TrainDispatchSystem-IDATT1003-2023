@@ -1,33 +1,26 @@
 package edu.ntnu.stud;
 
 import edu.ntnu.stud.exceptions.ClockException;
+import edu.ntnu.stud.exceptions.DelayException;
 import edu.ntnu.stud.exceptions.TableAddException;
 import edu.ntnu.stud.exceptions.TrackException;
 import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
 import edu.ntnu.stud.verification.Verification;
-
-import java.time.LocalTime;
 import java.util.HashMap;
 
 /**
- * This is the class for interactions with user
+ * This is the class for interactions with user.
  */
 public class UserInterface {
   private final Table table = new Table();
   private final Clock clock = new Clock();
   private final Input input = new Input();
 
-  private final int PRINT_TRAINDEPARTURE = 1;
-  private final int ADD_TRAINDEPARTURE = 2;
-  private final int SET_TRACKTOTRAIN = 3;
-  private final int SET_DELAYTOTRAIN = 4;
-  private final int FIND_TRAINBYTRAINNUMBER = 5;
-  private final int FIND_TRAINBYDESTINATION = 6;
-  private final int UPDATE_CLOCK = 7;
   private final String buffer = "_".repeat(60);
 
   /**
-   * Method for initializing Table and starting the program.
+   * Method for initializing Table with 4 objects of the TrainDeparture-class
+   * and running the menu-program indefinitely.
    */
   public void start() {
     init();
@@ -35,10 +28,9 @@ public class UserInterface {
   }
 
   /**
-   * Method for adding 4 elements of trainDeparture to table
+   * Method for adding 4 objects of trainDeparture to table.
    */
   public void init() {
-    // Oppretter først 4 objekter av klassen TrainDeparture og legger dem inn i et objekt av klassen Table
     try {
 
       table.add(601, new TrainDeparture("12:15", "L3", "Hamar", -2));
@@ -46,14 +38,14 @@ public class UserInterface {
       table.add(404, new TrainDeparture("10:30", "L13",  "Bergkrystallen", -1));
       table.add(406, new TrainDeparture("10:40", "L4",  "Bergkrystallen", -1));
 
-    } catch (Exception e){
+    } catch (Exception e) {
       System.out.println("Your train-departures was not added. " + e.getMessage());
       System.exit(0); //exits the program if init isn't properly initialized
     }
   }
 
   /**
-   * Prints out a menu to user, takes in an int from user and returns the int
+   * Prints out a menu to user, takes in an int from user and returns the int.
    *
    * @return menuChoice
    */
@@ -74,7 +66,8 @@ public class UserInterface {
           """);
 
       //får inn valgt funksjon fra bruker og legger i variablen menuChoice
-      menuChoice = input.intInput("Skriv inn tallet som korresponderer med handlingen du vil utføre: ", 0);
+      menuChoice = input.intInput(
+          "Skriv inn tallet som korresponderer med handlingen du vil utføre: ", 0);
       //hvis det som ble satt inn ikke var et tall, blir dummy-verdien 0 satt inn og løkka gjentas
     } while (menuChoice == 0);
     return menuChoice; //returnerer valgt int verdi
@@ -83,12 +76,20 @@ public class UserInterface {
   /**
    * Takes in an int and does the corresponding operation in a switch. It then uses
    * {@link #menuList() menuList} to get new int for user and loops
+   *
    * @see #menuList() menuList to get new int from user and loops
    *
    * @param menuChoice         takes in an int that it does the corresponding int to
    */
   private void doOperation(int menuChoice) {
-    while(true) {
+    final int PRINT_TRAINDEPARTURE = 1;
+    final int ADD_TRAINDEPARTURE = 2;
+    final int SET_TRACKTOTRAIN = 3;
+    final int SET_DELAYTOTRAIN = 4;
+    final int FIND_TRAINBYTRAINNUMBER = 5;
+    final int FIND_TRAINBYDESTINATION = 6;
+    final int UPDATE_CLOCK = 7;
+    while (true) {
       switch (menuChoice) {
         case PRINT_TRAINDEPARTURE -> printTrainDeparture();
         case ADD_TRAINDEPARTURE -> addTrainDeparture();
@@ -105,7 +106,7 @@ public class UserInterface {
   }
 
   /**
-   * Prints out all the trainDepartures in Table
+   * Prints out all the trainDepartures in Table.
    */
   private void printTrainDeparture() {
     table.setHashMap(SortByTime.sort(table.getHashMap()));
@@ -121,11 +122,12 @@ public class UserInterface {
   }
 
   /**
-   * A function that adds a new traindeparture to the Table-class
-   * with the help of user-input
+   * A function that adds a new TrainDeparture-object to the Table-class
+   * with the help of user-input.
    */
   private void addTrainDeparture() {
-    String originalDepartureTime = input.stringInput("Skriv inn tiden togetavgangen på formatet HH:mm");
+    String originalDepartureTime = input.stringInput(
+        "Skriv inn tiden togavgangen på formatet HH:mm");
 
     String line = input.stringInput("Skriv inn navnet på linjen");
 
@@ -144,7 +146,8 @@ public class UserInterface {
     }
 
     try {
-      TrainDeparture newTrainDeparture = new TrainDeparture(originalDepartureTime, line, destination, track);
+      TrainDeparture newTrainDeparture = new TrainDeparture(
+          originalDepartureTime, line, destination, track);
       if (table.add(trainNumber, newTrainDeparture)) {
         System.out.println("The train-departure was added");
       }
@@ -152,32 +155,45 @@ public class UserInterface {
       System.out.println("The train-departure was not added. " + e.getMessage());
     } catch (TrackException e) {
       System.out.println(e.getMessage());
-      //TrainDeparture newTrainDeparture = new TrainDeparture(originalDepartureTime, line, destination, track);
     }
   }
 
   /**
-   * A function that lets the user pick a track which the train leaves at
+   * A function that lets the user pick a track which the train leaves at.
    */
   public void setTrackToTrain() {
     int trainNumber = chooseTrainNumber();
     String print = "Skriv inn ved hvilken spor toget skal gå fra. Hvis ikke bestemt, skriv inn -1";
     int track = input.intInput(print, -1);
     try {
-      table.setTrackToTrain(trainNumber, track);
+      if (table.setTrackToTrain(trainNumber, track)) {
+        System.out.print("Sporet til " + trainNumber + " er satt til ");
+        if (track == -1) {
+          System.out.println("ubestemt (-1)");
+        } else {
+          System.out.println(track);
+        }
+      }
+
     } catch (TrackException e) {
       System.out.println(e.getMessage() + ". The track was not set to the train");
     }
   }
 
   /**
-   * A function that lets the user set the delay for a train departure
+   * A function that lets the user set the delay for a train departure.
    */
   public void setDelayToTrain() {
     int trainNumber = chooseTrainNumber();
-    String print = "toget er forsinket med";
-    LocalTime delay = LocalTime.of(input.hourInput(print), input.minuteInput(print));
-    table.setDelayToTrain(trainNumber, delay);
+    String delay = input.stringInput("Skriv inn forsinkelsen til togavgangen på formatet HH:mm");
+    try {
+      if (table.setDelayToTrain(trainNumber, delay)) {
+        System.out.println("Delay was set to " + trainNumber);
+      }
+    } catch (DelayException e) {
+      System.out.println("Delay was not set. " + e.getMessage());
+    }
+
   }
 
   /**
@@ -200,8 +216,8 @@ public class UserInterface {
     table.getTrainNumberList().forEach(System.out::println);
     int trainNumber = input.intInput("Velg en av togavgangene", 0);
 
-    while(table.getTrainByTrainNumber(trainNumber) == null || trainNumber == 0){
-      System.out.println( "Du må sette inn et tognummer fra listen");
+    while (table.getTrainByTrainNumber(trainNumber) == null || trainNumber == 0) {
+      System.out.println("Du må sette inn et tognummer fra listen");
       table.getTrainNumberList().forEach(System.out::println);
       trainNumber = input.intInput("Velg en av togavgangene", 0);
     }
@@ -214,7 +230,7 @@ public class UserInterface {
    */
   public void findTrainByDestination() {
     HashMap<Integer, TrainDeparture> destinationList = chooseDestination();
-    destinationList.forEach((key, value) -> value.toString(key));
+    destinationList.forEach((key, value) -> System.out.println(value.toString(key)));
   }
 
   /**
@@ -247,7 +263,8 @@ public class UserInterface {
     String newTime = input.stringInput("Skriv inn et nytt klokkeslett på formatet HH:mm");
     try {
       clock.setClock(newTime);
-    } catch (ClockException e){
+      System.out.println("Time is updated");
+    } catch (ClockException e) {
       System.out.println(e.getMessage() + ". Time stays the same");
     }
     table.removeTrainDepartureBeforeTime(clock.getClock());
