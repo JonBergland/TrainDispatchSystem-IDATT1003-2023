@@ -1,11 +1,11 @@
 package edu.ntnu.stud.exceptions;
 
 /**
- * Exception class for errors that occur in the updating of a Clock-object.
+ * Exception class for errors that occur in the assigning or changing of the track.
  * <p>
- * This exception is thrown when there is an issue during the updating of the LocalTime
- * variable in the clock-object. It extends the standard {@code Exception}
- * class.
+ * This exception is thrown when there is an issue during assigning or changing of the
+ * integer variable {@code track} in the TrainDeparture-object. It extends the standard
+ * {@code Exception} class.
  * </p>
  *
  * @see Exception
@@ -24,6 +24,7 @@ public class TrackException extends Exception {
   public TrackException(String errorMessage) {
     super(errorMessage);
   }
+
   /**
    * Constructs a TrackException with predetermined error message.
    * <p>
