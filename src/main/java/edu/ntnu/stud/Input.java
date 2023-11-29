@@ -6,22 +6,18 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Input {
-  //private HashMap<Integer, TrainDeparture> hashMap;
-  //private final Clock clock;
-
-  /**
-   * Konstruktør klassen for klokken
-   */
-  //får inn Table-objektet og klokke-objektet som parametere
-  public Input() {
-  }
   Scanner in = new Scanner(System.in);
 
   /**
-   * Tries to convert the number into integer
+   * Checks if a given string can be parsed into an integer.
+   * <p>
+   * This method attempts to parse the specified string into an integer using {@code Integer.parseInt}.
+   * If the parsing is successful, the method returns {@code true}; otherwise, it returns {@code false}.
+   * </p>
    *
-   * @param number
-   * @return boolean
+   * @param number    The string to be checked for integer validity.
+   * @return {@code true} if the string can be parsed into an integer, {@code false} otherwise.
+   * @see Integer#parseInt(String)
    */
   private boolean tryInt(String number) { //en metode for å sjekke om en streng er et tall (int)
     boolean isInt = true;
@@ -34,82 +30,42 @@ public class Input {
   }
 
   /**
+   * Prompts the user for an integer input with a specified message.
+   * <p>
+   * This method displays the specified print message to the user, reads an integer input from the
+   * user, and returns the entered value. If the user enters a non-integer or invalid input,
+   * the method returns the specified dummyValue. The input validation is performed using the
+   * {@code tryInt} method.
+   * </p>
    *
-   * @param print
-   * @param dummyValue
-   * @return int
+   * @param print         The message to prompt the user for input.
+   * @param dummyValue    The default value returned in case of invalid input.
+   * @return An integer input provided by the user or the specified dummyValue if the input is invalid.
+   * @see #tryInt(String)
    */
-  public int intInput(String print, int dummyValue) { //en metode for en tall-input fra bruker
-    System.out.println(print); //skriver ut en egendefinert streng til bruker
+  public int intInput(String print, int dummyValue) {
+    System.out.println(print);
     String intInput = in.nextLine();
-    int output = 0;
+    int output = dummyValue;
     if (tryInt(intInput)) {
       output = Integer.parseInt(intInput);
     }
-    return output; //bruker intInput-metoden for å sjekke at input fra bruker er et tall
+    return output;
   }
 
   /**
-   * @param print
-   * @return String
+   * Prompts the user for a string input with a specified message.
+   * <p>
+   * This method displays the specified print message to the user, waits for the user to input
+   * a string, and returns the entered string. The entered string is obtained using the
+   * {@code in.nextLine()} method.
+   * </p>
+   *
+   * @param print   The message to prompt the user for a string input.
+   * @return The string input provided by the user.
    */
   public String stringInput(String print) { //en metode for en streng-input fra bruker
     System.out.println(print); //skriver ut en egendefinert streng til bruker
     return in.nextLine(); //returnerer bruker-inputet
   }
-
-  /**
-   * @param details
-   * @return int
-   */
-  public int hourInput(String details) {
-    String print = "Skriv inn tiden, i timer, " + details + " (mellom 0-23)";
-
-    int dummyValue = 0;
-    int hour = intInput(print, dummyValue);
-    if (hour > 23 || hour < 0) {
-      hour = dummyValue;
-      System.out.println("Det som er satt inn er over den gitte rekkevidden. " + dummyValue + " ble satt inn istedet");
-    }
-    return hour; //retunerer bruker-input eller dummy-veri
-  }
-
-  /**
-   * @param details
-   * @return int
-   */
-  public int minuteInput(String details) { //en metode for minutt input fra bruker
-    //en tekst-streng som skal skrives ut til bruker
-    String print = "Skriv inn tiden, i minutter, " + details + " (mellom 0-59)";
-    int dummyValue = 0; //setter en dummy-veri
-    int minute = intInput(print, dummyValue); //får et tall-input fra bruker ved hjelp av metoden intInput
-    if (minute > 59 || minute < 0) { //sjekker om inputen er innenfor begrensningen
-      minute = 0; //hvis minutter satt inn er over 59 timer, blir veriden satt til dummyverdi
-      //sender ut en feilmelding til bruker om at dummy-verdien ble satt inn istedet for inputen
-      System.out.println("Det som er satt inn er over den gitte rekkevidden. " + dummyValue + " ble satt inn istedet");
-    }
-    return minute; //retunerer bruker-input eller dummy-veri
-  }
-
-  /**
-   * A function that gives you a list over current train numbers
-   * and lets you choose one of them
-   *
-   * @return int
-   */
-  public int chooseTrainNumber(HashMap<Integer, TrainDeparture> hashMap) {
-    int trainNumber = 0;
-    String print = "";
-    do {
-      System.out.print(print);
-      for (int existingTrainNumber : hashMap.keySet()) {
-        System.out.println(existingTrainNumber);
-      }
-      trainNumber = intInput("\nVelg en av togavgangene", 0);
-      print = "Du må sette inn et tognummer fra listen\n"; //setter print til feilmeldingen
-      //hvis trainNumber fra bruker ikke er i Table-objektet, løkker løkken på nytt
-    } while (hashMap.get(trainNumber) == null);
-    return trainNumber;
-  }
-
 }
