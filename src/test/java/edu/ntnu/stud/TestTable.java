@@ -1,5 +1,6 @@
 package edu.ntnu.stud;
 
+import edu.ntnu.stud.exceptions.DelayException;
 import edu.ntnu.stud.exceptions.TableAddException;
 import edu.ntnu.stud.exceptions.TrackException;
 import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
@@ -188,8 +189,8 @@ public class TestTable {
 
     @DisplayName("Test of setDelayToTrain")
     @Test
-    void testSetDelayToTrain() {
-      LocalTime delay = LocalTime.of(1,0);
+    void testSetDelayToTrain() throws DelayException {
+      String delay = "01:00";
       tableTest.setDelayToTrain(trainNumber3, delay);
 
       assertEquals(delay, trainDeparture3.getDelay());
