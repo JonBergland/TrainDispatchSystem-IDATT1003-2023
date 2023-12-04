@@ -22,9 +22,9 @@ import java.time.format.DateTimeFormatter;
  * @see TrackException
  */
 public final class TrainDeparture {
-  private final LocalTime originalDepartureTime;
-  private final String line;
-  private final String destination;
+  private LocalTime originalDepartureTime;
+  private String line;
+  private String destination;
   private int track;
   private LocalTime delay;
 
@@ -52,28 +52,15 @@ public final class TrainDeparture {
    * @see Verification#requireNonZeroNonLessThanMinus1Integer(int, String, String)
    */
   public TrainDeparture(String originalDepartureTime, String line, String destination,
-                        int track) throws TrainDepartureConstructorException, TrackException {
+                        int track) throws TrainDepartureConstructorException {
     try {
-      Verification.requireStringOnFormatHHmm(originalDepartureTime,
-          "Departure time was not formatted properly");
-      Verification.requireNonNullOrBlank(line, "Line was null",
-          "Line was empty");
-      Verification.requireNonNullOrBlank(destination, "Destination was null",
-          "Destination was empty");
-
-      this.originalDepartureTime = LocalTime.parse(LocalTime.now().format(
-          DateTimeFormatter.ofPattern(originalDepartureTime)));
-      this.line = line;
-      this.destination = destination;
+      setOriginalDepartureTime(originalDepartureTime);
+      setLine(line);
+      setDestination(destination);
+      setTrack(track);
     } catch (Exception e) {
       throw new TrainDepartureConstructorException(
-          e.getMessage() + ". The train-departure was not created");
-    }
-    try {
-      Verification.requireNonZeroNonLessThanMinus1Integer(track);
-      this.track = track;
-    } catch (IllegalArgumentException e) {
-      this.track = -1;
+          e.getMessage());
     }
 
     this.delay = LocalTime.of(0, 0); //initialize the delay at 0 hours and 0 minutes
@@ -159,6 +146,41 @@ public final class TrainDeparture {
     LocalTime departureTime = this.originalDepartureTime.plusHours(this.delay.getHour());
     departureTime = departureTime.plusMinutes(this.delay.getMinute());
     return departureTime;
+  }
+
+  public TrainDeparture getDeepCopy() {
+
+    String stringOriginalDepartureTime =
+        String.format("%02d", this.originalDepartureTime.getHour())
+        + ":" +  String.format("%02d", this.originalDepartureTime.getMinute());
+    try {
+      return new TrainDeparture(stringOriginalDepartureTime,
+          line, destination, track);
+    } catch (TrainDepartureConstructorException e) {
+      return null;
+    }
+  }
+
+  private void setOriginalDepartureTime(String originalDepartureTime)
+      throws IllegalArgumentException {
+    Verification.requireStringOnFormatHHmm(originalDepartureTime,
+        "Departure time was not formatted properly");
+    this.originalDepartureTime = LocalTime.parse(LocalTime.now().format(
+        DateTimeFormatter.ofPattern(originalDepartureTime)));
+  }
+
+  private void setLine(String line)
+      throws IllegalArgumentException {
+    Verification.requireNonNullOrBlank(line, "Line was null",
+        "Line was empty");
+    this.line = line;
+  }
+
+  private void setDestination(String destination)
+      throws IllegalArgumentException {
+      Verification.requireNonNullOrBlank(destination, "Destination was null",
+          "Destination was empty");
+      this.destination = destination;
   }
 
   /**
