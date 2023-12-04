@@ -2,13 +2,13 @@ package edu.ntnu.stud;
 
 //import org.junit.BeforeClass;
 import edu.ntnu.stud.exceptions.DelayException;
-import edu.ntnu.stud.exceptions.TrackException;
 import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
 import org.junit.jupiter.api.*;
 
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,7 +24,7 @@ public class TestTrainDeparture {
   TrainDeparture trainDeparture;
 
   @BeforeEach
-  void setup() throws TrainDepartureConstructorException, IllegalArgumentException, TrackException {
+  void setup() throws TrainDepartureConstructorException, IllegalArgumentException {
     originalDepartureTime = "08:30";
     line = "L3";
     trainNumber = 204;
@@ -64,7 +64,7 @@ public class TestTrainDeparture {
 
     @Test
     @DisplayName("Test of constructor when track is less than -1")
-    void trackWhen0OrLessThanMinus1() throws TrackException, TrainDepartureConstructorException {
+    void trackWhen0OrLessThanMinus1() throws TrainDepartureConstructorException {
       track = -4;
       TrainDeparture newTrainDeparture = new TrainDeparture(originalDepartureTime,
           line, destination, track);
@@ -73,7 +73,7 @@ public class TestTrainDeparture {
 
     @Test
     @DisplayName("Test of constructor when track is 0")
-    void trackWhen0() throws TrackException, TrainDepartureConstructorException {
+    void trackWhen0() throws TrainDepartureConstructorException {
       track = 0;
       TrainDeparture newTrainDeparture = new TrainDeparture(originalDepartureTime,
           line, destination, track);
@@ -147,6 +147,18 @@ public class TestTrainDeparture {
           LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern(originalDepartureTime)));
       assertEquals(originalDepartureTime3, trainDeparture.getDepartureTime());
     }
+    @Test
+    @DisplayName("Test of get deep copy has the same info as original TrainDeparture")
+    void testGetDeepCopySameAsOriginalTrainDeparture() {
+      assertEquals(trainDeparture.toString(trainNumber),
+          Objects.requireNonNull(trainDeparture.getDeepCopy()).toString(trainNumber));
+    }
+
+    @Test
+    @DisplayName("Test of get deep copy is not the same object")
+    void testGetDeepCopyNotTheSameObject() {
+      assertNotEquals(trainDeparture, trainDeparture.getDeepCopy());
+    }
   }
 
   @Nested
@@ -154,7 +166,7 @@ public class TestTrainDeparture {
   class trainDepartureSetMethods {
     @Test
     @DisplayName("Test of positive integer set track")
-    void positiveIntegerSetTrack() throws TrackException {
+    void positiveIntegerSetTrack() {
       track = 1;
       assertTrue(trainDeparture.setTrack(track));
     }
@@ -195,7 +207,7 @@ public class TestTrainDeparture {
 
     @Test
     @DisplayName("Test of ToString without track and delay")
-    void toStringWithoutTrackAndDelay() throws TrackException {
+    void toStringWithoutTrackAndDelay() {
       String normalOutput = toStringSetup();
       normalOutput += String.format("%" + 6 + "s", " ") + "|"
           + String.format("%" + 12 + "s", " ");
@@ -215,7 +227,7 @@ public class TestTrainDeparture {
 
     @Test
     @DisplayName("Test of ToString without track")
-    void toStringWithoutTrack() throws TrackException, DelayException {
+    void toStringWithoutTrack() throws DelayException {
       String normalOutput = toStringSetup();
       normalOutput += String.format("%" + 6 + "s", " ") + "|"
           + String.format("%" + 12 + "s", delay);
