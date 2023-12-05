@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Represents a table of TrainDeparture-objects indexed by train numbers.
@@ -53,11 +54,10 @@ public class Table {
     HashMap<Integer, TrainDeparture> destinationHashMap = new HashMap<>();
     hashMap.forEach((key, value) -> {
       if (value.getDestination().equalsIgnoreCase(destination)) {
-        //System.out.println((value.toString(key)));
         destinationHashMap.put(key, value);
       }
     });
-    return destinationHashMap; //returnerer lista
+    return destinationHashMap;
   }
 
   /**
@@ -103,7 +103,7 @@ public class Table {
    *                                  already exists in the register
    */
   public boolean add(int trainNumber, TrainDeparture trainDeparture)
-      throws TableAddException, TrainDepartureConstructorException, TrackException {
+      throws TableAddException, TrainDepartureConstructorException {
     try {
       Verification.requireNonZeroOrLess(trainNumber,
           "The train number was 0 or less");
@@ -111,10 +111,7 @@ public class Table {
         throw new IllegalArgumentException("The train-number already exists");
       }
       //make a deep copy of TrainDeparture
-      String originalDepartureTime = trainDeparture.getOriginalDepartureTime().getHour()
-          + ":" + trainDeparture.getOriginalDepartureTime().getMinute();
-      this.hashMap.put(trainNumber, new TrainDeparture(originalDepartureTime,
-          trainDeparture.getLine(), trainDeparture.getDestination(), trainDeparture.getTrack()));
+      this.hashMap.put(trainNumber, trainDeparture.getDeepCopy());
     } catch (IllegalArgumentException e) {
       throw new TableAddException(e.getMessage());
     }
@@ -130,7 +127,11 @@ public class Table {
    * @param hashMap       The new hashmap that overrides the original
    */
   public void setHashMap(HashMap<Integer, TrainDeparture> hashMap) {
-    this.hashMap = new LinkedHashMap<>(hashMap); //made a deep copy of the new HashMap
+    HashMap<Integer, TrainDeparture> newHashMap = new LinkedHashMap<>();
+    for (Map.Entry<Integer, TrainDeparture> entry : hashMap.entrySet()) {
+      newHashMap.put(entry.getKey(), entry.getValue().getDeepCopy());
+    }
+    this.hashMap = newHashMap; //made a deep copy of the new HashMap
   }
 
   /**
