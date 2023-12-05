@@ -13,15 +13,16 @@ class TestInput {
   @Nested
   @DisplayName("Test of tryInt")
   class inputTryIntMethod {
-    @DisplayName("Positive test of tryInt")
+
     @Test
+    @DisplayName("Positive test of tryInt")
     void positiveTryInt() {
       String number = "1";
       assertEquals(Integer.parseInt(number), input.tryInt(number, 0));
     }
 
-    @DisplayName("Test of nonInteger in tryInt")
     @Test
+    @DisplayName("Test of nonInteger in tryInt")
     void nonIntegerTryInt() {
       String nonInteger = "nonInteger";
       int dummyValue = 0;
