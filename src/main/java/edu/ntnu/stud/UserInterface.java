@@ -5,35 +5,31 @@ import edu.ntnu.stud.exceptions.DelayException;
 import edu.ntnu.stud.exceptions.TableAddException;
 import edu.ntnu.stud.exceptions.TrackException;
 import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
-import edu.ntnu.stud.verification.Verification;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
- * This is the class for interactions with user.
+ * The {@code UserInterface} class represents the user interface for managing train departures.
+ * It includes methods for initializing the system with train departures and running the menu program.
+ * The user interface interacts with a {@link Table} to manage train departures and a {@link Clock} to handle time.
  */
 public class UserInterface {
-  private final Table table = new Table();
-  private final Clock clock = new Clock();
-  private final Input input = new Input();
-
-  private final String buffer = "_".repeat(60);
+  private Table table;
+  private Clock clock;
+  private Input input;
 
   /**
-   * Method for initializing Table with 4 objects of the TrainDeparture-class
-   * and running the menu-program indefinitely.
+   * Initializes the system with predefined train departures and runs the menu program indefinitely.
+   * <p>
+   * This method adds predefined train departures to the table and enters an infinite loop
+   * to run the menu program using the {@link #doOperation(int)} method.
+   * </p>
    */
   public void start() {
     init();
-    doOperation(menuList());
-  }
-
-  /**
-   * Method for adding 4 objects of trainDeparture to table.
-   */
-  public void init() {
     try {
 
-      table.add(601, new TrainDeparture("12:15", "L3", "Hamar", -2));
+      table.add(601, new TrainDeparture("12:15", "L3", "Hamar", -1));
       table.add(305, new TrainDeparture("15:30", "L2", "Sognsvann", -1));
       table.add(404, new TrainDeparture("10:30", "L13",  "Bergkrystallen", -1));
       table.add(406, new TrainDeparture("10:40", "L4",  "Bergkrystallen", -1));
@@ -42,18 +38,26 @@ public class UserInterface {
       System.out.println("Your train-departures was not added. " + e.getMessage());
       System.exit(0); //exits the program if init isn't properly initialized
     }
+    printTrainDeparture();
+    doOperation(menuList());
   }
 
   /**
-   * Prints out a menu to user, takes in an int from user and returns the int.
-   *
-   * @return menuChoice
+   * Initializes the system by creating instances of {@link Table}, {@link Clock}, and {@link Input}.
    */
-  private int menuList() {
-    int menuChoice;
-    do {
+  public void init() {
+    this.table = new Table();
+    this.clock = new Clock();
+    this.input = new Input();
+  }
+
+  /**
+   * Prints a menu for the user, takes an input, and returns the selected option.
+   *
+   * @return The user's menu choice.
+   */
+  public int menuList() {
       System.out.println("_".repeat(60));
-      //skriver ut funksjonene til bruker
       System.out.println("""
           [1] Vis tog avgangene
           [2] Legg til ny togavgang
@@ -64,22 +68,18 @@ public class UserInterface {
           [7] Oppdater klokken
           [8] Avslutt
           """);
-
-      //får inn valgt funksjon fra bruker og legger i variablen menuChoice
-      menuChoice = input.intInput(
-          "Skriv inn tallet som korresponderer med handlingen du vil utføre: ", 0);
-      //hvis det som ble satt inn ikke var et tall, blir dummy-verdien 0 satt inn og løkka gjentas
-    } while (menuChoice == 0);
-    return menuChoice; //returnerer valgt int verdi
+    return input.intInput(
+        "Skriv inn tallet som korresponderer med handlingen du vil utføre: ", 0);
   }
 
   /**
-   * Takes in an int and does the corresponding operation in a switch. It then uses
-   * {@link #menuList() menuList} to get new int for user and loops
+   * Executes the operation corresponding to the provided menu choice.
+   * <p>
+   * This method uses a switch statement to perform the operation based on the user's menu choice.
+   * It continuously loops, allowing the user to perform multiple operations until choosing to exit.
+   * </p>
    *
-   * @see #menuList() menuList to get new int from user and loops
-   *
-   * @param menuChoice         takes in an int that it does the corresponding int to
+   * @param menuChoice   The user's selected menu choice.
    */
   private void doOperation(int menuChoice) {
     final int PRINT_TRAINDEPARTURE = 1;
@@ -89,6 +89,7 @@ public class UserInterface {
     final int FIND_TRAINBYTRAINNUMBER = 5;
     final int FIND_TRAINBYDESTINATION = 6;
     final int UPDATE_CLOCK = 7;
+    final int EXIT_SYSTEM = 8;
     while (true) {
       switch (menuChoice) {
         case PRINT_TRAINDEPARTURE -> printTrainDeparture();
@@ -98,7 +99,7 @@ public class UserInterface {
         case FIND_TRAINBYTRAINNUMBER -> findTrainByTrainNumber();
         case FIND_TRAINBYDESTINATION -> findTrainByDestination();
         case UPDATE_CLOCK -> updateClock();
-        case 8 -> System.exit(0);
+        case EXIT_SYSTEM -> System.exit(0);
         default -> System.out.println("Tallet du satte inn samsvarer ikke med et tall fra listen");
       }
       menuChoice = menuList();
@@ -106,7 +107,7 @@ public class UserInterface {
   }
 
   /**
-   * Prints out all the trainDepartures in Table.
+   * Prints all train departures in the table, sorted by time.
    */
   private void printTrainDeparture() {
     table.setHashMap(SortByTime.sort(table.getHashMap()));
@@ -114,16 +115,20 @@ public class UserInterface {
         + String.format("%" + -19 + "s", "Togavganger")
         + String.format("%" + -8 + "s", "Spor: ")
         + String.format("%" + -10 + "s", "Forsinkelse: ") + "\n"
-        + this.buffer);
+        + "_".repeat(60));
 
     for (int trainNumber : table.getHashMap().keySet()) {
-      System.out.println(table.getHashMap().get(trainNumber).toString(trainNumber));
+      System.out.println(Objects.requireNonNull(table.getHashMap().get(trainNumber)
+          .getDeepCopy()).toString(trainNumber));
     }
   }
 
   /**
-   * A function that adds a new TrainDeparture-object to the Table-class
-   * with the help of user-input.
+   * Adds a new train departure to the table based on user input.
+   * <p>
+   * This method prompts the user for information to create a new {@link TrainDeparture} object
+   * and adds it to the table. Handles exceptions if the addition fails.
+   * </p>
    */
   private void addTrainDeparture() {
     String originalDepartureTime = input.stringInput(
@@ -132,18 +137,15 @@ public class UserInterface {
     String line = input.stringInput("Skriv inn navnet på linjen");
 
     int trainNumber = input.intInput("Skriv inn et nytt, unikt tognummer", 0);
+    while (table.getTrainByTrainNumber(trainNumber) != null) {
+      System.out.println("Tognummeret du skrev inn var ikke unikt");
+      trainNumber = input.intInput("Skriv inn et nytt, unikt tognummer", 0);
+    }
 
     String destination = input.stringInput("Skriv inn navnet på destinasjonen");
 
     String print = "Skriv inn ved hvilken spor toget skal gå fra. Hvis ikke bestemt, skriv inn -1";
     int track = input.intInput(print, -1);
-
-    try {
-      Verification.requireNonZeroNonLessThanMinus1Integer(track);
-    } catch (IllegalArgumentException e) {
-      System.out.println("Track was not valid and was set to -1");
-      track = -1;
-    }
 
     try {
       TrainDeparture newTrainDeparture = new TrainDeparture(
@@ -153,13 +155,15 @@ public class UserInterface {
       }
     } catch (TrainDepartureConstructorException | TableAddException e) {
       System.out.println("The train-departure was not added. " + e.getMessage());
-    } catch (TrackException e) {
-      System.out.println(e.getMessage());
     }
   }
 
   /**
-   * A function that lets the user pick a track which the train leaves at.
+   * Allows the user to assign a track to a train based on user input.
+   * <p>
+   * This method prompts the user to enter a track number for a specific train.
+   * </p>
+   *
    */
   public void setTrackToTrain() {
     int trainNumber = chooseTrainNumber();
@@ -181,14 +185,18 @@ public class UserInterface {
   }
 
   /**
-   * A function that lets the user set the delay for a train departure.
+   * Allows the user to set a delay for a train departure based on user input.
+   * <p>
+   * This method prompts the user to enter a delay time for a specific train departure.
+   * </p>
+   *
    */
   public void setDelayToTrain() {
     int trainNumber = chooseTrainNumber();
     String delay = input.stringInput("Skriv inn forsinkelsen til togavgangen på formatet HH:mm");
     try {
       if (table.setDelayToTrain(trainNumber, delay)) {
-        System.out.println("Delay was set to " + trainNumber);
+        System.out.println(table.getHashMap().get(trainNumber).getDelay() + " was set to " + trainNumber);
       }
     } catch (DelayException e) {
       System.out.println("Delay was not set. " + e.getMessage());
@@ -197,20 +205,23 @@ public class UserInterface {
   }
 
   /**
-   * A function that prints a train departure that corresponds to a
-   * user picked train number.
+   * Prints information about a train departure based on the user-selected train number.
+   *
    */
   public void findTrainByTrainNumber() {
     int trainNumber = chooseTrainNumber();
-    System.out.println(table.getTrainByTrainNumber(trainNumber).toString(trainNumber));
+    System.out.println(Objects.requireNonNull(table.getTrainByTrainNumber(trainNumber).
+        getDeepCopy()).toString(trainNumber));
   }
 
   /**
-   * Prints out all the train-numbers in Table and lets user write one.
-   * If user doesn't put in an existing train-number, it loops until user
-   * puts in a valid input. Returns an existing, user-picked train-number.
+   * Allows the user to choose a train number from the list of available train departures.
+   * <p>
+   * This method displays the list of train numbers, prompts the user to choose one,
+   * and ensures that a valid and existing train number is selected.
+   * </p>
    *
-   * @return trainNumber
+   * @return The user-selected train number.
    */
   public int chooseTrainNumber() {
     table.getTrainNumberList().forEach(System.out::println);
@@ -224,21 +235,24 @@ public class UserInterface {
     return trainNumber;
   }
 
+
   /**
-   * Uses {@link #chooseDestination() chooseDestination} to get a destination from user.
-   * Prints all the trainDepartures that matches the destination
+   * Prints information about train departures based on the user-selected destination.
+   *
    */
   public void findTrainByDestination() {
     HashMap<Integer, TrainDeparture> destinationList = chooseDestination();
-    destinationList.forEach((key, value) -> System.out.println(value.toString(key)));
+    destinationList.forEach((key, value) ->
+        System.out.println(Objects.requireNonNull(value.getDeepCopy()).toString(key)));
   }
 
   /**
-   * Prints an out all the unique destinations in Table to user.
-   * Method will loop until user picks one of the destinations.
-   * Returns a HashMap over all the trainDepartures with matching destinations
+   * Prints all unique destinations in the table and allows the user to choose one.
+   * <p>
+   * This method returns a list of train departures with matching destinations based on the user's selection.
+   * </p>
    *
-   * @return destinationsList
+   * @return A list of train departures with matching destinations.
    */
   public HashMap<Integer, TrainDeparture> chooseDestination() {
     table.getUniqueDestinationList().forEach(System.out::println);
@@ -255,9 +269,11 @@ public class UserInterface {
   }
 
   /**
-   * Gets input on new hour and minute from user. If new time is before old time,
-   * an exception is sent and time stays the same. Removes all the trainDepartures
-   * that has departureTime after new time
+   * Gets input on a new hour and minute from the user and updates the clock.
+   * <p>
+   * If the new time is before the old time, an exception is caught,
+   * and the time stays the same. Removes all train departures with departure times after the new time.
+   * </p>
    */
   public void updateClock() { //en metode som oppdaterer klokka til ny tid satt av bruker
     String newTime = input.stringInput("Skriv inn et nytt klokkeslett på formatet HH:mm");
