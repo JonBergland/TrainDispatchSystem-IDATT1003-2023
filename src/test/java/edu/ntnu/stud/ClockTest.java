@@ -3,7 +3,6 @@ package edu.ntnu.stud;
 import edu.ntnu.stud.exceptions.ClockException;
 import org.junit.jupiter.api.*;
 
-import java.time.DateTimeException;
 import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
