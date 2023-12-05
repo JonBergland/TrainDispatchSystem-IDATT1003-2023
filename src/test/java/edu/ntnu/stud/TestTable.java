@@ -43,12 +43,13 @@ public class TestTable {
     tableTest.getHashMap().put(trainNumber3, trainDeparture3);
     tableTest.getHashMap().put(trainNumber4, trainDeparture4);
   }
+
   @Nested
   @DisplayName("Test of get() methods")
   class tableGetMethods {
 
-    @DisplayName("Test of getHashMap")
     @Test
+    @DisplayName("Test of getHashMap")
     void testGetHashMap() {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
       newHashMap.put(trainNumber1, trainDeparture1);
@@ -59,8 +60,8 @@ public class TestTable {
       assertEquals(newHashMap, tableTest.getHashMap());
     }
 
-    @DisplayName("Test of getTrainByDestination")
     @Test
+    @DisplayName("Test of getTrainByDestination")
     void testGetTrainByDestination() {
       String destination = "Oslo";
       HashMap<Integer, TrainDeparture> destinationList = new HashMap<>();
@@ -70,8 +71,8 @@ public class TestTable {
       assertEquals(destinationList, tableTest.getTrainByDestination(destination));
     }
 
-    @DisplayName("Test of getUniqueDestinations")
     @Test
+    @DisplayName("Test of getUniqueDestinations")
     void testGetUniqueDestinations() {
       HashSet<String> uniqueDestinations = new HashSet<>();
       uniqueDestinations.add("Oslo");
@@ -81,25 +82,26 @@ public class TestTable {
       assertEquals(uniqueDestinations, tableTest.getUniqueDestinationList());
     }
 
-    @DisplayName("Test of getTrainNumberList")
     @Test
+    @DisplayName("Test of getTrainNumberList")
     void testGetTrainNumberList() {
       HashSet<Integer> trainNumberHashSet = new HashSet<>(tableTest.getHashMap().keySet());
       assertEquals(trainNumberHashSet, tableTest.getTrainNumberList());
     }
 
-    @DisplayName("Test of getTrainByTrainNumber")
     @Test
+    @DisplayName("Test of getTrainByTrainNumber")
     void testGetTrainByTrainNumber() {
-      assertEquals(trainDeparture1, tableTest.getTrainByTrainNumber(trainNumber1));
+      assertEquals(trainDeparture1.toString(trainNumber1),
+          tableTest.getTrainByTrainNumber(trainNumber1).toString(trainNumber1));
     }
   }
 
   @Nested
   @DisplayName("Test of add()")
   class tableAddMethod {
-    @DisplayName("Test of add() with postive trainNumber")
     @Test
+    @DisplayName("Test of add() with postive trainNumber")
     void testAddWithPositiveTrainNumber() throws TrainDepartureConstructorException, TableAddException, TrackException {
       int trainNumber = 501;
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
@@ -115,8 +117,8 @@ public class TestTable {
       assertEquals(trainDepartureString1, trainDepartureString2);
     }
 
-    @DisplayName("Test of add() with negative trainNumber")
     @Test
+    @DisplayName("Test of add() with negative trainNumber")
     void testAddWithNegativeTrainNumber() throws TrainDepartureConstructorException, TrackException {
       int trainNumber = -501;
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
@@ -126,8 +128,8 @@ public class TestTable {
           tableTest.add(trainNumber, trainDeparture));
     }
 
-    @DisplayName("Test of add() with 0 as trainNumber")
     @Test
+    @DisplayName("Test of add() with 0 as trainNumber")
     void addWithZeroAsTrainNumber() throws TrainDepartureConstructorException, TrackException {
       int trainNumber = 0;
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
@@ -137,8 +139,8 @@ public class TestTable {
           tableTest.add(trainNumber, trainDeparture));
     }
 
-    @DisplayName("Test of add() with already existing trainNumber")
     @Test
+    @DisplayName("Test of add() with already existing trainNumber")
     void testAddWithAlreadyExistingTrainNumber() throws TrainDepartureConstructorException, TrackException {
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
@@ -151,57 +153,76 @@ public class TestTable {
   @Nested
   @DisplayName("Test of set() methods")
   class setMethods {
-    @DisplayName("Test of setHashMap")
     @Test
-    void testOfSetHashMap() {
+    @DisplayName("Test of setHashMap with same key before and after")
+    void testOfSetHashMapSameKeyBeforeAndAfter() {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
       newHashMap.put(trainNumber1, trainDeparture1);
 
       tableTest.setHashMap(newHashMap);
 
-      assertEquals(newHashMap, tableTest.getHashMap());
+      assertEquals(newHashMap.keySet(), tableTest.getHashMap().keySet());
     }
 
-    @DisplayName("Test of positive Integer setTrackToTrain")
     @Test
+    @DisplayName("Test of setHashMap with not the same TrainDeparture object")
+    void testOfSetHashMapNotTheSameObject() {
+      HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
+      newHashMap.put(trainNumber1, trainDeparture1);
+
+      tableTest.setHashMap(newHashMap);
+
+      assertNotEquals(newHashMap.get(trainNumber1), tableTest.getHashMap().get(trainNumber1));
+    }
+
+    @Test
+    @DisplayName("Test of positive Integer setTrackToTrain")
     void positiveIntegerSetTrackToTrain() throws TrackException {
       int newTrack = 2;
       assertTrue(tableTest.setTrackToTrain(trainNumber2, newTrack));
     }
 
+    @Test
     @DisplayName("Test of negative, non minus 1 Integer setTrackToTrain")
-    @Test
-    void negativeNonMinus1IntegerSetTrackToTrain() {
+    void negativeNonMinus1IntegerSetTrackToTrain() throws TrackException {
       int newTrack = -5;
-      assertThrows(TrackException.class, () ->
-          tableTest.setTrackToTrain(trainNumber2, newTrack));
+      tableTest.setTrackToTrain(trainNumber2, newTrack);
+      assertEquals(-1, tableTest.getTrainByTrainNumber(trainNumber2).getTrack());
     }
 
+    @Test
     @DisplayName("Test of zero integer setTrackToTrain")
-    @Test
-    void zeroIntegerSetTrackToTrain() {
+    void zeroIntegerSetTrackToTrain() throws TrackException {
       int newTrack = 0;
-      assertThrows(TrackException.class, () ->
-          tableTest.setTrackToTrain(trainNumber2, newTrack));
-
-      //assertTrue(tableTest.setTrackToTrain(trainNumber2, newTrack));
+      tableTest.setTrackToTrain(trainNumber2, newTrack);
+      assertEquals(-1, tableTest.getTrainByTrainNumber(trainNumber2).getTrack());
     }
 
-    @DisplayName("Test of setDelayToTrain")
     @Test
-    void testSetDelayToTrain() throws DelayException {
+    @DisplayName("Test of setDelayToTrain with correct trainNumber")
+    void testSetDelayToTrainCorrectTrainNumber() throws DelayException {
       String delay = "01:00";
       tableTest.setDelayToTrain(trainNumber3, delay);
 
-      assertEquals(delay, trainDeparture3.getDelay());
+      assertEquals(LocalTime.of(1,0), trainDeparture3.getDelay());
+    }
+
+    @Test
+    @DisplayName("Test of setDelayToTrain with incorrect trainNumber")
+    void testSetDelayToTrainIncorrectTrainNumber() throws DelayException {
+      String delay = "01:00";
+      int incorrectTrainNumber = 111;
+
+      assertThrows(DelayException.class, () ->
+          tableTest.setDelayToTrain(incorrectTrainNumber, delay));
     }
   }
 
   @Nested
   @DisplayName("Test of remove method")
   class removeMethods {
-    @DisplayName("Test of removeTrainDepartureBeforeTime with no effect")
     @Test
+    @DisplayName("Test of removeTrainDepartureBeforeTime with no effect")
     void testRemoveTrainDepartureBeforeTimeWithNoEffect() {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>(tableTest.getHashMap());
       LocalTime time = LocalTime.of(10, 0);
@@ -209,8 +230,8 @@ public class TestTable {
       assertEquals(newHashMap, tableTest.getHashMap());
     }
 
-    @DisplayName("Test of removeTrainDepartureBeforeTime")
     @Test
+    @DisplayName("Test of removeTrainDepartureBeforeTime")
     void testRemoveTrainDepartureBeforeTime() {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
       newHashMap.put(trainNumber1, trainDeparture1);
@@ -221,8 +242,8 @@ public class TestTable {
       assertEquals(newHashMap, tableTest.getHashMap());
     }
 
-    @DisplayName("Test of removeTrainDepartureBeforeTime with time sett as a departure time")
     @Test
+    @DisplayName("Test of removeTrainDepartureBeforeTime with time sett as a departure time")
     void testRemoveTrainDepartureBeforeTimeWithTimeAsDepartureTime() {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
       newHashMap.put(trainNumber1, trainDeparture1);
