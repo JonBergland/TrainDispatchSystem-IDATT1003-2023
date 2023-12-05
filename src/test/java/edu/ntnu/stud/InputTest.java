@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Input-class")
-class TestInput {
+class InputTest {
   Input input = new Input();
 
   @Nested

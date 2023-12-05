@@ -16,7 +16,7 @@ import java.util.HashSet;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Table-class")
-public class TestTable {
+public class TableTest {
   Table tableTest = new Table();
   int trainNumber1;
   TrainDeparture trainDeparture1;
@@ -28,7 +28,7 @@ public class TestTable {
   TrainDeparture trainDeparture4;
 
   @BeforeEach
-  void setupTable() throws TrainDepartureConstructorException, IllegalArgumentException, TrackException {
+  void setupTable() throws TrainDepartureConstructorException, IllegalArgumentException {
     trainNumber1 = 601;
     trainDeparture1 = new TrainDeparture("12:15", "L3", "Oslo", -1);
     trainNumber2 = 305;
@@ -50,7 +50,7 @@ public class TestTable {
 
     @Test
     @DisplayName("Test of getHashMap")
-    void testGetHashMap() {
+    void getHashMap() {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
       newHashMap.put(trainNumber1, trainDeparture1);
       newHashMap.put(trainNumber2, trainDeparture2);
@@ -62,7 +62,7 @@ public class TestTable {
 
     @Test
     @DisplayName("Test of getTrainByDestination")
-    void testGetTrainByDestination() {
+    void getTrainByDestination() {
       String destination = "Oslo";
       HashMap<Integer, TrainDeparture> destinationList = new HashMap<>();
       destinationList.put(trainNumber1, trainDeparture1);
@@ -73,7 +73,7 @@ public class TestTable {
 
     @Test
     @DisplayName("Test of getUniqueDestinations")
-    void testGetUniqueDestinations() {
+    void getUniqueDestinations() {
       HashSet<String> uniqueDestinations = new HashSet<>();
       uniqueDestinations.add("Oslo");
       uniqueDestinations.add("Hamar");
@@ -84,14 +84,14 @@ public class TestTable {
 
     @Test
     @DisplayName("Test of getTrainNumberList")
-    void testGetTrainNumberList() {
+    void getTrainNumberList() {
       HashSet<Integer> trainNumberHashSet = new HashSet<>(tableTest.getHashMap().keySet());
       assertEquals(trainNumberHashSet, tableTest.getTrainNumberList());
     }
 
     @Test
     @DisplayName("Test of getTrainByTrainNumber")
-    void testGetTrainByTrainNumber() {
+    void getTrainByTrainNumber() {
       assertEquals(trainDeparture1.toString(trainNumber1),
           tableTest.getTrainByTrainNumber(trainNumber1).toString(trainNumber1));
     }
@@ -102,7 +102,7 @@ public class TestTable {
   class tableAddMethod {
     @Test
     @DisplayName("Test of add() with postive trainNumber")
-    void testAddWithPositiveTrainNumber() throws TrainDepartureConstructorException, TableAddException, TrackException {
+    void addWithPositiveTrainNumber() throws TrainDepartureConstructorException, TableAddException {
       int trainNumber = 501;
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
@@ -119,7 +119,7 @@ public class TestTable {
 
     @Test
     @DisplayName("Test of add() with negative trainNumber")
-    void testAddWithNegativeTrainNumber() throws TrainDepartureConstructorException, TrackException {
+    void addWithNegativeTrainNumber() throws TrainDepartureConstructorException {
       int trainNumber = -501;
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
@@ -130,7 +130,7 @@ public class TestTable {
 
     @Test
     @DisplayName("Test of add() with 0 as trainNumber")
-    void addWithZeroAsTrainNumber() throws TrainDepartureConstructorException, TrackException {
+    void addWithZeroAsTrainNumber() throws TrainDepartureConstructorException {
       int trainNumber = 0;
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
@@ -141,7 +141,7 @@ public class TestTable {
 
     @Test
     @DisplayName("Test of add() with already existing trainNumber")
-    void testAddWithAlreadyExistingTrainNumber() throws TrainDepartureConstructorException, TrackException {
+    void addWithAlreadyExistingTrainNumber() throws TrainDepartureConstructorException {
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
 
@@ -155,7 +155,7 @@ public class TestTable {
   class setMethods {
     @Test
     @DisplayName("Test of setHashMap with same key before and after")
-    void testOfSetHashMapSameKeyBeforeAndAfter() {
+    void setHashMapSameKeyBeforeAndAfter() {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
       newHashMap.put(trainNumber1, trainDeparture1);
 
@@ -166,7 +166,7 @@ public class TestTable {
 
     @Test
     @DisplayName("Test of setHashMap with not the same TrainDeparture object")
-    void testOfSetHashMapNotTheSameObject() {
+    void setHashMapNotTheSameObject() {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
       newHashMap.put(trainNumber1, trainDeparture1);
 
@@ -200,7 +200,7 @@ public class TestTable {
 
     @Test
     @DisplayName("Test of setDelayToTrain with correct trainNumber")
-    void testSetDelayToTrainCorrectTrainNumber() throws DelayException {
+    void setDelayToTrainCorrectTrainNumber() throws DelayException {
       String delay = "01:00";
       tableTest.setDelayToTrain(trainNumber3, delay);
 
@@ -209,7 +209,7 @@ public class TestTable {
 
     @Test
     @DisplayName("Test of setDelayToTrain with incorrect trainNumber")
-    void testSetDelayToTrainIncorrectTrainNumber() throws DelayException {
+    void setDelayToTrainIncorrectTrainNumber() {
       String delay = "01:00";
       int incorrectTrainNumber = 111;
 
@@ -223,7 +223,7 @@ public class TestTable {
   class removeMethods {
     @Test
     @DisplayName("Test of removeTrainDepartureBeforeTime with no effect")
-    void testRemoveTrainDepartureBeforeTimeWithNoEffect() {
+    void removeTrainDepartureBeforeTimeWithNoEffect() {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>(tableTest.getHashMap());
       LocalTime time = LocalTime.of(10, 0);
       tableTest.removeTrainDepartureBeforeTime(time);
@@ -232,7 +232,7 @@ public class TestTable {
 
     @Test
     @DisplayName("Test of removeTrainDepartureBeforeTime")
-    void testRemoveTrainDepartureBeforeTime() {
+    void removeTrainDepartureBeforeTime() {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
       newHashMap.put(trainNumber1, trainDeparture1);
       newHashMap.put(trainNumber2, trainDeparture2);
@@ -244,7 +244,7 @@ public class TestTable {
 
     @Test
     @DisplayName("Test of removeTrainDepartureBeforeTime with time sett as a departure time")
-    void testRemoveTrainDepartureBeforeTimeWithTimeAsDepartureTime() {
+    void removeTrainDepartureBeforeTimeWithTimeAsDepartureTime() {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
       newHashMap.put(trainNumber1, trainDeparture1);
       newHashMap.put(trainNumber2, trainDeparture2);

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @DisplayName("TrainDeparture-entity-class")
-public class TestTrainDeparture {
+public class TrainDepartureTest {
   String originalDepartureTime;
   String line;
   int trainNumber;
@@ -110,7 +110,7 @@ public class TestTrainDeparture {
   class trainDepartureGetMethods {
     @Test
     @DisplayName("Test of get OriginalDepartureTime")
-    void testGetOriginalDepartureTime() {
+    void getOriginalDepartureTime() {
       LocalTime originalDepartureTime2 =
           LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern(originalDepartureTime)));
       assertEquals(originalDepartureTime2, trainDeparture.getOriginalDepartureTime());
@@ -118,45 +118,45 @@ public class TestTrainDeparture {
 
     @Test
     @DisplayName("Test of get line")
-    void testGetLine() {
+    void getLine() {
       assertEquals(line, trainDeparture.getLine());
     }
 
     @Test
     @DisplayName("Test of get destination")
-    void testGetDestination() {
+    void getDestination() {
       assertEquals(destination, trainDeparture.getDestination());
     }
 
     @Test
     @DisplayName("Test of get track")
-    void testGetTrack() {
+    void getTrack() {
       assertEquals(track, trainDeparture.getTrack());
     }
 
     @Test
     @DisplayName("Test of get delay")
-    void testGetDelay() {
+    void getDelay() {
       assertEquals(LocalTime.of(0, 0), trainDeparture.getDelay());
     }
 
     @Test
     @DisplayName("Test of get departure time")
-    void testGetDepartureTime() {
+    void getDepartureTime() {
       LocalTime originalDepartureTime3 =
           LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern(originalDepartureTime)));
       assertEquals(originalDepartureTime3, trainDeparture.getDepartureTime());
     }
     @Test
     @DisplayName("Test of get deep copy has the same info as original TrainDeparture")
-    void testGetDeepCopySameAsOriginalTrainDeparture() {
+    void getDeepCopySameAsOriginalTrainDeparture() {
       assertEquals(trainDeparture.toString(trainNumber),
           Objects.requireNonNull(trainDeparture.getDeepCopy()).toString(trainNumber));
     }
 
     @Test
     @DisplayName("Test of get deep copy is not the same object")
-    void testGetDeepCopyNotTheSameObject() {
+    void getDeepCopyNotTheSameObject() {
       assertNotEquals(trainDeparture, trainDeparture.getDeepCopy());
     }
   }
@@ -189,14 +189,14 @@ public class TestTrainDeparture {
 
     @Test
     @DisplayName("Test of set delay with correct formatted input")
-    void testCorrectFormatSetDelay() throws DelayException {
+    void correctFormatSetDelay() throws DelayException {
       trainDeparture.setDelay(delay);
       assertEquals(LocalTime.of(1,0), trainDeparture.getDelay());
     }
 
     @Test
     @DisplayName("Test of set delay with incorrect formatted input")
-    void testIncorrectFormatSetDelay() {
+    void incorrectFormatSetDelay() {
       String incorrectDelay = "1:00";
       assertThrows(DelayException.class, () ->
           trainDeparture.setDelay(incorrectDelay));
