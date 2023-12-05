@@ -149,17 +149,16 @@ public final class TrainDeparture {
   }
 
   public TrainDeparture getDeepCopy() {
-
-    String stringOriginalDepartureTime =
-        String.format("%02d", this.originalDepartureTime.getHour())
-        + ":" +  String.format("%02d", this.originalDepartureTime.getMinute());
     try {
-      return new TrainDeparture(stringOriginalDepartureTime,
-          line, destination, track);
-    } catch (TrainDepartureConstructorException e) {
+      TrainDeparture deepTrainDeparture = new TrainDeparture(
+          originalDepartureTime.toString(), line, destination, track);
+      deepTrainDeparture.setDelay(delay.toString());
+      return deepTrainDeparture;
+    } catch (TrainDepartureConstructorException | DelayException e) {
       return null;
     }
   }
+
 
   private void setOriginalDepartureTime(String originalDepartureTime)
       throws IllegalArgumentException {
@@ -219,7 +218,6 @@ public final class TrainDeparture {
    *
    * @return String
    */
-  //@Override
   public String toString(int trainNumber) {
     String output = String.format("%" + -6 + "s", this.originalDepartureTime) + "|"
         + String.format("%" + 1 + "s", "") + String.format("%" + -4 + "s", this.line) + "|"
