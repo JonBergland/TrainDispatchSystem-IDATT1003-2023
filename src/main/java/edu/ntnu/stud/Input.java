@@ -2,14 +2,25 @@ package edu.ntnu.stud;
 
 import java.util.Scanner;
 
+/**
+ * The {@code Input} class provides methods for interacting with user inputs through the console.
+ * It includes functionality to check if a given string can be parsed into an integer and prompts
+ * the user for both integer and string inputs with specified messages.
+ * <p>
+ * The class uses a {@link Scanner} to read inputs from the console.
+ * </p>
+ *
+ * @see Scanner
+ */
 public class Input {
   Scanner in = new Scanner(System.in);
 
   /**
    * Checks if a given string can be parsed into an integer.
    * <p>
-   * This method attempts to parse the specified string into an integer using {@code Integer.parseInt}.
-   * If the parsing is successful, the method returns the parsed number; otherwise, it returns a dummy value.
+   * This method attempts to parse the specified string into an integer using
+   * {@code Integer.parseInt}. If the parsing is successful, the method returns
+   * the parsed number; otherwise, it returns a dummy value.
    * </p>
    *
    * @param number      The string to be checked for integer validity.
@@ -22,7 +33,7 @@ public class Input {
       return Integer.parseInt(number);
     } catch (NumberFormatException e) {
       return dummyValue;
-     }
+    }
   }
 
   /**
@@ -36,11 +47,12 @@ public class Input {
    *
    * @param print         The message to prompt the user for input.
    * @param dummyValue    The default value returned in case of invalid input.
-   * @return An integer input provided by the user or the specified dummyValue if the input is invalid.
+   * @return              An integer input provided by the user or the specified
+   *                      dummyValue if the input is invalid.
    * @see #tryInt(String, int)
    */
   public int intInput(String print, int dummyValue) {
-    //System.out.println(print);
+    System.out.println(print);
     String intInput = in.nextLine();
     return tryInt(intInput, dummyValue);
   }
