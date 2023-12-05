@@ -188,10 +188,18 @@ public class TestTrainDeparture {
     }
 
     @Test
-    @DisplayName("Test of set delay")
-    void testSetDelay() throws DelayException {
+    @DisplayName("Test of set delay with correct formatted input")
+    void testCorrectFormatSetDelay() throws DelayException {
       trainDeparture.setDelay(delay);
       assertEquals(LocalTime.of(1,0), trainDeparture.getDelay());
+    }
+
+    @Test
+    @DisplayName("Test of set delay with incorrect formatted input")
+    void testIncorrectFormatSetDelay() {
+      String incorrectDelay = "1:00";
+      assertThrows(DelayException.class, () ->
+          trainDeparture.setDelay(incorrectDelay));
     }
   }
 
