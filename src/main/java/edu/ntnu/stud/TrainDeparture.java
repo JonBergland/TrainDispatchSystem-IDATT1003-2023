@@ -187,12 +187,12 @@ public final class TrainDeparture {
    *
    * @param track                   sets track as the integer parameter
    */
-  public boolean setTrack(int track) {
+  public boolean setTrack(int track) throws TrackException {
     try {
       Verification.requireNonZeroNonLessThanMinus1Integer(track);
       this.track = track;
     } catch (IllegalArgumentException e) {
-      this.track = -1;
+      throw new TrackException(e.getMessage());
     }
     return true;
   }
