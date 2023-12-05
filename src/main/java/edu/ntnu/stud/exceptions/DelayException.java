@@ -33,7 +33,7 @@ public class DelayException extends Exception {
    * </p>
    */
   public DelayException() {
-    super("The track was not accepted");
+    super("The delay was not accepted");
   }
 }
 
