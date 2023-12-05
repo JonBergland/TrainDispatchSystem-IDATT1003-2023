@@ -108,13 +108,8 @@ public class TableTest {
           "Skien", -1);
 
       tableTest.add(trainNumber, trainDeparture);
-      TrainDeparture trainDepartureTable = tableTest.getTrainByTrainNumber(trainNumber);
-      String trainDepartureString1 = trainDeparture.getOriginalDepartureTime() + trainDeparture.getLine() +
-          trainDeparture.getDestination() + trainDeparture.getTrack();
-      String trainDepartureString2 = trainDepartureTable.getOriginalDepartureTime() +
-          trainDepartureTable.getLine() + trainDepartureTable.getDestination()
-          + trainDepartureTable.getTrack();
-      assertEquals(trainDepartureString1, trainDepartureString2);
+      assertEquals(trainDeparture.toString(trainNumber),
+          tableTest.getHashMap().get(trainNumber).toString(trainNumber));
     }
 
     @Test
@@ -186,16 +181,14 @@ public class TableTest {
     @DisplayName("Test of negative, non minus 1 Integer setTrackToTrain")
     void negativeNonMinus1IntegerSetTrackToTrain() throws TrackException {
       int newTrack = -5;
-      tableTest.setTrackToTrain(trainNumber2, newTrack);
-      assertEquals(-1, tableTest.getTrainByTrainNumber(trainNumber2).getTrack());
+      assertThrows(TrackException.class, () -> tableTest.setTrackToTrain(trainNumber2, newTrack));
     }
 
     @Test
     @DisplayName("Test of zero integer setTrackToTrain")
     void zeroIntegerSetTrackToTrain() throws TrackException {
       int newTrack = 0;
-      tableTest.setTrackToTrain(trainNumber2, newTrack);
-      assertEquals(-1, tableTest.getTrainByTrainNumber(trainNumber2).getTrack());
+      assertThrows(TrackException.class, () -> tableTest.setTrackToTrain(trainNumber2, newTrack));
     }
 
     @Test
