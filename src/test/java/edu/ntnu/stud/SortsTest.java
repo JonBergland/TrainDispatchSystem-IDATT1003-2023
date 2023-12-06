@@ -98,8 +98,8 @@ public class SortsTest {
   @Test
   @DisplayName("Test of sortByLine is the return the same as sorted map")
   void sortByLineTheSameAsSortedMap() {
-    sortedHashMap.put(trainNumber2, trainDeparture2);
     sortedHashMap.put(trainNumber3, trainDeparture3);
+    sortedHashMap.put(trainNumber2, trainDeparture2);
     sortedHashMap.put(trainNumber1, trainDeparture1);
     List<TrainDeparture> expectedList = new ArrayList<>(sortedHashMap.values());
     List<TrainDeparture> actualList = new ArrayList<>(SortByLine.sort(unsortedHashMap).values());
@@ -110,8 +110,32 @@ public class SortsTest {
   @Test
   @DisplayName("Test of sortByLine returns a different hashmap than original")
   void sortByLineReturnsDifferentMap() {
-    sortedHashMap.put(trainNumber2, trainDeparture2);
     sortedHashMap.put(trainNumber3, trainDeparture3);
+    sortedHashMap.put(trainNumber2, trainDeparture2);
+    sortedHashMap.put(trainNumber1, trainDeparture1);
+    List<TrainDeparture> originalList = new ArrayList<>(unsortedHashMap.values());
+    List<TrainDeparture> outcomeList = new ArrayList<>(SortByLine.sort(unsortedHashMap).values());
+
+    assertNotEquals(originalList, outcomeList);
+  }
+
+  @Test
+  @DisplayName("Test of sortByTrack is the return the same as sorted map")
+  void sortByTrackTheSameAsSortedMap() {
+    sortedHashMap.put(trainNumber3, trainDeparture3);
+    sortedHashMap.put(trainNumber2, trainDeparture2);
+    sortedHashMap.put(trainNumber1, trainDeparture1);
+    List<TrainDeparture> expectedList = new ArrayList<>(sortedHashMap.values());
+    List<TrainDeparture> actualList = new ArrayList<>(SortByLine.sort(unsortedHashMap).values());
+
+    assertEquals(expectedList, actualList);
+  }
+
+  @Test
+  @DisplayName("Test of sortByTrack returns a different hashmap than original")
+  void sortByTrackReturnsDifferentMap() {
+    sortedHashMap.put(trainNumber3, trainDeparture3);
+    sortedHashMap.put(trainNumber2, trainDeparture2);
     sortedHashMap.put(trainNumber1, trainDeparture1);
     List<TrainDeparture> originalList = new ArrayList<>(unsortedHashMap.values());
     List<TrainDeparture> outcomeList = new ArrayList<>(SortByLine.sort(unsortedHashMap).values());
