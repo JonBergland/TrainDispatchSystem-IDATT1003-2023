@@ -10,11 +10,11 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Represents a train-departure with information such as departure time, line name,
- * destination, track and eventual delay
+ * destination, track and eventual delay.
  * <p>
- *   This class encapsulates details about a train-departure, providing methods to retrieve
- *   information and perform operations related to the train-departure, including mutable
- *   for track and delay
+ * This class encapsulates details about a train-departure, providing methods to retrieve
+ * information and perform operations related to the train-departure, including mutable
+ * for track and delay
  * </p>
  *
  * @see Verification
@@ -33,10 +33,10 @@ public final class TrainDeparture {
    * <p>
    * This method constructs a TrainDeparture object with a specific departure time,
    * the name of the train line, the train-departure's destination and the track
-   * the train arrives at. It validates the parameters to ensure they meet requirements
-   * using the Verification class. If a validation fails, a
-   * {@code TrainDepartureConstructorException} is thrown. Also initializes the {@code delay}
-   * variable as a LocalTime of 0 hours and 0 minutes.
+   * the train arrives at. It validates the parameters by using the set-methods in the
+   * TrainDeparture-class. If a validation fails, a
+   * {@code TrainDepartureConstructorException} is thrown. Also initializes the
+   * {@code delay} variable as a LocalTime of 0 hours and 0 minutes.
    * </p>
    *
    * @param originalDepartureTime Original time for departure
@@ -47,9 +47,10 @@ public final class TrainDeparture {
    *                                            set, an exception is thrown. The exception message
    *                                            provides details about which parameter didn't meet
    *                                            the requirement and why.
-   * @see Verification#requireStringOnFormatHHmm(String, String)
-   * @see Verification#requireNonNullOrBlank(String, String, String)
-   * @see Verification#requireNonZeroNonLessThanMinus1Integer(int, String, String)
+   * @see TrainDeparture#setOriginalDepartureTime(String)
+   * @see TrainDeparture#setLine(String)
+   * @see TrainDeparture#setDestination(String)
+   * @see TrainDeparture#setTrack(int)
    */
   public TrainDeparture(String originalDepartureTime, String line, String destination,
                         int track) throws TrainDepartureConstructorException {
@@ -59,11 +60,23 @@ public final class TrainDeparture {
       setDestination(destination);
       setTrack(track);
     } catch (Exception e) {
-      throw new TrainDepartureConstructorException(
-          e.getMessage());
+      throw new TrainDepartureConstructorException(e.getMessage());
     }
 
     this.delay = LocalTime.of(0, 0); //initialize the delay at 0 hours and 0 minutes
+  }
+
+  /**
+   * Constructs a TrainDeparture object from an already existing object.
+   *
+   * @param oldTrainDeparture The existing TrainDeparture object that is copied
+   */
+  public TrainDeparture(TrainDeparture oldTrainDeparture) {
+    this.originalDepartureTime = oldTrainDeparture.getOriginalDepartureTime();
+    this.line = oldTrainDeparture.getLine();
+    this.destination = oldTrainDeparture.getDestination();
+    this.track = oldTrainDeparture.getTrack();
+    this.delay = oldTrainDeparture.getDelay();
   }
 
   /**
@@ -148,18 +161,11 @@ public final class TrainDeparture {
     return departureTime;
   }
 
-  public TrainDeparture getDeepCopy() {
-    try {
-      TrainDeparture deepTrainDeparture = new TrainDeparture(
-          originalDepartureTime.toString(), line, destination, track);
-      deepTrainDeparture.setDelay(delay.toString());
-      return deepTrainDeparture;
-    } catch (TrainDepartureConstructorException | DelayException e) {
-      return null;
-    }
-  }
-
-
+  /**
+   * Sets a original departure time for the train departure using the String parameter.
+   *
+   * @param originalDepartureTime sets track as the integer parameter
+   */
   private void setOriginalDepartureTime(String originalDepartureTime)
       throws IllegalArgumentException {
     Verification.requireStringOnFormatHHmm(originalDepartureTime,
@@ -168,6 +174,11 @@ public final class TrainDeparture {
         DateTimeFormatter.ofPattern(originalDepartureTime)));
   }
 
+  /**
+   * Sets a line for the train departure using the String parameter.
+   *
+   * @param line sets track as the integer parameter
+   */
   private void setLine(String line)
       throws IllegalArgumentException {
     Verification.requireNonNullOrBlank(line, "Line was null",
@@ -175,17 +186,22 @@ public final class TrainDeparture {
     this.line = line;
   }
 
+  /**
+   * Sets a destination for the train departure using the String parameter.
+   *
+   * @param destination sets track as the integer parameter
+   */
   private void setDestination(String destination)
       throws IllegalArgumentException {
-      Verification.requireNonNullOrBlank(destination, "Destination was null",
-          "Destination was empty");
-      this.destination = destination;
+    Verification.requireNonNullOrBlank(destination, "Destination was null",
+        "Destination was empty");
+    this.destination = destination;
   }
 
   /**
    * Sets a track for the train departure using the integer parameter.
    *
-   * @param track                   sets track as the integer parameter
+   * @param track sets track as the integer parameter
    */
   public boolean setTrack(int track) throws TrackException {
     try {
@@ -200,7 +216,7 @@ public final class TrainDeparture {
   /**
    * Sets a delay for the train departure using the LocalTime parameter.
    *
-   * @param delay                   sets delay as the LocalTime parameter
+   * @param delay sets delay as the LocalTime parameter
    */
   public void setDelay(String delay) throws DelayException {
     try {
@@ -219,21 +235,19 @@ public final class TrainDeparture {
    * @return String
    */
   public String toString(int trainNumber) {
-    String output = String.format("%" + -6 + "s", this.originalDepartureTime) + "|"
-        + String.format("%" + 1 + "s", "") + String.format("%" + -4 + "s", this.line) + "|"
-        + String.format("%" + 1 + "s", "") + String.format("%" + -4 + "s", trainNumber) + "|"
-        + String.format("%" + 1 + "s", "") + String.format("%" + -16 + "s", this.destination) + "|";
+    String output = String.format("%-6s|%1s%-4s|%1s%-4s|%1s%-16s|",
+        this.originalDepartureTime, "",this.line, "", trainNumber, "",this.destination);
 
-    String track = String.format("%" + 6 + "s", " ") + "|";
+    String track = String.format("%6s|", " ");
     if (getTrack() > -1) {
-      track = String.format("%" + 4 + "s", "") + String.format("%" + -2 + "s", this.track) + "|";
+      track = String.format("%4s%-2s|", "", this.track);
     }
     output += track;
     String delay = " ";
     if (getDelay().isAfter(LocalTime.of(0, 0))) {
       delay += this.delay;
     }
-    output += String.format("%" + 12 + "s", delay);
+    output += String.format("%12s", delay);
     return output;
   }
 }
