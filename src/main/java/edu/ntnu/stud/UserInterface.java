@@ -9,14 +9,14 @@ import edu.ntnu.stud.sort.SortByDestination;
 import edu.ntnu.stud.sort.SortByLine;
 import edu.ntnu.stud.sort.SortByTime;
 import edu.ntnu.stud.sort.SortByTrack;
-
 import java.util.HashMap;
 import java.util.Objects;
 
 /**
  * The {@code UserInterface} class represents the user interface for managing train departures.
- * It includes methods for initializing the system with train departures and running the menu program.
- * The user interface interacts with a {@link Table} to manage train departures and a {@link Clock} to handle time.
+ * It includes methods for initializing the system with train departures and runs the menu program.
+ * The user interface interacts with a {@link Table} to manage train departures and a
+ * {@link Clock} to handle time.
  */
 public class UserInterface {
   private Table table;
@@ -43,13 +43,14 @@ public class UserInterface {
       System.out.println("Your train-departures was not added. " + e.getMessage());
       System.exit(0); //exits the program if init isn't properly initialized
     }
-    table.setHashMap(SortByTrack.sort(table.getHashMap()));
+    table.setHashMap(SortByTime.sort(table.getHashMap()));
     printTrainDeparture();
     doOperation(menuList());
   }
 
   /**
-   * Initializes the system by creating instances of {@link Table}, {@link Clock}, and {@link Input}.
+   * Initializes the system by creating instances of {@link Table},
+   * {@link Clock}, and {@link Input}.
    */
   public void init() {
     this.table = new Table();
@@ -63,18 +64,19 @@ public class UserInterface {
    * @return The user's menu choice.
    */
   public int menuList() {
-      System.out.println("_".repeat(60));
-      System.out.println("""
-          [1] Vis tog avgangene
-          [2] Legg til ny togavgang
-          [3] Tildel spor til avgang
-          [4] Legg inn forsinkelse
-          [5] Søk etter togavgang basert på tognummer
-          [6] Søk etter togavgang basert på destinasjon
-          [7] Sorter tabellen over tog avgangene
-          [8] Oppdater klokken
-          [9] Avslutt
-          """);
+    System.out.println("_".repeat(60));
+    System.out.println("""
+        [1] Vis tog avgangene
+        [2] Legg til ny togavgang
+        [3] Tildel spor til avgang
+        [4] Legg inn forsinkelse
+        [5] Søk etter togavgang basert på tognummer
+        [6] Søk etter togavgang basert på destinasjon
+        [7] Sorter tabellen over tog avgangene
+        [8] Fjern en togavgang
+        [9] Oppdater klokken
+        [10] Avslutt
+        """);
     return input.intInput(
         "Skriv inn tallet som korresponderer med handlingen du vil utføre: ", 0);
   }
@@ -96,8 +98,9 @@ public class UserInterface {
     final int FIND_TRAINBYTRAINNUMBER = 5;
     final int FIND_TRAINBYDESTINATION = 6;
     final int SORT_BY = 7;
-    final int UPDATE_CLOCK = 8;
-    final int EXIT_SYSTEM = 9;
+    final int REMOVE_TRAINDEPARTURE = 8;
+    final int UPDATE_CLOCK = 9;
+    final int EXIT_SYSTEM = 10;
     while (true) {
       switch (menuChoice) {
         case PRINT_TRAINDEPARTURE -> {
@@ -110,6 +113,7 @@ public class UserInterface {
         case FIND_TRAINBYTRAINNUMBER -> findTrainByTrainNumber();
         case FIND_TRAINBYDESTINATION -> findTrainByDestination();
         case SORT_BY -> sortBy(sortMenuList());
+        case REMOVE_TRAINDEPARTURE ->  removeTrainByTrainNumber(chooseTrainNumber());
         case UPDATE_CLOCK -> updateClock();
         case EXIT_SYSTEM -> System.exit(0);
         default -> System.out.println("Tallet du satte inn samsvarer ikke med et tall fra listen");
@@ -127,8 +131,8 @@ public class UserInterface {
         "_".repeat(60));
 
     for (int trainNumber : table.getHashMap().keySet()) {
-      System.out.println(Objects.requireNonNull(new TrainDeparture(table.getHashMap().get(trainNumber))
-          .toString(trainNumber)));
+      System.out.println(Objects.requireNonNull(new TrainDeparture(table.getHashMap()
+          .get(trainNumber)).toString(trainNumber)));
     }
   }
 
@@ -205,7 +209,8 @@ public class UserInterface {
     String delay = input.stringInput("Skriv inn forsinkelsen til togavgangen på formatet HH:mm");
     try {
       if (table.setDelayToTrain(trainNumber, delay)) {
-        System.out.println(table.getHashMap().get(trainNumber).getDelay() + " was set to " + trainNumber);
+        System.out.println(table.getHashMap().get(trainNumber).getDelay()
+            + " was set to " + trainNumber);
       }
     } catch (DelayException e) {
       System.out.println("Delay was not set. " + e.getMessage());
@@ -258,7 +263,8 @@ public class UserInterface {
   /**
    * Prints all unique destinations in the table and allows the user to choose one.
    * <p>
-   * This method returns a list of train departures with matching destinations based on the user's selection.
+   * This method returns a list of train departures with matching destinations
+   * based on the user's selection.
    * </p>
    *
    * @return A list of train departures with matching destinations.
@@ -303,6 +309,7 @@ public class UserInterface {
     } while (sortChoice < 1 || sortChoice > 3);
   }
 
+
   public int sortMenuList() {
     System.out.println("""
           [1] Tid
@@ -314,10 +321,23 @@ public class UserInterface {
   }
 
   /**
+   * Removes a train departure from the table based on the provided train number.
+   *
+   * @param trainNumber   The train number to be removed.
+   */
+  public void removeTrainByTrainNumber(int trainNumber) {
+    if (table.remove(trainNumber)) {
+      System.out.println("The train departure was removed");
+    } else {
+      System.out.println("The train number was not valid. The train departure was not removed");
+    }
+  }
+
+  /**
    * Gets input on a new hour and minute from the user and updates the clock.
    * <p>
-   * If the new time is before the old time, an exception is caught,
-   * and the time stays the same. Removes all train departures with departure times after the new time.
+   * If the new time is before the old time an exception is caught, and the time stays the same.
+   * Removes all train departures with departure times after the new time.
    * </p>
    */
   public void updateClock() { //en metode som oppdaterer klokka til ny tid satt av bruker
