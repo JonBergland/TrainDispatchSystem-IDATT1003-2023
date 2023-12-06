@@ -20,7 +20,7 @@ import java.util.Map;
  * </p>
  */
 public class Table {
-  private HashMap<Integer, TrainDeparture> hashMap;
+  private final HashMap<Integer, TrainDeparture> hashMap;
 
   /**
    * Constructs a Table object with an empty HashMap for storing TrainDeparture-objects.
@@ -35,7 +35,7 @@ public class Table {
    *
    * @param oldHashMap The existing TrainDeparture object that is copied
    */
-  public Table(HashMap<Integer, TrainDeparture> oldHashMap) {
+  public Table(HashMap<Integer, TrainDeparture> oldHashMap) throws TrainDepartureConstructorException {
     HashMap<Integer, TrainDeparture> newHashMap = new LinkedHashMap<>();
     for (Map.Entry<Integer, TrainDeparture> entry : oldHashMap.entrySet()) {
       newHashMap.put(entry.getKey(), new TrainDeparture(entry.getValue()));

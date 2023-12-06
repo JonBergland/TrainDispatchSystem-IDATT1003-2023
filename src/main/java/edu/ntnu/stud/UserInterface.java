@@ -6,7 +6,6 @@ import edu.ntnu.stud.exceptions.TableAddException;
 import edu.ntnu.stud.exceptions.TrackException;
 import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
 import edu.ntnu.stud.sort.SortByDestination;
-import edu.ntnu.stud.sort.SortByLine;
 import edu.ntnu.stud.sort.SortByTime;
 import edu.ntnu.stud.sort.SortByTrack;
 import java.util.HashMap;
@@ -38,12 +37,11 @@ public class UserInterface {
       table.add(404, new TrainDeparture("10:30", "L13",  "Bergkrystallen", -1));
       table.add(406, new TrainDeparture("10:40", "L14",  "Bergkrystallen", 3));
       table.add(550, new TrainDeparture("16:30", "L8",  "Arendal", -1));
-
+      this.table = new Table(SortByTime.sort(table.getHashMap()));
     } catch (Exception e) {
       System.out.println("Your train-departures was not added. " + e.getMessage());
       System.exit(0); //exits the program if init isn't properly initialized
     }
-    this.table = new Table(SortByTime.sort(table.getHashMap()));
     printTrainDeparture();
     doOperation(menuList());
   }
@@ -128,8 +126,12 @@ public class UserInterface {
         "_".repeat(60));
 
     for (int trainNumber : table.getHashMap().keySet()) {
-      System.out.println(Objects.requireNonNull(new TrainDeparture(table.getHashMap()
-          .get(trainNumber)).toString(trainNumber)));
+      try {
+        System.out.println(Objects.requireNonNull(new TrainDeparture(table.getHashMap()
+            .get(trainNumber)).toString(trainNumber)));
+      } catch (TrainDepartureConstructorException e) {
+        System.out.println("The train departure couldn't be printed: " + e.getMessage());
+      }
     }
   }
 
@@ -221,8 +223,13 @@ public class UserInterface {
    */
   public void findTrainByTrainNumber() {
     int trainNumber = chooseTrainNumber();
-    System.out.println(new TrainDeparture(table.getTrainByTrainNumber(trainNumber))
-        .toString(trainNumber));
+    try {
+      System.out.println(new TrainDeparture(table.getTrainByTrainNumber(trainNumber))
+          .toString(trainNumber));
+    } catch (TrainDepartureConstructorException e) {
+      System.out.println("The train departure couldn't be printed" + e.getMessage());
+    }
+
   }
 
   /**
@@ -254,7 +261,13 @@ public class UserInterface {
   public void findTrainByDestination() {
     HashMap<Integer, TrainDeparture> destinationList = chooseDestination();
     destinationList.forEach((key, value) ->
-        System.out.println(new TrainDeparture(value).toString(key)));
+    {
+      try {
+        System.out.println(new TrainDeparture(value).toString(key));
+      } catch (TrainDepartureConstructorException e) {
+        System.out.println("The train departure couldn't be printed: " + e.getMessage());
+      }
+    });
   }
 
   /**
@@ -289,17 +302,21 @@ public class UserInterface {
     final int SORT_TIME = 1;
     final int SORT_DESTINATION = 2;
     final int SORT_TRACK = 3;
-    do {
-      switch (sortChoice) {
-        case SORT_TIME -> this.table = new Table(SortByTime.sort(table.getHashMap()));
-        case SORT_DESTINATION -> this.table = new Table(SortByDestination.sort(table.getHashMap()));
-        case SORT_TRACK -> this.table = new Table(SortByTrack.sort(table.getHashMap()));
-        default -> {
-          System.out.println("Tallet du satte inn samsvarer ikke med et tall fra listen");
-          sortChoice = sortMenuList();
+    try {
+      do {
+        switch (sortChoice) {
+          case SORT_TIME -> this.table = new Table(SortByTime.sort(table.getHashMap()));
+          case SORT_DESTINATION -> this.table = new Table(SortByDestination.sort(table.getHashMap()));
+          case SORT_TRACK -> this.table = new Table(SortByTrack.sort(table.getHashMap()));
+          default -> {
+            System.out.println("Tallet du satte inn samsvarer ikke med et tall fra listen");
+            sortChoice = sortMenuList();
+          }
         }
-      }
-    } while (sortChoice < 1 || sortChoice > 3);
+      } while (sortChoice < 1 || sortChoice > 3);
+    } catch (Exception e) {
+      System.out.println("An error happened while running: " + e.getMessage());
+    }
   }
 
   /**
