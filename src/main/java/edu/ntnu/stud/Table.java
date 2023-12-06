@@ -31,6 +31,19 @@ public class Table {
   }
 
   /**
+   * Constructs a Table object from an already existing hashmap.
+   *
+   * @param oldHashMap The existing TrainDeparture object that is copied
+   */
+  public Table(HashMap<Integer, TrainDeparture> oldHashMap) {
+    HashMap<Integer, TrainDeparture> newHashMap = new LinkedHashMap<>();
+    for (Map.Entry<Integer, TrainDeparture> entry : oldHashMap.entrySet()) {
+      newHashMap.put(entry.getKey(), new TrainDeparture(entry.getValue()));
+    }
+    this.hashMap = newHashMap; //made a deep copy of the new HashMap
+  }
+
+  /**
    * Gets the list over trainDepartures.
    * This method returns the HashMap in the Table-class
    *
@@ -116,22 +129,6 @@ public class Table {
       throw new TableAddException(e.getMessage());
     }
     return true;
-  }
-
-  /**
-   * Sets a new HashMap as the HashMap variable in Table
-   * This method takes in a new HashMap as parameter and
-   * creates a deep copy of it. It is then set as the new
-   * HashMap in the Table-class
-   *
-   * @param hashMap       The new hashmap that overrides the original
-   */
-  public void setHashMap(HashMap<Integer, TrainDeparture> hashMap) {
-    HashMap<Integer, TrainDeparture> newHashMap = new LinkedHashMap<>();
-    for (Map.Entry<Integer, TrainDeparture> entry : hashMap.entrySet()) {
-      newHashMap.put(entry.getKey(), new TrainDeparture(entry.getValue()));
-    }
-    this.hashMap = newHashMap; //made a deep copy of the new HashMap
   }
 
   /**
