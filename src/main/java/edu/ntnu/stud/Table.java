@@ -111,7 +111,7 @@ public class Table {
         throw new IllegalArgumentException("The train-number already exists");
       }
       //make a deep copy of TrainDeparture
-      this.hashMap.put(trainNumber, trainDeparture.getDeepCopy());
+      this.hashMap.put(trainNumber, new TrainDeparture(trainDeparture));
     } catch (IllegalArgumentException e) {
       throw new TableAddException(e.getMessage());
     }
@@ -129,7 +129,7 @@ public class Table {
   public void setHashMap(HashMap<Integer, TrainDeparture> hashMap) {
     HashMap<Integer, TrainDeparture> newHashMap = new LinkedHashMap<>();
     for (Map.Entry<Integer, TrainDeparture> entry : hashMap.entrySet()) {
-      newHashMap.put(entry.getKey(), entry.getValue().getDeepCopy());
+      newHashMap.put(entry.getKey(), new TrainDeparture(entry.getValue()));
     }
     this.hashMap = newHashMap; //made a deep copy of the new HashMap
   }
