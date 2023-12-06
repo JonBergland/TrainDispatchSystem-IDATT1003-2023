@@ -283,6 +283,11 @@ public class UserInterface {
     return destinationList;
   }
 
+  /**
+   * Executes sorting of train departures based on the user's selected criteria.
+   *
+   * @param sortChoice    The user's selected sorting criteria.
+   */
   public void sortBy(int sortChoice) {
     final int SORT_TIME = 1;
     final int SORT_DESTINATION = 2;
@@ -309,7 +314,11 @@ public class UserInterface {
     } while (sortChoice < 1 || sortChoice > 3);
   }
 
-
+  /**
+   * Displays a menu for selecting the criteria for sorting train departures.
+   *
+   * @return The user's selected sorting criteria.
+   */
   public int sortMenuList() {
     System.out.println("""
           [1] Tid
