@@ -71,12 +71,17 @@ public final class TrainDeparture {
    *
    * @param oldTrainDeparture The existing TrainDeparture object that is copied
    */
-  public TrainDeparture(TrainDeparture oldTrainDeparture) {
-    this.originalDepartureTime = oldTrainDeparture.getOriginalDepartureTime();
-    this.line = oldTrainDeparture.getLine();
-    this.destination = oldTrainDeparture.getDestination();
-    this.track = oldTrainDeparture.getTrack();
-    this.delay = oldTrainDeparture.getDelay();
+  public TrainDeparture(TrainDeparture oldTrainDeparture) throws TrainDepartureConstructorException {
+    try {
+      this.originalDepartureTime = oldTrainDeparture.getOriginalDepartureTime();
+      this.line = oldTrainDeparture.getLine();
+      this.destination = oldTrainDeparture.getDestination();
+      this.track = oldTrainDeparture.getTrack();
+      this.delay = oldTrainDeparture.getDelay();
+    } catch (NullPointerException e) {
+      throw new TrainDepartureConstructorException(e.getMessage());
+    }
+
   }
 
   /**
@@ -162,14 +167,15 @@ public final class TrainDeparture {
   }
 
   /**
-   * Sets a original departure time for the train departure using the String parameter.
+   * Sets an original departure time for the train departure using the String parameter.
    *
    * @param originalDepartureTime sets track as the integer parameter
    */
   private void setOriginalDepartureTime(String originalDepartureTime)
       throws IllegalArgumentException {
     Verification.requireStringOnFormatHHmm(originalDepartureTime,
-        "Departure time was not formatted properly");
+        "Departure time was not formatted properly",
+        "The departure time was null");
     this.originalDepartureTime = LocalTime.parse(LocalTime.now().format(
         DateTimeFormatter.ofPattern(originalDepartureTime)));
   }
@@ -221,7 +227,8 @@ public final class TrainDeparture {
   public void setDelay(String delay) throws DelayException {
     try {
       Verification.requireStringOnFormatHHmm(delay,
-          "The delay was not formatted properly");
+          "The delay was not formatted properly",
+          "The delay was null");
       this.delay = LocalTime.parse(LocalTime.now().format(
           DateTimeFormatter.ofPattern(delay)));
     } catch (IllegalArgumentException e) {
