@@ -45,6 +45,30 @@ public class TableTest {
   }
 
   @Nested
+  @DisplayName("Test of the Table constructor")
+  class tableConstructor {
+    @Test
+    @DisplayName("Test of table constructor with same key before and after")
+    void tableConstructorSameKeyBeforeAndAfter() {
+      HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
+      newHashMap.put(trainNumber1, trainDeparture1);
+
+      tableTest = new Table(newHashMap);
+      assertEquals(newHashMap.keySet(), tableTest.getHashMap().keySet());
+    }
+
+    @Test
+    @DisplayName("Test of table constructor with not the same TrainDeparture object")
+    void setHashMapNotTheSameObject() {
+      HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
+      newHashMap.put(trainNumber1, trainDeparture1);
+
+      tableTest = new Table(newHashMap);
+      assertNotEquals(newHashMap.get(trainNumber1), tableTest.getHashMap().get(trainNumber1));
+    }
+  }
+
+  @Nested
   @DisplayName("Test of get() methods")
   class tableGetMethods {
 
@@ -149,28 +173,6 @@ public class TableTest {
   @DisplayName("Test of set() methods")
   class setMethods {
     @Test
-    @DisplayName("Test of setHashMap with same key before and after")
-    void setHashMapSameKeyBeforeAndAfter() {
-      HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
-      newHashMap.put(trainNumber1, trainDeparture1);
-
-      tableTest.setHashMap(newHashMap);
-
-      assertEquals(newHashMap.keySet(), tableTest.getHashMap().keySet());
-    }
-
-    @Test
-    @DisplayName("Test of setHashMap with not the same TrainDeparture object")
-    void setHashMapNotTheSameObject() {
-      HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
-      newHashMap.put(trainNumber1, trainDeparture1);
-
-      tableTest.setHashMap(newHashMap);
-
-      assertNotEquals(newHashMap.get(trainNumber1), tableTest.getHashMap().get(trainNumber1));
-    }
-
-    @Test
     @DisplayName("Test of positive Integer setTrackToTrain")
     void positiveIntegerSetTrackToTrain() throws TrackException {
       int newTrack = 2;
@@ -212,7 +214,7 @@ public class TableTest {
   }
 
   @Nested
-  @DisplayName("Test of remove method")
+  @DisplayName("Test of remove methods")
   class removeMethods {
     @Test
     @DisplayName("Test of removeTrainDepartureBeforeTime with no effect")
@@ -238,6 +240,18 @@ public class TableTest {
     @Test
     @DisplayName("Test of removeTrainDepartureBeforeTime with time sett as a departure time")
     void removeTrainDepartureBeforeTimeWithTimeAsDepartureTime() {
+      HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
+      newHashMap.put(trainNumber1, trainDeparture1);
+      newHashMap.put(trainNumber2, trainDeparture2);
+
+      LocalTime time = LocalTime.of(12, 15);
+      tableTest.removeTrainDepartureBeforeTime(time);
+      assertEquals(newHashMap, tableTest.getHashMap());
+    }
+
+    @Test
+    @DisplayName("Test of remove with existing trainNumber")
+    void removeTrainDepartureWithExistingTrainNumber() {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
       newHashMap.put(trainNumber1, trainDeparture1);
       newHashMap.put(trainNumber2, trainDeparture2);
