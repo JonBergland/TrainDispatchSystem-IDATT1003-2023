@@ -11,11 +11,8 @@ import java.util.stream.Collectors;
 /**
  * Utility class for sorting a HashMap of TrainDeparture objects based on their destinations.
  * <p>
- * The {@code SortByTime} class provides a static method to sort a HashMap with Integer keys and
- * TrainDeparture values in ascending order based on the original departure times of the TrainDeparture objects.
- * The sorting is performed using Java Streams and a Comparator which compares based on the
- * destination of the TrainDepartures. The resulting sorted map is returned as a LinkedHashMap to
- * maintain the order of the TrainDepartures.
+ * The {@code SortByDestination} class provides a static method to sort a HashMap with Integer keys and
+ * TrainDeparture values in ascending order based on the destination of the TrainDeparture objects.
  * </p>
  *
  * @see TrainDeparture
@@ -35,8 +32,8 @@ public class SortByDestination {
    * LinkedHashMap to maintain the order of the TrainDepartures.
    * </p>
    * @param map   The unsorted HashMap containing Integer keys and TrainDeparture values.
-   * @return      A LinkedHashMap with the entries sorted by the original departure times.
-   *              If the original departure times are equal, the order of insertion is maintained.
+   * @return      A LinkedHashMap with the entries sorted by the destination.
+   *              If the destinations are equal, the order of insertion is maintained.
    */
   public static HashMap<Integer, TrainDeparture> sort(HashMap<Integer, TrainDeparture> map) {
     return map.entrySet().stream()
