@@ -9,7 +9,6 @@ import org.junit.jupiter.api.*;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -89,7 +88,7 @@ public class TrainDepartureTest {
 
     @Test
     @DisplayName("Test of constructor when originalDepartureTime has invalid value for minute")
-    void originalDepartureTimeWhenInvalidValueForMinute () {
+    void originalDepartureTimeWhenInvalidValueForMinute() {
       originalDepartureTime = "08:61";
       assertThrows(TrainDepartureConstructorException.class, () -> new
           TrainDeparture(originalDepartureTime, line, destination, track));
@@ -97,10 +96,17 @@ public class TrainDepartureTest {
 
     @Test
     @DisplayName("Test of constructor when originalDepartureTime has invalid value for hour")
-    void originalDepartureTimeWhenInvalidValueForHour () {
+    void originalDepartureTimeWhenInvalidValueForHour() {
       originalDepartureTime = "25:00";
       assertThrows(TrainDepartureConstructorException.class, () -> new
           TrainDeparture(originalDepartureTime, line, destination, track));
+    }
+    @Test
+    @DisplayName("Test of constructor with TrainDeparture object as parameter")
+    void constructorTrainDepartureObject() {
+      TrainDeparture newTrainDeparture = new TrainDeparture(trainDeparture);
+      assertEquals(trainDeparture.toString(trainNumber), newTrainDeparture.toString(trainNumber));
+      assertNotEquals(trainDeparture, newTrainDeparture);
     }
   }
 
@@ -146,110 +152,98 @@ public class TrainDepartureTest {
           LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern(originalDepartureTime)));
       assertEquals(originalDepartureTime3, trainDeparture.getDepartureTime());
     }
-    @Test
-    @DisplayName("Test of get deep copy has the same info as original TrainDeparture")
-    void getDeepCopySameAsOriginalTrainDeparture() {
-      assertEquals(trainDeparture.toString(trainNumber),
-          Objects.requireNonNull(trainDeparture.getDeepCopy()).toString(trainNumber));
+
+    @Nested
+    @DisplayName("set() methods")
+    class trainDepartureSetMethods {
+      @Test
+      @DisplayName("Test of positive integer set track")
+      void positiveIntegerSetTrack() throws TrackException {
+        track = 1;
+        assertTrue(trainDeparture.setTrack(track));
+      }
+
+      @Test
+      @DisplayName("Test of zero integer set track")
+      void zeroIntegerSetTrack() {
+        track = 0;
+        assertThrows(TrackException.class, () -> trainDeparture.setTrack(track));
+      }
+
+      @Test
+      @DisplayName("Test of less than -1 integer set track")
+      void lessThanMinus1IntegerSetTrack() {
+        track = -2;
+        assertThrows(TrackException.class, () -> trainDeparture.setTrack(track));
+      }
+
+      @Test
+      @DisplayName("Test of set delay with correct formatted input")
+      void correctFormatSetDelay() throws DelayException {
+        trainDeparture.setDelay(delay);
+        assertEquals(LocalTime.of(1, 0), trainDeparture.getDelay());
+      }
+
+      @Test
+      @DisplayName("Test of set delay with incorrect formatted input")
+      void incorrectFormatSetDelay() {
+        String incorrectDelay = "1:00";
+        assertThrows(DelayException.class, () ->
+            trainDeparture.setDelay(incorrectDelay));
+      }
     }
 
-    @Test
-    @DisplayName("Test of get deep copy is not the same object")
-    void getDeepCopyNotTheSameObject() {
-      assertNotEquals(trainDeparture, trainDeparture.getDeepCopy());
-    }
-  }
+    @Nested
+    @DisplayName("toString()")
+    class trainDepartureToString {
+      private String toStringSetup() {
+        return String.format("%" + -6 + "s", originalDepartureTime) + "|"
+            + String.format("%" + 1 + "s", "") + String.format("%" + -4 + "s", line) + "|"
+            + String.format("%" + 1 + "s", "") + String.format("%" + -4 + "s", trainNumber) + "|"
+            + String.format("%" + 1 + "s", "") + String.format("%" + -16 + "s", destination) + "|";
+      }
 
-  @Nested
-  @DisplayName("set() methods")
-  class trainDepartureSetMethods {
-    @Test
-    @DisplayName("Test of positive integer set track")
-    void positiveIntegerSetTrack() throws TrackException {
-      track = 1;
-      assertTrue(trainDeparture.setTrack(track));
-    }
+      @Test
+      @DisplayName("Test of ToString without track and delay")
+      void toStringWithoutTrackAndDelay() throws TrackException {
+        String normalOutput = toStringSetup();
+        normalOutput += String.format("%" + 6 + "s", " ") + "|"
+            + String.format("%" + 12 + "s", " ");
+        track = -1;
+        trainDeparture.setTrack(-1);
+        assertEquals(normalOutput, trainDeparture.toString(trainNumber));
+      }
 
-    @Test
-    @DisplayName("Test of zero integer set track")
-    void zeroIntegerSetTrack() {
-      track = 0;
-      assertThrows(TrackException.class, () -> trainDeparture.setTrack(track));
-    }
+      @Test
+      @DisplayName("Test of ToString without delay")
+      void toStringWithoutDelay() {
+        String normalOutput = toStringSetup();
+        normalOutput += String.format("%" + 4 + "s", "") + String.format("%" + -2 + "s", track) + "|"
+            + String.format("%" + 12 + "s", " ");
+        assertEquals(normalOutput, trainDeparture.toString(trainNumber));
+      }
 
-    @Test
-    @DisplayName("Test of less than -1 integer set track")
-    void lessThanMinus1IntegerSetTrack() {
-      track = -2;
-      assertThrows(TrackException.class, () -> trainDeparture.setTrack(track));
-    }
+      @Test
+      @DisplayName("Test of ToString without track")
+      void toStringWithoutTrack() throws DelayException, TrackException {
+        String normalOutput = toStringSetup();
+        normalOutput += String.format("%" + 6 + "s", " ") + "|"
+            + String.format("%" + 12 + "s", delay);
+        trainDeparture.setDelay(delay);
+        trainDeparture.setTrack(-1);
 
-    @Test
-    @DisplayName("Test of set delay with correct formatted input")
-    void correctFormatSetDelay() throws DelayException {
-      trainDeparture.setDelay(delay);
-      assertEquals(LocalTime.of(1,0), trainDeparture.getDelay());
-    }
+        assertEquals(normalOutput, trainDeparture.toString(trainNumber));
+      }
 
-    @Test
-    @DisplayName("Test of set delay with incorrect formatted input")
-    void incorrectFormatSetDelay() {
-      String incorrectDelay = "1:00";
-      assertThrows(DelayException.class, () ->
-          trainDeparture.setDelay(incorrectDelay));
-    }
-  }
-
-  @Nested
-  @DisplayName("toString()")
-  class trainDepartureToString {
-    private String toStringSetup() {
-      return String.format("%" + -6 + "s", originalDepartureTime) + "|"
-          + String.format("%" + 1 + "s", "") + String.format("%" + -4 + "s", line) + "|"
-          + String.format("%" + 1 + "s", "") + String.format("%" + -4 + "s", trainNumber) + "|"
-          + String.format("%" + 1 + "s", "") + String.format("%" + -16 + "s", destination) + "|";
-    }
-
-    @Test
-    @DisplayName("Test of ToString without track and delay")
-    void toStringWithoutTrackAndDelay() throws TrackException {
-      String normalOutput = toStringSetup();
-      normalOutput += String.format("%" + 6 + "s", " ") + "|"
-          + String.format("%" + 12 + "s", " ");
-      track = -1;
-      trainDeparture.setTrack(-1);
-      assertEquals(normalOutput, trainDeparture.toString(trainNumber));
-    }
-
-    @Test
-    @DisplayName("Test of ToString without delay")
-    void toStringWithoutDelay() {
-      String normalOutput = toStringSetup();
-      normalOutput += String.format("%" + 4 + "s", "") + String.format("%" + -2 + "s", track) + "|"
-          + String.format("%" + 12 + "s", " ");
-      assertEquals(normalOutput, trainDeparture.toString(trainNumber));
-    }
-
-    @Test
-    @DisplayName("Test of ToString without track")
-    void toStringWithoutTrack() throws DelayException, TrackException {
-      String normalOutput = toStringSetup();
-      normalOutput += String.format("%" + 6 + "s", " ") + "|"
-          + String.format("%" + 12 + "s", delay);
-      trainDeparture.setDelay(delay);
-      trainDeparture.setTrack(-1);
-
-      assertEquals(normalOutput, trainDeparture.toString(trainNumber));
-    }
-
-    @Test
-    @DisplayName("Test of ToString")
-    void toStringWithTrackAndDelay() throws DelayException {
-      String normalOutput = toStringSetup();
-      normalOutput += String.format("%" + 4 + "s", "") + String.format("%" + -2 + "s", track) + "|"
-          + String.format("%" + 12 + "s", delay);
-      trainDeparture.setDelay(delay);
-      assertEquals(normalOutput, trainDeparture.toString(trainNumber));
+      @Test
+      @DisplayName("Test of ToString")
+      void toStringWithTrackAndDelay() throws DelayException {
+        String normalOutput = toStringSetup();
+        normalOutput += String.format("%" + 4 + "s", "") + String.format("%" + -2 + "s", track) + "|"
+            + String.format("%" + 12 + "s", delay);
+        trainDeparture.setDelay(delay);
+        assertEquals(normalOutput, trainDeparture.toString(trainNumber));
+      }
     }
   }
 }
