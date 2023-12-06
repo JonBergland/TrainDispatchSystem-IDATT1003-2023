@@ -177,5 +177,14 @@ public class Table {
   public void removeTrainDepartureBeforeTime(LocalTime time) {
     hashMap.entrySet().removeIf(map -> map.getValue().getDepartureTime().isBefore(time));
   }
+
+  public boolean remove(int trainNumber) {
+    if (hashMap.get(trainNumber) != null) {
+      hashMap.remove(trainNumber);
+      return true;
+    } else{
+      return false;
+    }
+  }
 }
 
