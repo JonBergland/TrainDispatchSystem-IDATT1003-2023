@@ -4,6 +4,7 @@ import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
 import edu.ntnu.stud.sort.SortByDestination;
 import edu.ntnu.stud.sort.SortByLine;
 import edu.ntnu.stud.sort.SortByTime;
+import edu.ntnu.stud.sort.SortByTrack;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,8 +24,6 @@ public class SortsTest {
   TrainDeparture trainDeparture2;
   int trainNumber3;
   TrainDeparture trainDeparture3;
-  int trainNumber4;
-  TrainDeparture trainDeparture4;
   HashMap<Integer, TrainDeparture> unsortedHashMap;
   HashMap<Integer, TrainDeparture> sortedHashMap;
   @BeforeEach
@@ -126,7 +125,7 @@ public class SortsTest {
     sortedHashMap.put(trainNumber2, trainDeparture2);
     sortedHashMap.put(trainNumber1, trainDeparture1);
     List<TrainDeparture> expectedList = new ArrayList<>(sortedHashMap.values());
-    List<TrainDeparture> actualList = new ArrayList<>(SortByLine.sort(unsortedHashMap).values());
+    List<TrainDeparture> actualList = new ArrayList<>(SortByTrack.sort(unsortedHashMap).values());
 
     assertEquals(expectedList, actualList);
   }
@@ -138,7 +137,7 @@ public class SortsTest {
     sortedHashMap.put(trainNumber2, trainDeparture2);
     sortedHashMap.put(trainNumber1, trainDeparture1);
     List<TrainDeparture> originalList = new ArrayList<>(unsortedHashMap.values());
-    List<TrainDeparture> outcomeList = new ArrayList<>(SortByLine.sort(unsortedHashMap).values());
+    List<TrainDeparture> outcomeList = new ArrayList<>(SortByTrack.sort(unsortedHashMap).values());
 
     assertNotEquals(originalList, outcomeList);
   }
