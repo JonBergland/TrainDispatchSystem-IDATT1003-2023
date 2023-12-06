@@ -103,7 +103,7 @@ public class TrainDepartureTest {
     }
     @Test
     @DisplayName("Test of constructor with TrainDeparture object as parameter")
-    void constructorTrainDepartureObject() {
+    void constructorTrainDepartureObject() throws TrainDepartureConstructorException {
       TrainDeparture newTrainDeparture = new TrainDeparture(trainDeparture);
       assertEquals(trainDeparture.toString(trainNumber), newTrainDeparture.toString(trainNumber));
       assertNotEquals(trainDeparture, newTrainDeparture);

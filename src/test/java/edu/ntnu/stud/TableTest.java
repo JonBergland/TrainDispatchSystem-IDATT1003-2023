@@ -49,7 +49,7 @@ public class TableTest {
   class tableConstructor {
     @Test
     @DisplayName("Test of table constructor with same key before and after")
-    void tableConstructorSameKeyBeforeAndAfter() {
+    void tableConstructorSameKeyBeforeAndAfter() throws TrainDepartureConstructorException {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
       newHashMap.put(trainNumber1, trainDeparture1);
 
@@ -59,7 +59,7 @@ public class TableTest {
 
     @Test
     @DisplayName("Test of table constructor with not the same TrainDeparture object")
-    void setHashMapNotTheSameObject() {
+    void setHashMapNotTheSameObject() throws TrainDepartureConstructorException {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
       newHashMap.put(trainNumber1, trainDeparture1);
 
