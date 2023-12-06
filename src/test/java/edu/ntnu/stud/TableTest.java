@@ -256,9 +256,15 @@ public class TableTest {
       newHashMap.put(trainNumber1, trainDeparture1);
       newHashMap.put(trainNumber2, trainDeparture2);
 
-      LocalTime time = LocalTime.of(12, 15);
-      tableTest.removeTrainDepartureBeforeTime(time);
+      tableTest.remove(trainNumber3);
+      tableTest.remove(trainNumber4);
       assertEquals(newHashMap, tableTest.getHashMap());
+    }
+
+    @Test
+    @DisplayName("Test of remove with non existing trainNumber")
+    void removeTrainDepartureWithNonExistingTrainNumber() {
+      assert(!tableTest.remove(123));
     }
   }
 }
