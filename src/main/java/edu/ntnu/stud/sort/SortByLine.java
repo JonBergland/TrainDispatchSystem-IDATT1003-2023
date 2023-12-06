@@ -36,7 +36,7 @@ public class SortByLine {
    */
   public static HashMap<Integer, TrainDeparture> sort(HashMap<Integer, TrainDeparture> map) {
     return map.entrySet().stream()
-        .sorted(Comparator.comparing(entry -> entry.getValue().getOriginalDepartureTime()))
+        .sorted(Comparator.comparing(entry -> entry.getValue().getLine()))
         .collect(Collectors.toMap(
             Map.Entry::getKey,
             Map.Entry::getValue,
