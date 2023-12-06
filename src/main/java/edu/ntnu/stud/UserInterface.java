@@ -43,7 +43,7 @@ public class UserInterface {
       System.out.println("Your train-departures was not added. " + e.getMessage());
       System.exit(0); //exits the program if init isn't properly initialized
     }
-    table.setHashMap(SortByTime.sort(table.getHashMap()));
+    this.table = new Table(SortByTime.sort(table.getHashMap()));
     printTrainDeparture();
     doOperation(menuList());
   }
@@ -103,10 +103,7 @@ public class UserInterface {
     final int EXIT_SYSTEM = 10;
     while (true) {
       switch (menuChoice) {
-        case PRINT_TRAINDEPARTURE -> {
-          table.setHashMap(SortByLine.sort(table.getHashMap()));
-          printTrainDeparture();
-        }
+        case PRINT_TRAINDEPARTURE -> printTrainDeparture();
         case ADD_TRAINDEPARTURE -> addTrainDeparture();
         case SET_TRACKTOTRAIN -> setTrackToTrain();
         case SET_DELAYTOTRAIN -> setDelayToTrain();
@@ -294,18 +291,9 @@ public class UserInterface {
     final int SORT_TRACK = 3;
     do {
       switch (sortChoice) {
-        case SORT_TIME -> {
-          table.setHashMap(SortByTime.sort(table.getHashMap()));
-          printTrainDeparture();
-        }
-        case SORT_DESTINATION -> {
-          table.setHashMap(SortByDestination.sort(table.getHashMap()));
-          printTrainDeparture();
-        }
-        case SORT_TRACK -> {
-          table.setHashMap(SortByTrack.sort(table.getHashMap()));
-          printTrainDeparture();
-        }
+        case SORT_TIME -> this.table = new Table(SortByTime.sort(table.getHashMap()));
+        case SORT_DESTINATION -> this.table = new Table(SortByDestination.sort(table.getHashMap()));
+        case SORT_TRACK -> this.table = new Table(SortByTrack.sort(table.getHashMap()));
         default -> {
           System.out.println("Tallet du satte inn samsvarer ikke med et tall fra listen");
           sortChoice = sortMenuList();
