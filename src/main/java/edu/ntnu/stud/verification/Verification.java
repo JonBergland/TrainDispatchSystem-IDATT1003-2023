@@ -35,12 +35,15 @@ public class Verification {
     requireNonNullOrBlank(checkString, "String is null", "String is blank");
   }
 
-  public static void requireStringOnFormatHHmm(String checkString, String formatMessage)
+  public static void requireStringOnFormatHHmm(String checkString, String formatMessage,
+                                               String nullPointerMessage)
       throws DateTimeException {
     try {
       LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern(checkString)));
     } catch (DateTimeException e) {
       throw new IllegalArgumentException(formatMessage);
+    } catch (NullPointerException e) {
+      throw new IllegalArgumentException(nullPointerMessage);
     }
   }
 
