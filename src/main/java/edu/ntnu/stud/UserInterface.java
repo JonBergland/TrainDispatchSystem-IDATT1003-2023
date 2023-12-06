@@ -5,6 +5,9 @@ import edu.ntnu.stud.exceptions.DelayException;
 import edu.ntnu.stud.exceptions.TableAddException;
 import edu.ntnu.stud.exceptions.TrackException;
 import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
+import edu.ntnu.stud.sort.SortByDestination;
+import edu.ntnu.stud.sort.SortByTime;
+
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -28,11 +31,11 @@ public class UserInterface {
   public void start() {
     init();
     try {
-
       table.add(601, new TrainDeparture("12:15", "L3", "Hamar", -1));
       table.add(305, new TrainDeparture("15:30", "L2", "Sognsvann", -1));
       table.add(404, new TrainDeparture("10:30", "L13",  "Bergkrystallen", -1));
       table.add(406, new TrainDeparture("10:40", "L4",  "Bergkrystallen", -1));
+      table.add(550, new TrainDeparture("16:30", "L8",  "Arendal", -1));
 
     } catch (Exception e) {
       System.out.println("Your train-departures was not added. " + e.getMessage());
@@ -92,7 +95,10 @@ public class UserInterface {
     final int EXIT_SYSTEM = 8;
     while (true) {
       switch (menuChoice) {
-        case PRINT_TRAINDEPARTURE -> printTrainDeparture();
+        case PRINT_TRAINDEPARTURE -> {
+          table.setHashMap(SortByTime.sort(table.getHashMap()));
+          printTrainDeparture();
+        }
         case ADD_TRAINDEPARTURE -> addTrainDeparture();
         case SET_TRACKTOTRAIN -> setTrackToTrain();
         case SET_DELAYTOTRAIN -> setDelayToTrain();
@@ -110,16 +116,20 @@ public class UserInterface {
    * Prints all train departures in the table, sorted by time.
    */
   private void printTrainDeparture() {
-    table.setHashMap(SortByTime.sort(table.getHashMap()));
+    /*
     System.out.println(String.format("%" + -19 + "s", "Time: " + clock.getClock())
         + String.format("%" + -19 + "s", "Togavganger")
         + String.format("%" + -8 + "s", "Spor: ")
         + String.format("%" + -10 + "s", "Forsinkelse: ") + "\n"
         + "_".repeat(60));
+     */
+    System.out.printf("%-19s%-19s%-8s%-10s%n%s%n",
+        "Time: " + clock.getClock(), "Togavganger", "Spor: ", "Forsinkelse: ",
+        "_".repeat(60));
 
     for (int trainNumber : table.getHashMap().keySet()) {
-      System.out.println(Objects.requireNonNull(table.getHashMap().get(trainNumber)
-          .getDeepCopy()).toString(trainNumber));
+      System.out.println(Objects.requireNonNull(new TrainDeparture(table.getHashMap().get(trainNumber))
+          .toString(trainNumber)));
     }
   }
 
@@ -210,8 +220,8 @@ public class UserInterface {
    */
   public void findTrainByTrainNumber() {
     int trainNumber = chooseTrainNumber();
-    System.out.println(Objects.requireNonNull(table.getTrainByTrainNumber(trainNumber).
-        getDeepCopy()).toString(trainNumber));
+    System.out.println(new TrainDeparture(table.getTrainByTrainNumber(trainNumber))
+        .toString(trainNumber));
   }
 
   /**
@@ -243,7 +253,7 @@ public class UserInterface {
   public void findTrainByDestination() {
     HashMap<Integer, TrainDeparture> destinationList = chooseDestination();
     destinationList.forEach((key, value) ->
-        System.out.println(Objects.requireNonNull(value.getDeepCopy()).toString(key)));
+        System.out.println(new TrainDeparture(value).toString(key)));
   }
 
   /**
@@ -266,6 +276,40 @@ public class UserInterface {
       destinationList = table.getTrainByDestination(destination);
     }
     return destinationList;
+  }
+
+  public void sortBy(int sortChoice) {
+    final int SORT_TIME = 1;
+    final int SORT_DESTINATION = 2;
+    final int SORT_LINE = 3;
+    final int SORT_TRACK = 4;
+    final int SORT_DELAY = 5;
+    switch (sortChoice) {
+      case SORT_TIME -> {
+        table.setHashMap(SortByTime.sort(table.getHashMap()));
+        printTrainDeparture();
+      }
+      case SORT_DESTINATION -> {
+        table.setHashMap(SortByDestination.sort(table.getHashMap()));
+        printTrainDeparture();
+      }
+      case SORT_LINE -> setTrackToTrain();
+      case SORT_TRACK -> setDelayToTrain();
+      case SORT_DELAY -> findTrainByTrainNumber();
+      default -> System.out.println("Tallet du satte inn samsvarer ikke med et tall fra listen");
+    }
+  }
+
+  public int sortMenuList() {
+    System.out.println("""
+          [1] Tid
+          [2] Destinasjon
+          [3] Linje
+          [4] Spor
+          [5] Forsinkelse
+          """);
+    return input.intInput(
+        "Skriv inn tallet som korresponderer med hvordan du vil sortere togavgangene: ", 0);
   }
 
   /**
