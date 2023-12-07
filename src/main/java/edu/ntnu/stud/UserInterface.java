@@ -2,7 +2,7 @@ package edu.ntnu.stud;
 
 import edu.ntnu.stud.exceptions.ClockException;
 import edu.ntnu.stud.exceptions.DelayException;
-import edu.ntnu.stud.exceptions.TableAddException;
+import edu.ntnu.stud.exceptions.TableException;
 import edu.ntnu.stud.exceptions.TrackException;
 import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
 import edu.ntnu.stud.sort.SortByDestination;
@@ -38,7 +38,7 @@ public class UserInterface {
       table.add(406, new TrainDeparture("10:40", "L14",  "Bergkrystallen", 3));
       table.add(550, new TrainDeparture("16:30", "L8",  "Arendal", -1));
       this.table = new Table(SortByTime.sort(table.getHashMap()));
-    } catch (Exception e) {
+    } catch (TrainDepartureConstructorException | TableException e) {
       System.out.println("Your train-departures was not added. " + e.getMessage());
       System.exit(0); //exits the program if init isn't properly initialized
     }
@@ -165,7 +165,7 @@ public class UserInterface {
       if (table.add(trainNumber, newTrainDeparture)) {
         System.out.println("The train-departure was added");
       }
-    } catch (TrainDepartureConstructorException | TableAddException e) {
+    } catch (TrainDepartureConstructorException | TableException e) {
       System.out.println("The train-departure was not added. " + e.getMessage());
     }
   }
@@ -315,7 +315,7 @@ public class UserInterface {
           }
         }
       } while (sortChoice < 1 || sortChoice > 3);
-    } catch (Exception e) {
+    } catch (TableException e) {
       System.out.println("An error happened while running: " + e.getMessage());
     }
   }

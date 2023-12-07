@@ -1,7 +1,7 @@
 package edu.ntnu.stud;
 
 import edu.ntnu.stud.exceptions.DelayException;
-import edu.ntnu.stud.exceptions.TableAddException;
+import edu.ntnu.stud.exceptions.TableException;
 import edu.ntnu.stud.exceptions.TrackException;
 import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
 import edu.ntnu.stud.verification.Verification;
@@ -36,12 +36,16 @@ public class Table {
    * @param oldHashMap The existing TrainDeparture object that is copied
    */
   public Table(HashMap<Integer, TrainDeparture> oldHashMap)
-      throws TrainDepartureConstructorException {
-    HashMap<Integer, TrainDeparture> newHashMap = new LinkedHashMap<>();
-    for (Map.Entry<Integer, TrainDeparture> entry : oldHashMap.entrySet()) {
-      newHashMap.put(entry.getKey(), new TrainDeparture(entry.getValue()));
+      throws TableException {
+    try {
+      HashMap<Integer, TrainDeparture> newHashMap = new LinkedHashMap<>();
+      for (Map.Entry<Integer, TrainDeparture> entry : oldHashMap.entrySet()) {
+        newHashMap.put(entry.getKey(), new TrainDeparture(entry.getValue()));
+      }
+      this.hashMap = newHashMap; //made a deep copy of the new HashMap
+    } catch (TrainDepartureConstructorException | NullPointerException e) {
+      throw new TableException(e.getMessage());
     }
-    this.hashMap = newHashMap; //made a deep copy of the new HashMap
   }
 
   /**
@@ -115,21 +119,21 @@ public class Table {
   }
 
   /**
-   * Adds an Integer-key (trainNumber) and a TrainDeparture-value (trainDeparture)
-   * to the Hashmap variable in Table.
+   * Adds an Integer-key ({@code trainNumber}) and a TrainDeparture-value ({@code trainDeparture})
+   * to the {@code hashMap} variable in Table.
    * <p>
    * This method takes a trainNumber (which represents
    * the key in the HashMap) and a TrainDeparture object (which represents the value in
-   * the HashMap).
+   * the HashMap), validates them and puts them in the {@code hashMap} variable in Table
    * </p>
    *
-   * @param trainNumber    The unique train number that is set as the key in the hash map
-   * @param trainDeparture The trainDeparture entity that the train number belongs to
+   * @param trainNumber               The unique train number that is set as the key in the hash map
+   * @param trainDeparture            The trainDeparture entity that the train number belongs to
    * @throws IllegalArgumentException Throws Exception if the trainNumber
    *                                  already exists in the register
    */
   public boolean add(int trainNumber, TrainDeparture trainDeparture)
-      throws TableAddException, TrainDepartureConstructorException {
+      throws TableException, TrainDepartureConstructorException {
     try {
       Verification.requireNonZeroOrLess(trainNumber,
           "The train number was 0 or less");
@@ -139,7 +143,7 @@ public class Table {
       //make a deep copy of TrainDeparture
       this.hashMap.put(trainNumber, new TrainDeparture(trainDeparture));
     } catch (IllegalArgumentException e) {
-      throw new TableAddException(e.getMessage());
+      throw new TableException(e.getMessage());
     }
     return true;
   }
