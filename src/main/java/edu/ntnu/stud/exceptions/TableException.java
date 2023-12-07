@@ -10,9 +10,9 @@ package edu.ntnu.stud.exceptions;
  *
  * @see Exception
  */
-public class TableAddException extends Exception{
+public class TableException extends Exception{
   /**
-   * Constructs a TableAddException with a specified error message.
+   * Constructs a TableException with a specified error message.
    * <p>
    * This constructor creates an instance of the exception with an errormessage
    * providing details on why the exception is thrown
@@ -21,18 +21,18 @@ public class TableAddException extends Exception{
    * @param errorMessage      A String containing the details on why the exception
    *                          is thrown
    */
-  public TableAddException(String errorMessage) {
+  public TableException(String errorMessage) {
     super(errorMessage);
   }
 
   /**
-   * Constructs a TableAddException with predetermined error message.
+   * Constructs a TableException with predetermined error message.
    * <p>
    * This constructor creates an instance of the exception with an predetermined
    * errormessage providing general details on why the exception is thrown
    * </p>
    */
-  public TableAddException() {
+  public TableException() {
     super("Something wrong happened during the creation of the train-departure");
   }
 }
