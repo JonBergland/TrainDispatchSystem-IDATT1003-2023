@@ -57,4 +57,14 @@ public class Verification {
     requireNonZeroOrLess(checkInteger, "Integer is 0 or less");
   }
 
+  public static void requireNonLessThanZero(int checkInteger, String zeroOrLessMessage) {
+    if (checkInteger < 0) {
+      throw new IllegalArgumentException(zeroOrLessMessage);
+    }
+  }
+
+  public static void requireNonLessThanZero(int checkInteger) {
+    requireNonZeroOrLess(checkInteger, "Integer is less than zero");
+  }
+
 }
