@@ -13,10 +13,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("SortByTime-class")
+/**
+ * Testcases for the Sort-classes.
+ * <p>
+ * The cases test the SortByDestination, SortByLine, SortByTime and SortByTrack
+ * </p>
+ */
+@DisplayName("Sorts-class")
 public class SortsTest {
   int trainNumber1;
   TrainDeparture trainDeparture1;

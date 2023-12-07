@@ -6,6 +6,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testcases for the Input-class.
+ * <p>
+ * The cases test the tryInt-method
+ * </p>
+ */
 @DisplayName("Input-class")
 class InputTest {
   Input input = new Input();
