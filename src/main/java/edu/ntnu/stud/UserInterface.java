@@ -107,7 +107,7 @@ public class UserInterface {
         case SET_DELAYTOTRAIN -> setDelayToTrain();
         case FIND_TRAINBYTRAINNUMBER -> findTrainByTrainNumber();
         case FIND_TRAINBYDESTINATION -> findTrainByDestination();
-        case SORT_BY -> sortBy(sortMenuList());
+        case SORT_BY -> sortBy(chooseSortingMethod());
         case REMOVE_TRAINDEPARTURE ->  removeTrainByTrainNumber(chooseTrainNumber());
         case UPDATE_CLOCK -> updateClock();
         case EXIT_SYSTEM -> System.exit(0);
@@ -257,12 +257,10 @@ public class UserInterface {
 
   /**
    * Prints information about train departures based on the user-selected destination.
-   *
    */
   public void findTrainByDestination() {
     HashMap<Integer, TrainDeparture> destinationList = chooseDestination();
-    destinationList.forEach((key, value) ->
-    {
+    destinationList.forEach((key, value) -> {
       try {
         System.out.println(new TrainDeparture(value).toString(key));
       } catch (TrainDepartureConstructorException e) {
@@ -307,25 +305,27 @@ public class UserInterface {
       do {
         switch (sortChoice) {
           case SORT_TIME -> this.table = new Table(SortByTime.sort(table.getHashMap()));
-          case SORT_DESTINATION -> this.table = new Table(SortByDestination.sort(table.getHashMap()));
+          case SORT_DESTINATION -> 
+            this.table = new Table(SortByDestination.sort(table.getHashMap()));
           case SORT_TRACK -> this.table = new Table(SortByTrack.sort(table.getHashMap()));
           default -> {
             System.out.println("Tallet du satte inn samsvarer ikke med et tall fra listen");
-            sortChoice = sortMenuList();
+            sortChoice = chooseSortingMethod();
           }
         }
-      } while (sortChoice < 1 || sortChoice > 3);
+      } while (sortChoice < SORT_TIME || sortChoice > SORT_TRACK);
     } catch (TableException e) {
       System.out.println("An error happened while running: " + e.getMessage());
     }
   }
 
   /**
-   * Displays a menu for selecting the criteria for sorting train departures.
+   * Displays a menu for selecting the method for sorting train departures and
+   * returns the user chosen method.
    *
-   * @return The user's selected sorting criteria.
+   * @return The user's selected sorting method.
    */
-  public int sortMenuList() {
+  public int chooseSortingMethod() {
     System.out.println("""
           [1] Tid
           [2] Destinasjon
@@ -355,7 +355,7 @@ public class UserInterface {
    * Removes all train departures with departure times after the new time.
    * </p>
    */
-  public void updateClock() { //en metode som oppdaterer klokka til ny tid satt av bruker
+  public void updateClock() {
     String newTime = input.stringInput("Skriv inn et nytt klokkeslett på formatet HH:mm");
     try {
       clock.setClock(newTime);
