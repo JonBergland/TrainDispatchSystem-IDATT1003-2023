@@ -149,13 +149,12 @@ public class Table {
    * to the given trainNumber.
    *
    * @param trainNumber         The trainDeparture's trainNumber
-   * @param delay               The delay you want to assign
+   * @param delayInMinutes      The delay you want to assign
    */
-  public boolean setDelayToTrain(int trainNumber, String delay) throws DelayException {
+  public boolean setDelayToTrain(int trainNumber, int delayInMinutes) throws DelayException {
     if (this.hashMap.get(trainNumber) != null) {
-      this.hashMap.get(trainNumber).setDelay(delay);
+      this.hashMap.get(trainNumber).setDelay(delayInMinutes);
     } else {
-      //TODO Add a unique exception to train-number
       throw new DelayException("Train-number is not unique");
     }
     return true;

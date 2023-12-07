@@ -181,14 +181,14 @@ public class TableTest {
 
     @Test
     @DisplayName("Test of negative, non minus 1 Integer setTrackToTrain")
-    void negativeNonMinus1IntegerSetTrackToTrain() throws TrackException {
+    void negativeNonMinus1IntegerSetTrackToTrain() {
       int newTrack = -5;
       assertThrows(TrackException.class, () -> tableTest.setTrackToTrain(trainNumber2, newTrack));
     }
 
     @Test
     @DisplayName("Test of zero integer setTrackToTrain")
-    void zeroIntegerSetTrackToTrain() throws TrackException {
+    void zeroIntegerSetTrackToTrain() {
       int newTrack = 0;
       assertThrows(TrackException.class, () -> tableTest.setTrackToTrain(trainNumber2, newTrack));
     }
@@ -196,7 +196,7 @@ public class TableTest {
     @Test
     @DisplayName("Test of setDelayToTrain with correct trainNumber")
     void setDelayToTrainCorrectTrainNumber() throws DelayException {
-      String delay = "01:00";
+      int delay = 60;
       tableTest.setDelayToTrain(trainNumber3, delay);
 
       assertEquals(LocalTime.of(1,0), trainDeparture3.getDelay());
@@ -205,7 +205,7 @@ public class TableTest {
     @Test
     @DisplayName("Test of setDelayToTrain with incorrect trainNumber")
     void setDelayToTrainIncorrectTrainNumber() {
-      String delay = "01:00";
+      int delay = 60;
       int incorrectTrainNumber = 111;
 
       assertThrows(DelayException.class, () ->

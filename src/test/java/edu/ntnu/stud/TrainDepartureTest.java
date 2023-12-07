@@ -20,7 +20,7 @@ public class TrainDepartureTest {
   int trainNumber;
   String destination;
   int track;
-  String delay;
+  int delay;
   TrainDeparture trainDeparture;
 
   @BeforeEach
@@ -30,7 +30,7 @@ public class TrainDepartureTest {
     trainNumber = 204;
     destination = "Oslo";
     track = 3;
-    delay = "01:00";
+    delay = 60;
 
     trainDeparture = new TrainDeparture(originalDepartureTime, line,
         destination, track);
@@ -107,6 +107,13 @@ public class TrainDepartureTest {
       TrainDeparture newTrainDeparture = new TrainDeparture(trainDeparture);
       assertEquals(trainDeparture.toString(trainNumber), newTrainDeparture.toString(trainNumber));
       assertNotEquals(trainDeparture, newTrainDeparture);
+    }
+
+    @Test
+    @DisplayName("Test of constructor with null in parameter")
+    void constructorTrainDepartureObjectWithNull() throws TrainDepartureConstructorException {
+      assertThrows(TrainDepartureConstructorException.class, () ->
+          new TrainDeparture(null));
     }
   }
 
@@ -187,7 +194,7 @@ public class TrainDepartureTest {
       @Test
       @DisplayName("Test of set delay with incorrect formatted input")
       void incorrectFormatSetDelay() {
-        String incorrectDelay = "1:00";
+        int incorrectDelay = -2;
         assertThrows(DelayException.class, () ->
             trainDeparture.setDelay(incorrectDelay));
       }
@@ -228,7 +235,7 @@ public class TrainDepartureTest {
       void toStringWithoutTrack() throws DelayException, TrackException {
         String normalOutput = toStringSetup();
         normalOutput += String.format("%" + 6 + "s", " ") + "|"
-            + String.format("%" + 12 + "s", delay);
+            + String.format("%" + 12 + "s", LocalTime.of(0,0).plusMinutes(delay));
         trainDeparture.setDelay(delay);
         trainDeparture.setTrack(-1);
 
@@ -240,7 +247,7 @@ public class TrainDepartureTest {
       void toStringWithTrackAndDelay() throws DelayException {
         String normalOutput = toStringSetup();
         normalOutput += String.format("%" + 4 + "s", "") + String.format("%" + -2 + "s", track) + "|"
-            + String.format("%" + 12 + "s", delay);
+            + String.format("%" + 12 + "s", LocalTime.of(0,0).plusMinutes(delay));
         trainDeparture.setDelay(delay);
         assertEquals(normalOutput, trainDeparture.toString(trainNumber));
       }

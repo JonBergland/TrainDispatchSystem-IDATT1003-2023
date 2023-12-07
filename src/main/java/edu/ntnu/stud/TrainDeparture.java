@@ -7,7 +7,6 @@ import edu.ntnu.stud.verification.Verification;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-
 /**
  * Represents a train-departure with information such as departure time, line name,
  * destination, track and eventual delay.
@@ -161,9 +160,8 @@ public final class TrainDeparture {
    * @return departureTime
    */
   public LocalTime getDepartureTime() {
-    LocalTime departureTime = this.originalDepartureTime.plusHours(this.delay.getHour());
-    departureTime = departureTime.plusMinutes(this.delay.getMinute());
-    return departureTime;
+    return this.originalDepartureTime.plusHours(this.delay.getHour())
+        .plusMinutes(this.delay.getMinute());
   }
 
   /**
@@ -207,7 +205,7 @@ public final class TrainDeparture {
   /**
    * Sets a track for the train departure using the integer parameter.
    *
-   * @param track sets track as the integer parameter
+   * @param track sets the track as the integer parameter
    */
   public boolean setTrack(int track) throws TrackException {
     try {
@@ -220,17 +218,18 @@ public final class TrainDeparture {
   }
 
   /**
-   * Sets a delay for the train departure using the LocalTime parameter.
+   * Sets a delay for the train departure using the int parameter. The int parameter
+   * represent the delay in minutes. The {@code delay} is reset and the new delay
+   * gets added.
    *
-   * @param delay sets delay as the LocalTime parameter
+   * @param delayInMinutes represents the delay set in minutes. Gets added to the
+   *                       LocalTime variable {@code delay}
    */
-  public void setDelay(String delay) throws DelayException {
+  public void setDelay(int delayInMinutes) throws DelayException {
     try {
-      Verification.requireStringOnFormatHHmm(delay,
-          "The delay was not formatted properly",
-          "The delay was null");
-      this.delay = LocalTime.parse(LocalTime.now().format(
-          DateTimeFormatter.ofPattern(delay)));
+      Verification.requireNonLessThanZero(delayInMinutes,
+          "The delay was not formatted properly");
+      this.delay = LocalTime.of(0,0).plusMinutes(delayInMinutes);
     } catch (IllegalArgumentException e) {
       throw new DelayException(e.getMessage());
     }

@@ -205,9 +205,10 @@ public class UserInterface {
    */
   public void setDelayToTrain() {
     int trainNumber = chooseTrainNumber();
-    String delay = input.stringInput("Skriv inn forsinkelsen til togavgangen på formatet HH:mm");
+    int delayInMinutes = input.intInput(
+        "Skriv inn antall minuter toget er forsinket med: ", 0);
     try {
-      if (table.setDelayToTrain(trainNumber, delay)) {
+      if (table.setDelayToTrain(trainNumber, delayInMinutes)) {
         System.out.println(table.getHashMap().get(trainNumber).getDelay()
             + " was set to " + trainNumber);
       }
