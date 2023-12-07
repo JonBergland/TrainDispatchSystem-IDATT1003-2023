@@ -1,7 +1,7 @@
 package edu.ntnu.stud;
 
 import edu.ntnu.stud.exceptions.DelayException;
-import edu.ntnu.stud.exceptions.TableAddException;
+import edu.ntnu.stud.exceptions.TableException;
 import edu.ntnu.stud.exceptions.TrackException;
 import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +15,13 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testcases for the table-class.
+ * <p>
+ *   The cases test the table-constructors, the get-methods, the set-methods,
+ *   the add-method and the remove-methods
+ * </p>
+ */
 @DisplayName("Table-class")
 public class TableTest {
   Table tableTest = new Table();
@@ -49,7 +56,7 @@ public class TableTest {
   class tableConstructor {
     @Test
     @DisplayName("Test of table constructor with same key before and after")
-    void tableConstructorSameKeyBeforeAndAfter() throws TrainDepartureConstructorException {
+    void tableConstructorSameKeyBeforeAndAfter() throws TableException {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
       newHashMap.put(trainNumber1, trainDeparture1);
 
@@ -59,7 +66,17 @@ public class TableTest {
 
     @Test
     @DisplayName("Test of table constructor with not the same TrainDeparture object")
-    void setHashMapNotTheSameObject() throws TrainDepartureConstructorException {
+    void tableConstructorNotTheSameObject() throws TableException {
+      HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
+      newHashMap.put(trainNumber1, trainDeparture1);
+
+      tableTest = new Table(newHashMap);
+      assertNotEquals(newHashMap.get(trainNumber1), tableTest.getHashMap().get(trainNumber1));
+    }
+
+    @Test
+    @DisplayName("Test of table constructor with null as TrainDeparture object")
+    void tableConstructorNullTrainDepartureObject() throws TableException {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
       newHashMap.put(trainNumber1, trainDeparture1);
 
@@ -126,7 +143,7 @@ public class TableTest {
   class tableAddMethod {
     @Test
     @DisplayName("Test of add() with postive trainNumber")
-    void addWithPositiveTrainNumber() throws TrainDepartureConstructorException, TableAddException {
+    void addWithPositiveTrainNumber() throws TrainDepartureConstructorException, TableException {
       int trainNumber = 501;
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
@@ -143,7 +160,7 @@ public class TableTest {
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
 
-      assertThrows(TableAddException.class, () ->
+      assertThrows(TableException.class, () ->
           tableTest.add(trainNumber, trainDeparture));
     }
 
@@ -154,7 +171,7 @@ public class TableTest {
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
 
-      assertThrows(TableAddException.class, () ->
+      assertThrows(TableException.class, () ->
           tableTest.add(trainNumber, trainDeparture));
     }
 
@@ -164,7 +181,7 @@ public class TableTest {
       TrainDeparture trainDeparture = new TrainDeparture("14:30", "L5",
           "Skien", -1);
 
-      assertThrows(TableAddException.class, () ->
+      assertThrows(TableException.class, () ->
           tableTest.add(trainNumber1, trainDeparture));
     }
   }
