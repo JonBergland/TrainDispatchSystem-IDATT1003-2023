@@ -103,10 +103,10 @@ public class UserInterface {
       switch (menuChoice) {
         case PRINT_TRAINDEPARTURE -> printTrainDeparture();
         case ADD_TRAINDEPARTURE -> addTrainDeparture();
-        case SET_TRACKTOTRAIN -> setTrackToTrain();
-        case SET_DELAYTOTRAIN -> setDelayToTrain();
-        case FIND_TRAINBYTRAINNUMBER -> findTrainByTrainNumber();
-        case FIND_TRAINBYDESTINATION -> findTrainByDestination();
+        case SET_TRACKTOTRAIN -> setTrackToTrain(chooseTrainNumber());
+        case SET_DELAYTOTRAIN -> setDelayToTrain(chooseTrainNumber());
+        case FIND_TRAINBYTRAINNUMBER -> findTrainByTrainNumber(chooseTrainNumber());
+        case FIND_TRAINBYDESTINATION -> findTrainByDestination(chooseDestination());
         case SORT_BY -> sortBy(chooseSortingMethod());
         case REMOVE_TRAINDEPARTURE ->  removeTrainByTrainNumber(chooseTrainNumber());
         case UPDATE_CLOCK -> updateClock();
@@ -121,18 +121,14 @@ public class UserInterface {
    * Prints all train departures in the table, sorted by time.
    */
   private void printTrainDeparture() {
-    System.out.printf("%-19s%-19s%-8s%-10s%n%s%n",
-        "Time: " + clock.getClock(), "Togavganger", "Spor: ", "Forsinkelse: ",
-        "_".repeat(60));
-
-    for (int trainNumber : table.getHashMap().keySet()) {
+    System.out.printf("%-19s%-19s%-8s%-10s%n%s%n", "Time: " + clock.getClock(), "Togavganger", "Spor: ", "Forsinkelse: ", "_".repeat(60));
+    table.getHashMap().forEach((key, value) -> {
       try {
-        System.out.println(Objects.requireNonNull(new TrainDeparture(table.getHashMap()
-            .get(trainNumber)).toString(trainNumber)));
+        System.out.println(new TrainDeparture(value).toString(key));
       } catch (TrainDepartureConstructorException e) {
         System.out.println("The train departure couldn't be printed: " + e.getMessage());
       }
-    }
+    });
   }
 
   /**
@@ -177,8 +173,7 @@ public class UserInterface {
    * </p>
    *
    */
-  public void setTrackToTrain() {
-    int trainNumber = chooseTrainNumber();
+  private void setTrackToTrain(int trainNumber) {
     String print = "Skriv inn ved hvilken spor toget skal gå fra. Hvis ikke bestemt, skriv inn -1";
     int track = input.intInput(print, -1);
     try {
@@ -203,8 +198,7 @@ public class UserInterface {
    * </p>
    *
    */
-  public void setDelayToTrain() {
-    int trainNumber = chooseTrainNumber();
+  private void setDelayToTrain(int trainNumber) {
     int delayInMinutes = input.intInput(
         "Skriv inn antall minuter toget er forsinket med: ", 0);
     try {
@@ -222,13 +216,12 @@ public class UserInterface {
    * Prints information about a train departure based on the user-selected train number.
    *
    */
-  public void findTrainByTrainNumber() {
-    int trainNumber = chooseTrainNumber();
+  private void findTrainByTrainNumber(int trainNumber) {
     try {
       System.out.println(new TrainDeparture(table.getTrainByTrainNumber(trainNumber))
           .toString(trainNumber));
     } catch (TrainDepartureConstructorException e) {
-      System.out.println("The train departure couldn't be printed" + e.getMessage());
+      System.out.println("The train departure couldn't be printed. " + e.getMessage());
     }
 
   }
@@ -242,7 +235,7 @@ public class UserInterface {
    *
    * @return The user-selected train number.
    */
-  public int chooseTrainNumber() {
+  private int chooseTrainNumber() {
     table.getTrainNumberList().forEach(System.out::println);
     int trainNumber = input.intInput("Velg en av togavgangene", 0);
 
@@ -258,8 +251,7 @@ public class UserInterface {
   /**
    * Prints information about train departures based on the user-selected destination.
    */
-  public void findTrainByDestination() {
-    HashMap<Integer, TrainDeparture> destinationList = chooseDestination();
+  private void findTrainByDestination(HashMap<Integer, TrainDeparture> destinationList) {
     destinationList.forEach((key, value) -> {
       try {
         System.out.println(new TrainDeparture(value).toString(key));
@@ -278,7 +270,7 @@ public class UserInterface {
    *
    * @return A list of train departures with matching destinations.
    */
-  public HashMap<Integer, TrainDeparture> chooseDestination() {
+  private HashMap<Integer, TrainDeparture> chooseDestination() {
     table.getUniqueDestinationList().forEach(System.out::println);
     String destination = input.stringInput("\nVelg en av destinasjonene");
     HashMap<Integer, TrainDeparture> destinationList = table.getTrainByDestination(destination);
@@ -297,7 +289,7 @@ public class UserInterface {
    *
    * @param sortChoice    The user's selected sorting criteria.
    */
-  public void sortBy(int sortChoice) {
+  private void sortBy(int sortChoice) {
     final int SORT_TIME = 1;
     final int SORT_DESTINATION = 2;
     final int SORT_TRACK = 3;
@@ -325,7 +317,7 @@ public class UserInterface {
    *
    * @return The user's selected sorting method.
    */
-  public int chooseSortingMethod() {
+  private int chooseSortingMethod() {
     System.out.println("""
           [1] Tid
           [2] Destinasjon
@@ -340,7 +332,7 @@ public class UserInterface {
    *
    * @param trainNumber   The train number to be removed.
    */
-  public void removeTrainByTrainNumber(int trainNumber) {
+  private void removeTrainByTrainNumber(int trainNumber) {
     if (table.remove(trainNumber)) {
       System.out.println("The train departure was removed");
     } else {
@@ -355,7 +347,7 @@ public class UserInterface {
    * Removes all train departures with departure times after the new time.
    * </p>
    */
-  public void updateClock() {
+  private void updateClock() {
     String newTime = input.stringInput("Skriv inn et nytt klokkeslett på formatet HH:mm");
     try {
       clock.setClock(newTime);
