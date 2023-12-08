@@ -24,6 +24,7 @@ public class TrainDepartureConstructorException extends Exception {
   public TrainDepartureConstructorException(String errorMessage) {
     super(errorMessage);
   }
+
   /**
    * Constructs a TrainDepartureConstructorException with predetermined error message.
    * <p>
@@ -32,7 +33,7 @@ public class TrainDepartureConstructorException extends Exception {
    * </p>
    */
   public TrainDepartureConstructorException() {
-    super("Something wrong happened during the creation of the train-departure. " +
-        "It was not added");
+    super("Something wrong happened during the creation of the train-departure. "
+        + "It was not added");
   }
 }

@@ -9,7 +9,6 @@ import edu.ntnu.stud.sort.SortByDestination;
 import edu.ntnu.stud.sort.SortByTime;
 import edu.ntnu.stud.sort.SortByTrack;
 import java.util.HashMap;
-import java.util.Objects;
 
 /**
  * The {@code UserInterface} class represents the user interface for managing train departures.
@@ -26,7 +25,7 @@ public class UserInterface {
    * Initializes the system with predefined train departures and runs the menu program indefinitely.
    * <p>
    * This method adds predefined train departures to the table and enters an infinite loop
-   * to run the menu program using the {@link #doOperation(int)} method.
+   * running the menu program using the {@link #doOperation(int)} method.
    * </p>
    */
   public void start() {
@@ -43,14 +42,14 @@ public class UserInterface {
       System.exit(0); //exits the program if init isn't properly initialized
     }
     printTrainDeparture();
-    doOperation(menuList());
+    doOperation(menuChoice());
   }
 
   /**
    * Initializes the system by creating instances of {@link Table},
    * {@link Clock}, and {@link Input}.
    */
-  public void init() {
+  private void init() {
     this.table = new Table();
     this.clock = new Clock();
     this.input = new Input();
@@ -61,7 +60,7 @@ public class UserInterface {
    *
    * @return The user's menu choice.
    */
-  public int menuList() {
+  private int menuChoice() {
     System.out.println("_".repeat(60));
     System.out.println("""
         [1] Vis tog avgangene
@@ -113,7 +112,7 @@ public class UserInterface {
         case EXIT_SYSTEM -> System.exit(0);
         default -> System.out.println("Tallet du satte inn samsvarer ikke med et tall fra listen");
       }
-      menuChoice = menuList();
+      menuChoice = menuChoice();
     }
   }
 
@@ -140,7 +139,7 @@ public class UserInterface {
    */
   private void addTrainDeparture() {
     String originalDepartureTime = input.stringInput(
-        "Skriv inn tiden togavgangen på formatet HH:mm");
+        "Skriv inn avgangstiden til toget på formatet HH:mm");
 
     String line = input.stringInput("Skriv inn navnet på linjen");
 
@@ -203,7 +202,7 @@ public class UserInterface {
         "Skriv inn antall minuter toget er forsinket med: ", 0);
     try {
       if (table.setDelayToTrain(trainNumber, delayInMinutes)) {
-        System.out.println(table.getHashMap().get(trainNumber).getDelay()
+        System.out.println(table.getTrainByTrainNumber(trainNumber).getDelay()
             + " was set to " + trainNumber);
       }
     } catch (DelayException e) {
@@ -236,12 +235,12 @@ public class UserInterface {
    * @return The user-selected train number.
    */
   private int chooseTrainNumber() {
-    table.getTrainNumberList().forEach(System.out::println);
+    table.getTrainNumberSet().forEach(System.out::println);
     int trainNumber = input.intInput("Velg en av togavgangene", 0);
 
     while (table.getTrainByTrainNumber(trainNumber) == null || trainNumber == 0) {
       System.out.println("Du må sette inn et tognummer fra listen");
-      table.getTrainNumberList().forEach(System.out::println);
+      table.getTrainNumberSet().forEach(System.out::println);
       trainNumber = input.intInput("Velg en av togavgangene", 0);
     }
     return trainNumber;
@@ -271,13 +270,13 @@ public class UserInterface {
    * @return A list of train departures with matching destinations.
    */
   private HashMap<Integer, TrainDeparture> chooseDestination() {
-    table.getUniqueDestinationList().forEach(System.out::println);
+    table.getUniqueDestinationSet().forEach(System.out::println);
     String destination = input.stringInput("\nVelg en av destinasjonene");
     HashMap<Integer, TrainDeparture> destinationList = table.getTrainByDestination(destination);
 
     while (destinationList.isEmpty()) {
       System.out.println("Du må sette inn en destinasjon fra listen");
-      table.getUniqueDestinationList().forEach(System.out::println);
+      table.getUniqueDestinationSet().forEach(System.out::println);
       destination = input.stringInput("\nVelg en av destinasjonene");
       destinationList = table.getTrainByDestination(destination);
     }
@@ -333,10 +332,12 @@ public class UserInterface {
    * @param trainNumber   The train number to be removed.
    */
   private void removeTrainByTrainNumber(int trainNumber) {
-    if (table.remove(trainNumber)) {
-      System.out.println("The train departure was removed");
-    } else {
-      System.out.println("The train number was not valid. The train departure was not removed");
+    try {
+      if (table.removeTrainByTrainNumber(trainNumber)) {
+        System.out.println("The train departure was removed");
+      }
+    } catch (TableException e) {
+      System.out.println(e.getMessage());
     }
   }
 

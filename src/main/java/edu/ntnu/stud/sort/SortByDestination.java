@@ -1,7 +1,6 @@
 package edu.ntnu.stud.sort;
 
 import edu.ntnu.stud.TrainDeparture;
-
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -11,8 +10,9 @@ import java.util.stream.Collectors;
 /**
  * Utility class for sorting a HashMap of TrainDeparture objects based on their destinations.
  * <p>
- * The {@code SortByDestination} class provides a static method to sort a HashMap with Integer keys and
- * TrainDeparture values in ascending order based on the destination of the TrainDeparture objects.
+ * The {@code SortByDestination} class provides a static method to sort a HashMap with
+ * Integer keys and TrainDeparture values in ascending order based on the destination
+ * of the TrainDeparture objects.
  * </p>
  *
  * @see TrainDeparture
@@ -31,6 +31,7 @@ public class SortByDestination {
    * destination of the TrainDepartures. The resulting sorted map is returned as a
    * LinkedHashMap to maintain the order of the TrainDepartures.
    * </p>
+   *
    * @param map   The unsorted HashMap containing Integer keys and TrainDeparture values.
    * @return      A LinkedHashMap with the entries sorted by the destination.
    *              If the destinations are equal, the order of insertion is maintained.

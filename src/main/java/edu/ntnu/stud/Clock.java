@@ -8,9 +8,10 @@ import java.time.format.DateTimeFormatter;
 /**
  * Represents a clock with LocalTime functionality.
  * <p>
- * The {@code Clock} class provides methods for initializing, retrieving, and updating
- * the current time represented by a LocalTime object. It includes functionality to set
- * a new time while ensuring it is valid and not earlier than the current time.
+ * The {@code Clock} class provides methods for initializing, retrieving,
+ * and updating the current time represented by a LocalTime object.
+ * It includes functionality to set a new time while ensuring it is valid
+ * and not earlier than the current time.
  * </p>
  *
  * @see LocalTime

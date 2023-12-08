@@ -70,7 +70,8 @@ public final class TrainDeparture {
    *
    * @param oldTrainDeparture The existing TrainDeparture object that is copied
    */
-  public TrainDeparture(TrainDeparture oldTrainDeparture) throws TrainDepartureConstructorException {
+  public TrainDeparture(TrainDeparture oldTrainDeparture)
+      throws TrainDepartureConstructorException {
     try {
       this.originalDepartureTime = oldTrainDeparture.getOriginalDepartureTime();
       this.line = oldTrainDeparture.getLine();
@@ -228,7 +229,7 @@ public final class TrainDeparture {
     try {
       Verification.requireNonLessThanZero(delayInMinutes,
           "The delay was not formatted properly");
-      this.delay = LocalTime.of(0,0).plusMinutes(delayInMinutes);
+      this.delay = LocalTime.of(0, 0).plusMinutes(delayInMinutes);
     } catch (IllegalArgumentException e) {
       throw new DelayException(e.getMessage());
     }
@@ -241,7 +242,7 @@ public final class TrainDeparture {
    */
   public String toString(int trainNumber) {
     String output = String.format("%-6s|%1s%-4s|%1s%-4s|%1s%-16s|",
-        this.originalDepartureTime, "",this.line, "", trainNumber, "",this.destination);
+        this.originalDepartureTime, "", this.line, "", trainNumber, "", this.destination);
 
     String track = String.format("%6s|", " ");
     if (getTrack() > -1) {

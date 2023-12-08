@@ -10,7 +10,7 @@ package edu.ntnu.stud.exceptions;
  *
  * @see Exception
  */
-public class ClockException extends Exception{
+public class ClockException extends Exception {
   /**
    * Constructs a ClockException with a specified error message.
    * <p>
@@ -24,6 +24,7 @@ public class ClockException extends Exception{
   public ClockException(String errorMessage) {
     super(errorMessage);
   }
+
   /**
    * Constructs a ClockException with predetermined error message.
    * <p>

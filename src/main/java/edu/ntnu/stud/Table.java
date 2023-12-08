@@ -89,9 +89,9 @@ public class Table {
    * hashset
    * </p>
    *
-   * @return uniqueDestinations
+   * @return a HashSet with all the unique destinations in the HashMap in Table
    */
-  public HashSet<String> getUniqueDestinationList() {
+  public HashSet<String> getUniqueDestinationSet() {
     HashSet<String> uniqueDestinations = new HashSet<>();
     for (TrainDeparture trainDeparture : hashMap.values()) {
       uniqueDestinations.add(trainDeparture.getDestination());
@@ -99,7 +99,16 @@ public class Table {
     return uniqueDestinations;
   }
 
-  public HashSet<Integer> getTrainNumberList() {
+  /**
+   * Gets all the trainNumbers in Table.
+   * <p>
+   *   This method puts all the keys in the HashMap in Table and returns them
+   *   as a HashSet
+   * </p>
+   *
+   * @return a HashSet with all the keys in the HashMap in Table
+   */
+  public HashSet<Integer> getTrainNumberSet() {
     return new HashSet<>(this.hashMap.keySet());
   }
 
@@ -210,13 +219,13 @@ public class Table {
    *                    you want to remove from the HashMap in table
    * @return a boolean representing if the operation was successful or not
    */
-  public boolean remove(int trainNumber) {
+  public boolean removeTrainByTrainNumber(int trainNumber) throws TableException {
     if (hashMap.get(trainNumber) != null) {
       hashMap.remove(trainNumber);
-      return true;
     } else {
-      return false;
+      throw new TableException("TrainDeparture was not removed");
     }
+    return true;
   }
 }
 
