@@ -176,7 +176,8 @@ public class TrainDepartureTest {
     @DisplayName("Test of positive integer set track")
     void positiveIntegerSetTrack() throws TrackException {
       track = 1;
-      assertTrue(trainDeparture.setTrack(track));
+      trainDeparture.setTrack(track);
+      assertEquals(track, trainDeparture.getTrack());
     }
 
     @Test
