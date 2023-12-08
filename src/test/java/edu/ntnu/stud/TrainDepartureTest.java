@@ -43,6 +43,9 @@ public class TrainDepartureTest {
         destination, track);
   }
 
+  /**
+   * Testcases for the TrainDeparture-constructor
+   */
   @Nested
   @DisplayName("TrainDeparture-Constructor")
   class trainDepartureConstructor {
@@ -119,12 +122,15 @@ public class TrainDepartureTest {
 
     @Test
     @DisplayName("Test of constructor with null in parameter")
-    void constructorTrainDepartureObjectWithNull() throws TrainDepartureConstructorException {
+    void constructorTrainDepartureObjectWithNull() {
       assertThrows(TrainDepartureConstructorException.class, () ->
           new TrainDeparture(null));
     }
   }
 
+  /**
+   * Testcases for the get-methods in TrainDeparture
+   */
   @Nested
   @DisplayName("get() methods")
   class trainDepartureGetMethods {
@@ -169,6 +175,9 @@ public class TrainDepartureTest {
     }
   }
 
+  /**
+   * Testcases for the set-methods in TrainDeparture
+   */
   @Nested
   @DisplayName("set() methods")
   class trainDepartureSetMethods {
@@ -210,6 +219,9 @@ public class TrainDepartureTest {
     }
   }
 
+  /**
+   * Testcases for the toString-method in TrainDeparture
+   */
   @Nested
   @DisplayName("toString()")
   class trainDepartureToString {
