@@ -211,6 +211,14 @@ public class TableTest {
     }
 
     @Test
+    @DisplayName("Test of invalid trainNumber setTrackToTrain")
+    void invalidTrainNumberSetTrackToTrain() {
+      int newTrack = 1;
+      int invalidTrainNumber = 123;
+      assertThrows(TrackException.class, () -> tableTest.setTrackToTrain(invalidTrainNumber,newTrack));
+    }
+
+    @Test
     @DisplayName("Test of setDelayToTrain with correct trainNumber")
     void setDelayToTrainCorrectTrainNumber() throws DelayException {
       int delay = 60;

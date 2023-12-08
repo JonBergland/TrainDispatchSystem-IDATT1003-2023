@@ -159,7 +159,12 @@ public class Table {
    * @param track       The track you want to assign
    */
   public boolean setTrackToTrain(int trainNumber, int track) throws TrackException {
-    return this.hashMap.get(trainNumber).setTrack(track);
+    if (this.hashMap.get(trainNumber) != null) {
+      this.hashMap.get(trainNumber).setTrack(track);
+    } else {
+      throw new TrackException("The train-number is not associated with a train-departure");
+    }
+    return true;
   }
 
   /**
@@ -176,7 +181,7 @@ public class Table {
     if (this.hashMap.get(trainNumber) != null) {
       this.hashMap.get(trainNumber).setDelay(delayInMinutes);
     } else {
-      throw new DelayException("Train-number is not unique");
+      throw new DelayException("The train-number is not associated with a train-departure");
     }
     return true;
   }
