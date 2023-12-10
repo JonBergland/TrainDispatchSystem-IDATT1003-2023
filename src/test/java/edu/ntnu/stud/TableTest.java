@@ -76,12 +76,11 @@ public class TableTest {
 
     @Test
     @DisplayName("Test of table constructor with null as TrainDeparture object")
-    void tableConstructorNullTrainDepartureObject() throws TableException {
+    void tableConstructorNullTrainDepartureObject() {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
-      newHashMap.put(trainNumber1, trainDeparture1);
+      newHashMap.put(trainNumber1, null);
 
-      tableTest = new Table(newHashMap);
-      assertNotEquals(newHashMap.get(trainNumber1), tableTest.getHashMap().get(trainNumber1));
+      assertThrows(TableException.class, () -> new Table(newHashMap));
     }
   }
 
@@ -120,14 +119,14 @@ public class TableTest {
       uniqueDestinations.add("Hamar");
       uniqueDestinations.add("Lillehammer");
 
-      assertEquals(uniqueDestinations, tableTest.getUniqueDestinationList());
+      assertEquals(uniqueDestinations, tableTest.getUniqueDestinationSet());
     }
 
     @Test
     @DisplayName("Test of getTrainNumberList")
     void getTrainNumberList() {
       HashSet<Integer> trainNumberHashSet = new HashSet<>(tableTest.getHashMap().keySet());
-      assertEquals(trainNumberHashSet, tableTest.getTrainNumberList());
+      assertEquals(trainNumberHashSet, tableTest.getTrainNumberSet());
     }
 
     @Test
@@ -276,20 +275,20 @@ public class TableTest {
 
     @Test
     @DisplayName("Test of remove with existing trainNumber")
-    void removeTrainDepartureWithExistingTrainNumber() {
+    void removeTrainDepartureWithExistingTrainNumber() throws TableException {
       HashMap<Integer, TrainDeparture> newHashMap = new HashMap<>();
       newHashMap.put(trainNumber1, trainDeparture1);
       newHashMap.put(trainNumber2, trainDeparture2);
 
-      tableTest.remove(trainNumber3);
-      tableTest.remove(trainNumber4);
+      tableTest.removeTrainByTrainNumber(trainNumber3);
+      tableTest.removeTrainByTrainNumber(trainNumber4);
       assertEquals(newHashMap, tableTest.getHashMap());
     }
 
     @Test
     @DisplayName("Test of remove with non existing trainNumber")
     void removeTrainDepartureWithNonExistingTrainNumber() {
-      assert(!tableTest.remove(123));
+      assertThrows(TableException.class, () -> tableTest.removeTrainByTrainNumber(123));
     }
   }
 }
