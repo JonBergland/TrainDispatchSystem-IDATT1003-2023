@@ -5,9 +5,7 @@ import edu.ntnu.stud.exceptions.DelayException;
 import edu.ntnu.stud.exceptions.TableException;
 import edu.ntnu.stud.exceptions.TrackException;
 import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
-import edu.ntnu.stud.sort.SortByDestination;
-import edu.ntnu.stud.sort.SortByTime;
-import edu.ntnu.stud.sort.SortByTrack;
+import edu.ntnu.stud.sort.Sort;
 import java.util.HashMap;
 
 /**
@@ -36,7 +34,7 @@ public class UserInterface {
       table.add(404, new TrainDeparture("10:30", "L13",  "Bergkrystallen", -1));
       table.add(406, new TrainDeparture("10:40", "L14",  "Bergkrystallen", 3));
       table.add(550, new TrainDeparture("16:30", "L8",  "Arendal", -1));
-      this.table = new Table(SortByTime.sort(table.getHashMap()));
+      this.table = new Table(Sort.sortByTime(table.getHashMap()));
     } catch (TrainDepartureConstructorException | TableException e) {
       System.out.println("Your train-departures was not added. " + e.getMessage());
       System.exit(0); //exits the program if init isn't properly initialized
@@ -117,17 +115,13 @@ public class UserInterface {
   }
 
   /**
-   * Prints all train departures in the table, sorted by time.
+   * Prints all train departures in the table.
    */
   private void printTrainDeparture() {
-    System.out.printf("%-19s%-19s%-8s%-10s%n%s%n", "Time: " + clock.getClock(), "Togavganger", "Spor: ", "Forsinkelse: ", "_".repeat(60));
-    table.getHashMap().forEach((key, value) -> {
-      try {
-        System.out.println(new TrainDeparture(value).toString(key));
-      } catch (TrainDepartureConstructorException e) {
-        System.out.println("The train departure couldn't be printed: " + e.getMessage());
-      }
-    });
+    System.out.printf("%-19s%-19s%-8s%-10s%n%s%n",
+        "Time: " + clock.getClock(), "Togavganger", "Spor: ", "Forsinkelse: ",
+        "_".repeat(60));
+    System.out.print(table.toString());
   }
 
   /**
@@ -155,9 +149,8 @@ public class UserInterface {
     int track = input.intInput(print, -1);
 
     try {
-      TrainDeparture newTrainDeparture = new TrainDeparture(
-          originalDepartureTime, line, destination, track);
-      if (table.add(trainNumber, newTrainDeparture)) {
+      if (table.add(trainNumber, new TrainDeparture(
+          originalDepartureTime, line, destination, track))) {
         System.out.println("The train-departure was added");
       }
     } catch (TrainDepartureConstructorException | TableException e) {
@@ -173,8 +166,8 @@ public class UserInterface {
    *
    */
   private void setTrackToTrain(int trainNumber) {
-    String print = "Skriv inn ved hvilken spor toget skal gå fra. Hvis ikke bestemt, skriv inn -1";
-    int track = input.intInput(print, -1);
+    int track = input.intInput(
+        "Skriv inn ved hvilken spor toget skal gå fra. Hvis ikke bestemt, skriv inn -1", -1);
     try {
       if (table.setTrackToTrain(trainNumber, track)) {
         System.out.print("Sporet til " + trainNumber + " er satt til ");
@@ -213,7 +206,6 @@ public class UserInterface {
 
   /**
    * Prints information about a train departure based on the user-selected train number.
-   *
    */
   private void findTrainByTrainNumber(int trainNumber) {
     try {
@@ -295,10 +287,10 @@ public class UserInterface {
     try {
       do {
         switch (sortChoice) {
-          case SORT_TIME -> this.table = new Table(SortByTime.sort(table.getHashMap()));
+          case SORT_TIME -> this.table = new Table(Sort.sortByTime(table.getHashMap()));
           case SORT_DESTINATION -> 
-            this.table = new Table(SortByDestination.sort(table.getHashMap()));
-          case SORT_TRACK -> this.table = new Table(SortByTrack.sort(table.getHashMap()));
+            this.table = new Table(Sort.sortByDestination(table.getHashMap()));
+          case SORT_TRACK -> this.table = new Table(Sort.sortByTrack(table.getHashMap()));
           default -> {
             System.out.println("Tallet du satte inn samsvarer ikke med et tall fra listen");
             sortChoice = chooseSortingMethod();
@@ -306,7 +298,7 @@ public class UserInterface {
         }
       } while (sortChoice < SORT_TIME || sortChoice > SORT_TRACK);
     } catch (TableException e) {
-      System.out.println("An error happened while running: " + e.getMessage());
+      System.out.println(e.getMessage());
     }
   }
 
@@ -352,10 +344,10 @@ public class UserInterface {
     String newTime = input.stringInput("Skriv inn et nytt klokkeslett på formatet HH:mm");
     try {
       clock.setClock(newTime);
+      table.removeTrainDepartureBeforeTime(clock.getClock());
       System.out.println("Time is updated");
     } catch (ClockException e) {
       System.out.println(e.getMessage() + ". Time stays the same");
     }
-    table.removeTrainDepartureBeforeTime(clock.getClock());
   }
 }
