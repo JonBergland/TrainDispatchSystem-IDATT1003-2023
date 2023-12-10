@@ -1,10 +1,7 @@
 package edu.ntnu.stud;
 
 import edu.ntnu.stud.exceptions.TrainDepartureConstructorException;
-import edu.ntnu.stud.sort.SortByDestination;
-import edu.ntnu.stud.sort.SortByLine;
-import edu.ntnu.stud.sort.SortByTime;
-import edu.ntnu.stud.sort.SortByTrack;
+import edu.ntnu.stud.sort.Sort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,7 +55,7 @@ public class SortsTest {
     sortedHashMap.put(trainNumber1, trainDeparture1);
     sortedHashMap.put(trainNumber2, trainDeparture2);
     List<TrainDeparture> expectedList = new ArrayList<>(sortedHashMap.values());
-    List<TrainDeparture> actualList = new ArrayList<>(SortByTime.sort(unsortedHashMap).values());
+    List<TrainDeparture> actualList = new ArrayList<>(Sort.sortByTime(unsortedHashMap).values());
 
     assertEquals(expectedList, actualList);
   }
@@ -70,7 +67,7 @@ public class SortsTest {
     sortedHashMap.put(trainNumber1, trainDeparture1);
     sortedHashMap.put(trainNumber2, trainDeparture2);
     List<TrainDeparture> originalList = new ArrayList<>(unsortedHashMap.values());
-    List<TrainDeparture> outcomeList = new ArrayList<>(SortByTime.sort(unsortedHashMap).values());
+    List<TrainDeparture> outcomeList = new ArrayList<>(Sort.sortByTime(unsortedHashMap).values());
 
     assertNotEquals(originalList, outcomeList);
   }
@@ -82,7 +79,7 @@ public class SortsTest {
     sortedHashMap.put(trainNumber2, trainDeparture2);
     sortedHashMap.put(trainNumber1, trainDeparture1);
     List<TrainDeparture> expectedList = new ArrayList<>(sortedHashMap.values());
-    List<TrainDeparture> actualList = new ArrayList<>(SortByDestination.sort(unsortedHashMap).values());
+    List<TrainDeparture> actualList = new ArrayList<>(Sort.sortByDestination(unsortedHashMap).values());
 
     assertEquals(expectedList, actualList);
   }
@@ -94,31 +91,7 @@ public class SortsTest {
     sortedHashMap.put(trainNumber2, trainDeparture2);
     sortedHashMap.put(trainNumber1, trainDeparture1);
     List<TrainDeparture> originalList = new ArrayList<>(unsortedHashMap.values());
-    List<TrainDeparture> outcomeList = new ArrayList<>(SortByDestination.sort(unsortedHashMap).values());
-
-    assertNotEquals(originalList, outcomeList);
-  }
-
-  @Test
-  @DisplayName("Test of sortByLine is the return the same as sorted map")
-  void sortByLineTheSameAsSortedMap() {
-    sortedHashMap.put(trainNumber3, trainDeparture3);
-    sortedHashMap.put(trainNumber2, trainDeparture2);
-    sortedHashMap.put(trainNumber1, trainDeparture1);
-    List<TrainDeparture> expectedList = new ArrayList<>(sortedHashMap.values());
-    List<TrainDeparture> actualList = new ArrayList<>(SortByLine.sort(unsortedHashMap).values());
-
-    assertEquals(expectedList, actualList);
-  }
-
-  @Test
-  @DisplayName("Test of sortByLine returns a different hashmap than original")
-  void sortByLineReturnsDifferentMap() {
-    sortedHashMap.put(trainNumber3, trainDeparture3);
-    sortedHashMap.put(trainNumber2, trainDeparture2);
-    sortedHashMap.put(trainNumber1, trainDeparture1);
-    List<TrainDeparture> originalList = new ArrayList<>(unsortedHashMap.values());
-    List<TrainDeparture> outcomeList = new ArrayList<>(SortByLine.sort(unsortedHashMap).values());
+    List<TrainDeparture> outcomeList = new ArrayList<>(Sort.sortByDestination(unsortedHashMap).values());
 
     assertNotEquals(originalList, outcomeList);
   }
@@ -130,7 +103,7 @@ public class SortsTest {
     sortedHashMap.put(trainNumber2, trainDeparture2);
     sortedHashMap.put(trainNumber1, trainDeparture1);
     List<TrainDeparture> expectedList = new ArrayList<>(sortedHashMap.values());
-    List<TrainDeparture> actualList = new ArrayList<>(SortByTrack.sort(unsortedHashMap).values());
+    List<TrainDeparture> actualList = new ArrayList<>(Sort.sortByTrack(unsortedHashMap).values());
 
     assertEquals(expectedList, actualList);
   }
@@ -142,7 +115,7 @@ public class SortsTest {
     sortedHashMap.put(trainNumber2, trainDeparture2);
     sortedHashMap.put(trainNumber1, trainDeparture1);
     List<TrainDeparture> originalList = new ArrayList<>(unsortedHashMap.values());
-    List<TrainDeparture> outcomeList = new ArrayList<>(SortByTrack.sort(unsortedHashMap).values());
+    List<TrainDeparture> outcomeList = new ArrayList<>(Sort.sortByTrack(unsortedHashMap).values());
 
     assertNotEquals(originalList, outcomeList);
   }
