@@ -227,5 +227,22 @@ public class Table {
     }
     return true;
   }
+
+  /**
+   * //TODO write this javadoc
+   * @return
+   */
+  @Override
+  public String toString() {
+    StringBuilder output = new StringBuilder();
+    for (Integer i : hashMap.keySet()) {
+      try {
+        output.append(new TrainDeparture(hashMap.get(i)).toString(i)).append("\n");
+      } catch (TrainDepartureConstructorException e) {
+        System.out.println("The train departure couldn't be printed: " + e.getMessage());
+      }
+    }
+    return output.toString();
+  }
 }
 
