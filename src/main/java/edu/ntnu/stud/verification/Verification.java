@@ -89,7 +89,7 @@ public class Verification {
                                                String nullPointerMessage)
       throws DateTimeException {
     try {
-      LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern(checkString)));
+      LocalTime.parse(checkString, DateTimeFormatter.ofPattern("HH:mm"));
     } catch (DateTimeException e) {
       throw new IllegalArgumentException(formatMessage);
     } catch (NullPointerException e) {
