@@ -131,7 +131,7 @@ public class TableTest {
 
     @Test
     @DisplayName("Test of getTrainByTrainNumber")
-    void getTrainByTrainNumber() {
+    void getTrainByTrainNumber() throws TrainDepartureConstructorException {
       assertEquals(trainDeparture1.toString(trainNumber1),
           tableTest.getTrainByTrainNumber(trainNumber1).toString(trainNumber1));
     }
