@@ -72,16 +72,15 @@ public final class TrainDeparture {
    */
   public TrainDeparture(TrainDeparture oldTrainDeparture)
       throws TrainDepartureConstructorException {
-    try {
-      this.originalDepartureTime = oldTrainDeparture.getOriginalDepartureTime();
-      this.line = oldTrainDeparture.getLine();
-      this.destination = oldTrainDeparture.getDestination();
-      this.track = oldTrainDeparture.getTrack();
-      this.delay = oldTrainDeparture.getDelay();
-    } catch (NullPointerException e) {
-      throw new TrainDepartureConstructorException(e.getMessage());
+    if (oldTrainDeparture != null) {
+        this.originalDepartureTime = oldTrainDeparture.getOriginalDepartureTime();
+        this.line = oldTrainDeparture.getLine();
+        this.destination = oldTrainDeparture.getDestination();
+        this.track = oldTrainDeparture.getTrack();
+        this.delay = oldTrainDeparture.getDelay();
+    } else {
+      throw new TrainDepartureConstructorException("The traindepature is null");
     }
-
   }
 
   /**
@@ -175,8 +174,8 @@ public final class TrainDeparture {
     Verification.requireStringOnFormatHHmm(originalDepartureTime,
         "Departure time was not formatted properly",
         "The departure time was null");
-    this.originalDepartureTime = LocalTime.parse(LocalTime.now().format(
-        DateTimeFormatter.ofPattern(originalDepartureTime)));
+    this.originalDepartureTime = LocalTime.parse(originalDepartureTime,
+        DateTimeFormatter.ofPattern("HH:mm"));
   }
 
   /**
