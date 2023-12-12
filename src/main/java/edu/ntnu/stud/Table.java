@@ -33,7 +33,7 @@ public class Table {
   /**
    * Constructs a Table object from an already existing hashmap.
    *
-   * @param oldHashMap The existing TrainDeparture object that is copied
+   * @param oldHashMap The existing HashMap that is copied
    */
   public Table(HashMap<Integer, TrainDeparture> oldHashMap)
       throws TableException {
@@ -123,8 +123,8 @@ public class Table {
    *                    object for.
    * @return The TrainDeparture object or null if the trainNumber has no associated TrainDeparture
    */
-  public TrainDeparture getTrainByTrainNumber(int trainNumber) {
-    return hashMap.get(trainNumber);
+  public TrainDeparture getTrainByTrainNumber(int trainNumber) throws TrainDepartureConstructorException {
+    return new TrainDeparture(hashMap.get(trainNumber));
   }
 
   /**
@@ -229,19 +229,17 @@ public class Table {
   }
 
   /**
-   * //TODO write this javadoc
-   * @return
+   * Turn all the information about the TrainDeparture objects in the HashMap
+   * into to a String.
+   *
+   * @return String
    */
   @Override
   public String toString() {
     StringBuilder output = new StringBuilder();
-    for (Integer i : hashMap.keySet()) {
-      try {
-        output.append(new TrainDeparture(hashMap.get(i)).toString(i)).append("\n");
-      } catch (TrainDepartureConstructorException e) {
-        System.out.println("The train departure couldn't be printed: " + e.getMessage());
-      }
-    }
+    hashMap.forEach((trainNumber, trainDeparture) ->
+        output.append(trainDeparture.toString(trainNumber)).append("\n")
+    );
     return output.toString();
   }
 }
