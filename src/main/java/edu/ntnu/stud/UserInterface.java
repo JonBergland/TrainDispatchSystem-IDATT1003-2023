@@ -30,9 +30,9 @@ public class UserInterface {
     init();
     try {
       table.add(601, new TrainDeparture("12:15", "L3", "Hamar", -1));
-      table.add(305, new TrainDeparture("15:30", "L2", "Sognsvann", 2));
-      table.add(404, new TrainDeparture("10:30", "L13",  "Bergkrystallen", -1));
-      table.add(406, new TrainDeparture("10:40", "L14",  "Bergkrystallen", 3));
+      table.add(305, new TrainDeparture("15:30", "L2", "Oslo", 2));
+      table.add(404, new TrainDeparture("10:30", "L13",  "Hønefoss", -1));
+      table.add(406, new TrainDeparture("10:40", "L14",  "Oslo", 3));
       table.add(550, new TrainDeparture("16:30", "L8",  "Arendal", -1));
       this.table = new Table(Sort.sortByTime(table.getHashMap()));
     } catch (TrainDepartureConstructorException | TableException e) {
@@ -61,13 +61,13 @@ public class UserInterface {
   private int menuChoice() {
     System.out.println("_".repeat(60));
     System.out.println("""
-        [1] Vis tog avgangene
+        [1] Vis tabellen over togavgangene
         [2] Legg til ny togavgang
-        [3] Tildel spor til avgang
-        [4] Legg inn forsinkelse
-        [5] Søk etter togavgang basert på tognummer
-        [6] Søk etter togavgang basert på destinasjon
-        [7] Sorter tabellen over tog avgangene
+        [3] Tildel spor til en avgang
+        [4] Legg inn forsinkelse på en togavgang
+        [5] Søk etter en togavgang basert på tognummer
+        [6] Søk etter en togavgang basert på destinasjon
+        [7] Sorter tabellen over togavgangene
         [8] Fjern en togavgang
         [9] Oppdater klokken
         [10] Avslutt
@@ -132,23 +132,20 @@ public class UserInterface {
    * </p>
    */
   private void addTrainDeparture() {
-    String originalDepartureTime = input.stringInput(
-        "Skriv inn avgangstiden til toget på formatet HH:mm");
-
-    String line = input.stringInput("Skriv inn navnet på linjen");
-
-    int trainNumber = input.intInput("Skriv inn et nytt, unikt tognummer", 0);
-    while (table.getTrainByTrainNumber(trainNumber) != null) {
-      System.out.println("Tognummeret du skrev inn var ikke unikt");
-      trainNumber = input.intInput("Skriv inn et nytt, unikt tognummer", 0);
-    }
-
-    String destination = input.stringInput("Skriv inn navnet på destinasjonen");
-
-    String print = "Skriv inn ved hvilken spor toget skal gå fra. Hvis ikke bestemt, skriv inn -1";
-    int track = input.intInput(print, -1);
-
     try {
+      String originalDepartureTime = input.stringInput(
+          "Skriv inn avgangstiden til toget på formatet HH:mm");
+
+      String line = input.stringInput("Skriv inn navnet på linjen");
+
+      int trainNumber = input.intInput("Skriv inn et nytt, unikt tognummer", 0);
+
+      String destination = input.stringInput("Skriv inn navnet på destinasjonen");
+
+      String print = "Skriv inn ved hvilken spor toget skal gå fra. Hvis ikke bestemt, skriv inn -1";
+      int track = input.intInput(print, -1);
+
+
       if (table.add(trainNumber, new TrainDeparture(
           originalDepartureTime, line, destination, track))) {
         System.out.println("The train-departure was added");
@@ -198,7 +195,7 @@ public class UserInterface {
         System.out.println(table.getTrainByTrainNumber(trainNumber).getDelay()
             + " was set to " + trainNumber);
       }
-    } catch (DelayException e) {
+    } catch (DelayException | TrainDepartureConstructorException e) {
       System.out.println("Delay was not set. " + e.getMessage());
     }
 
@@ -229,11 +226,14 @@ public class UserInterface {
   private int chooseTrainNumber() {
     table.getTrainNumberSet().forEach(System.out::println);
     int trainNumber = input.intInput("Velg en av togavgangene", 0);
-
+    try {
     while (table.getTrainByTrainNumber(trainNumber) == null || trainNumber == 0) {
       System.out.println("Du må sette inn et tognummer fra listen");
       table.getTrainNumberSet().forEach(System.out::println);
       trainNumber = input.intInput("Velg en av togavgangene", 0);
+    }
+    } catch (TrainDepartureConstructorException e) {
+      System.out.println(e.getMessage());
     }
     return trainNumber;
   }
@@ -326,7 +326,7 @@ public class UserInterface {
   private void removeTrainByTrainNumber(int trainNumber) {
     try {
       if (table.removeTrainByTrainNumber(trainNumber)) {
-        System.out.println("The train departure was removed");
+        System.out.println("The train-departure was removed");
       }
     } catch (TableException e) {
       System.out.println(e.getMessage());
