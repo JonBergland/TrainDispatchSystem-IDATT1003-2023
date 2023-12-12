@@ -38,10 +38,10 @@ public final class TrainDeparture {
    * {@code delay} variable as a LocalTime of 0 hours and 0 minutes.
    * </p>
    *
-   * @param originalDepartureTime Original time for departure
-   * @param line                  The name of the line
-   * @param destination           The train's destination
-   * @param track                 The track that the train arrives at
+   * @param originalDepartureTime               Original time for departure
+   * @param line                                The name of the line
+   * @param destination                         The train's destination
+   * @param track                               The track that the train arrives at
    * @throws TrainDepartureConstructorException If any parameters fail to meet the requirements
    *                                            set, an exception is thrown. The exception message
    *                                            provides details about which parameter didn't meet
@@ -68,18 +68,18 @@ public final class TrainDeparture {
   /**
    * Constructs a TrainDeparture object from an already existing object.
    *
-   * @param oldTrainDeparture The existing TrainDeparture object that is copied
+   * @param oldTrainDeparture The existing TrainDeparture object that is being copied
    */
   public TrainDeparture(TrainDeparture oldTrainDeparture)
       throws TrainDepartureConstructorException {
     if (oldTrainDeparture != null) {
-        this.originalDepartureTime = oldTrainDeparture.getOriginalDepartureTime();
-        this.line = oldTrainDeparture.getLine();
-        this.destination = oldTrainDeparture.getDestination();
-        this.track = oldTrainDeparture.getTrack();
-        this.delay = oldTrainDeparture.getDelay();
+      this.originalDepartureTime = oldTrainDeparture.getOriginalDepartureTime();
+      this.line = oldTrainDeparture.getLine();
+      this.destination = oldTrainDeparture.getDestination();
+      this.track = oldTrainDeparture.getTrack();
+      this.delay = oldTrainDeparture.getDelay();
     } else {
-      throw new TrainDepartureConstructorException("The traindepature is null");
+      throw new TrainDepartureConstructorException("The train-departure is null");
     }
   }
 
@@ -155,7 +155,8 @@ public final class TrainDeparture {
   }
 
   /**
-   * Gets the departure time (original + delay) for the train departure.
+   * Gets the departure time (original departure time + eventual delay)
+   * for the train departure.
    *
    * @return departureTime
    */
@@ -167,7 +168,9 @@ public final class TrainDeparture {
   /**
    * Sets an original departure time for the train departure using the String parameter.
    *
-   * @param originalDepartureTime sets track as the integer parameter
+   * @param originalDepartureTime represents the original departure time set in hours and minutes.
+   *                              Gets set to the LocalTime variable {@code originalDepartureTime}.
+   *                              Must be on the format HH:mm.
    */
   private void setOriginalDepartureTime(String originalDepartureTime)
       throws IllegalArgumentException {
@@ -181,7 +184,8 @@ public final class TrainDeparture {
   /**
    * Sets a line for the train departure using the String parameter.
    *
-   * @param line sets track as the integer parameter
+   * @param line represents the line set as a String. Gets set to the
+   *             String variable {@code line}. Cannot be null or empty
    */
   private void setLine(String line)
       throws IllegalArgumentException {
@@ -193,7 +197,8 @@ public final class TrainDeparture {
   /**
    * Sets a destination for the train departure using the String parameter.
    *
-   * @param destination sets track as the integer parameter
+   * @param destination represents the destination set as a String. Gets set to the
+   *                    String variable {@code destination}. Cannot be null or empty
    */
   private void setDestination(String destination)
       throws IllegalArgumentException {
@@ -205,7 +210,8 @@ public final class TrainDeparture {
   /**
    * Sets a track for the train departure using the integer parameter.
    *
-   * @param track sets the track as the integer parameter
+   * @param track represents the track set as an int. Gets set to the
+   *              int variable {@code track}. Cannot be 0 or less than -1
    */
   public void setTrack(int track) throws TrackException {
     try {
@@ -237,7 +243,7 @@ public final class TrainDeparture {
   /**
    * Turn all the information in the TrainDeparture object to a String.
    *
-   * @return String
+   * @return a String representing the objects information
    */
   public String toString(int trainNumber) {
     String output = String.format("%-6s|%1s%-4s|%1s%-4s|%1s%-16s|",

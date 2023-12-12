@@ -58,10 +58,11 @@ public class Sort {
    * </p>
    *
    * @param map The unsorted HashMap containing Integer keys and TrainDeparture values.
-   * @return A LinkedHashMap with the entries sorted by the destination.
-   * If the destinations are equal, the order of insertion is maintained.
+   * @return    A LinkedHashMap with the entries sorted by the destination.
+   *            If the destinations are equal, the order of insertion is maintained.
    */
-  public static HashMap<Integer, TrainDeparture> sortByDestination(HashMap<Integer, TrainDeparture> map) {
+  public static HashMap<Integer, TrainDeparture> sortByDestination(
+      HashMap<Integer, TrainDeparture> map) {
     return map.entrySet().stream()
         .sorted(Comparator.comparing(entry -> entry.getValue().getDestination()))
         .collect(Collectors.toMap(

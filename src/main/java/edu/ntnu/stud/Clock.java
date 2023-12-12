@@ -24,7 +24,7 @@ public class Clock {
   /**
    * Initialize the Clock object with a LocalTime of 0.
    */
-  public Clock() { //når Clock blir initialisert settes den til 00:00
+  public Clock() { //the clock-variable gets initialized
     this.clock = LocalTime.of(0, 0);
   }
 
@@ -33,7 +33,7 @@ public class Clock {
    *
    * @return The LocalTime object representing the current time.
    */
-  public LocalTime getClock() { //en get-metode for å returnere klokkeslettet
+  public LocalTime getClock() {
     return clock;
   }
 

@@ -9,17 +9,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Testcases for the Clock-class.
- * <p>
- * The cases test the get-methods and set-methods
- * </p>
  */
 @DisplayName("Clock-class")
 public class ClockTest {
   Clock clock;
+
   @BeforeEach
   void setupClock() {
     clock = new Clock();
   }
+
+  /**
+   * Testcases for the get-methods
+   */
   @Nested
   @DisplayName("Test of get() method")
   class clockGetMethod {
@@ -30,6 +32,9 @@ public class ClockTest {
     }
   }
 
+  /**
+   * Testcases for the set-method
+   */
   @Nested
   @DisplayName("Test of set() method")
   class clockSetMethod {

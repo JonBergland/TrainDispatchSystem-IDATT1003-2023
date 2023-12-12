@@ -4,7 +4,7 @@ package edu.ntnu.stud.exceptions;
  * Exception class for errors that occur when assigning a new train number
  * and TrainDeparture-object to the HashMap in the Table-class.
  * <p>
- * This exception is thrown during the validation of the train number parameter in
+ * This exception is thrown when there is an issue during the running of the methods in
  * the Table-class. It extends the standard {@code Exception} class.
  * </p>
  *

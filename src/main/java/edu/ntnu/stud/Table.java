@@ -42,7 +42,7 @@ public class Table {
       for (Map.Entry<Integer, TrainDeparture> entry : oldHashMap.entrySet()) {
         newHashMap.put(entry.getKey(), new TrainDeparture(entry.getValue()));
       }
-      this.hashMap = newHashMap; //made a deep copy of the new HashMap
+      this.hashMap = newHashMap; //made a deep copy of the old HashMap
     } catch (TrainDepartureConstructorException | NullPointerException e) {
       throw new TableException(e.getMessage());
     }
@@ -121,9 +121,11 @@ public class Table {
    *
    * @param trainNumber The key which this method gets the associated TrainDeparture
    *                    object for.
-   * @return The TrainDeparture object or null if the trainNumber has no associated TrainDeparture
+   * @return            A deep copy of the TrainDeparture object or null if the
+   *                    trainNumber has no associated TrainDeparture
    */
-  public TrainDeparture getTrainByTrainNumber(int trainNumber) throws TrainDepartureConstructorException {
+  public TrainDeparture getTrainByTrainNumber(int trainNumber)
+      throws TrainDepartureConstructorException {
     return new TrainDeparture(hashMap.get(trainNumber));
   }
 
@@ -217,7 +219,7 @@ public class Table {
    *
    * @param trainNumber The train number key corresponding with the train departure value
    *                    you want to remove from the HashMap in table
-   * @return a boolean representing if the operation was successful or not
+   * @return            a boolean representing if the operation was successful or not
    */
   public boolean removeTrainByTrainNumber(int trainNumber) throws TableException {
     if (hashMap.get(trainNumber) != null) {

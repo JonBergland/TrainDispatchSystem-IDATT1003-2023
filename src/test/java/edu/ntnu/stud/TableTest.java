@@ -51,6 +51,9 @@ public class TableTest {
     tableTest.getHashMap().put(trainNumber4, trainDeparture4);
   }
 
+  /**
+   * Testcases for the table constructor
+   */
   @Nested
   @DisplayName("Test of the Table constructor")
   class tableConstructor {
@@ -84,6 +87,9 @@ public class TableTest {
     }
   }
 
+  /**
+   * Testcases for the table get-methods
+   */
   @Nested
   @DisplayName("Test of get() methods")
   class tableGetMethods {
@@ -137,6 +143,9 @@ public class TableTest {
     }
   }
 
+  /**
+   * Testcases for the add-method constructor
+   */
   @Nested
   @DisplayName("Test of add()")
   class tableAddMethod {
@@ -185,6 +194,9 @@ public class TableTest {
     }
   }
 
+  /**
+   * Testcases for the set-method constructor
+   */
   @Nested
   @DisplayName("Test of set() methods")
   class setMethods {
@@ -237,6 +249,9 @@ public class TableTest {
     }
   }
 
+  /**
+   * Testcases for the remove-method constructor
+   */
   @Nested
   @DisplayName("Test of remove methods")
   class removeMethods {

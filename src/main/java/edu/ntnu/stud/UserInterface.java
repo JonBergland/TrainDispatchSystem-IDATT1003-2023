@@ -10,9 +10,9 @@ import java.util.HashMap;
 
 /**
  * The {@code UserInterface} class represents the user interface for managing train departures.
- * It includes methods for initializing the system with train departures and runs the menu program.
- * The user interface interacts with a {@link Table} to manage train departures and a
- * {@link Clock} to handle time.
+ * It includes methods for initializing the system, adding predefined train departures and runs
+ * the menu program. The user interface interacts with a {@link Table} to manage
+ * train departures and a {@link Clock} to handle time.
  */
 public class UserInterface {
   private Table table;

@@ -25,7 +25,8 @@ public class Input {
    *
    * @param number      The string to be checked for integer validity.
    * @param dummyValue  The value that gets returned if number can't be parsed into an integer
-   * @return {@code number} if the string can be parsed into an integer, dummyValue otherwise.
+   * @return            {@code number} if the string can be parsed into an integer, dummyValue
+   *                    otherwise.
    * @see Integer#parseInt(String)
    */
   public int tryInt(String number, int dummyValue) {
@@ -61,12 +62,11 @@ public class Input {
    * Prompts the user for a string input with a specified message.
    * <p>
    * This method displays the specified print message to the user, waits for the user to input
-   * a string, and returns the entered string. The entered string is obtained using the
-   * {@code in.nextLine()} method.
+   * a string, and returns the entered string.
    * </p>
    *
    * @param print   The message to prompt the user for a string input.
-   * @return The string input provided by the user.
+   * @return        The string input provided by the user.
    */
   public String stringInput(String print) {
     System.out.println(print);
