@@ -19,6 +19,20 @@ public class UserInterface {
   private Clock clock;
   private Input input;
 
+  final int PRINT_TRAINDEPARTURE = 1;
+  final int ADD_TRAINDEPARTURE = 2;
+  final int SET_TRACKTOTRAIN = 3;
+  final int SET_DELAYTOTRAIN = 4;
+  final int FIND_TRAINBYTRAINNUMBER = 5;
+  final int FIND_TRAINBYDESTINATION = 6;
+  final int SORT_BY = 7;
+  final int REMOVE_TRAINDEPARTURE = 8;
+  final int UPDATE_CLOCK = 9;
+  final int EXIT_SYSTEM = 10;
+  final int SORT_TIME = 1;
+  final int SORT_DESTINATION = 2;
+  final int SORT_TRACK = 3;
+
   /**
    * Initializes the system with predefined train departures and runs the menu program indefinitely.
    * <p>
@@ -86,16 +100,6 @@ public class UserInterface {
    * @param menuChoice   The user's selected menu choice.
    */
   private void doOperation(int menuChoice) {
-    final int PRINT_TRAINDEPARTURE = 1;
-    final int ADD_TRAINDEPARTURE = 2;
-    final int SET_TRACKTOTRAIN = 3;
-    final int SET_DELAYTOTRAIN = 4;
-    final int FIND_TRAINBYTRAINNUMBER = 5;
-    final int FIND_TRAINBYDESTINATION = 6;
-    final int SORT_BY = 7;
-    final int REMOVE_TRAINDEPARTURE = 8;
-    final int UPDATE_CLOCK = 9;
-    final int EXIT_SYSTEM = 10;
     while (true) {
       switch (menuChoice) {
         case PRINT_TRAINDEPARTURE -> printTrainDeparture();
@@ -142,7 +146,8 @@ public class UserInterface {
 
       String destination = input.stringInput("Skriv inn navnet på destinasjonen");
 
-      String print = "Skriv inn ved hvilken spor toget skal gå fra. Hvis ikke bestemt, skriv inn -1";
+      String print = "Skriv inn ved hvilken spor toget skal gå fra. "
+          + "Hvis ikke bestemt, skriv inn -1";
       int track = input.intInput(print, -1);
 
 
@@ -227,11 +232,11 @@ public class UserInterface {
     table.getTrainNumberSet().forEach(System.out::println);
     int trainNumber = input.intInput("Velg en av togavgangene", 0);
     try {
-    while (table.getTrainByTrainNumber(trainNumber) == null || trainNumber == 0) {
-      System.out.println("Du må sette inn et tognummer fra listen");
-      table.getTrainNumberSet().forEach(System.out::println);
-      trainNumber = input.intInput("Velg en av togavgangene", 0);
-    }
+      while (table.getTrainByTrainNumber(trainNumber) == null || trainNumber == 0) {
+        System.out.println("Du må sette inn et tognummer fra listen");
+        table.getTrainNumberSet().forEach(System.out::println);
+        trainNumber = input.intInput("Velg en av togavgangene", 0);
+      }
     } catch (TrainDepartureConstructorException e) {
       System.out.println(e.getMessage());
     }
@@ -281,9 +286,6 @@ public class UserInterface {
    * @param sortChoice    The user's selected sorting criteria.
    */
   private void sortBy(int sortChoice) {
-    final int SORT_TIME = 1;
-    final int SORT_DESTINATION = 2;
-    final int SORT_TRACK = 3;
     try {
       do {
         switch (sortChoice) {
